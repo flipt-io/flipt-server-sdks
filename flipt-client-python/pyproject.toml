@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "flipt-client-python"
+version = "0.1.0"
+description = ""
+authors = ["Yoofi Quansah <ybquansah@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pydantic = "^2.5.3"
+requests = "^2.31.0"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.12.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
