@@ -1,0 +1,19 @@
+[package]
+name = "flipt"
+description = "Flipt Rust Server SDK"
+version = "0.0.1"
+edition = "2021"
+author = ["Flipt Devs <dev@flipt.io>"]
+license = "MIT"
+keywords = ["flipt"]
+
+[dependencies]
+anyhow = "1.0.66"
+chrono = { version = "0.4.23", default-features = false, features = ["serde", "clock"] }
+reqwest = { version = "0.11.13", default-features = false, features = ["json", "rustls-tls"] }
+serde = { version = "1.0.147", features = ["derive"] }
+serde_json = "1.0.89"
+url = "2.5.0"
+
+[dev-dependencies]
+tokio = { version = "1.22.0", default-features = false, features = [ "macros", "rt-multi-thread", "time" ] }
