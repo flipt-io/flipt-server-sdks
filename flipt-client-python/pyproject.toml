@@ -1,8 +1,9 @@
 [tool.poetry]
-name = "flipt-client-python"
-version = "0.1.0"
-description = ""
-authors = ["Yoofi Quansah <ybquansah@gmail.com>"]
+name = "flipt"
+version = "0.0.1"
+description = "Flipt Server SDK"
+authors = ["Flipt Devs <dev@flipt.io>"]
+license = "MIT"
 readme = "README.md"
 
 [tool.poetry.dependencies]
