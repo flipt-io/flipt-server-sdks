@@ -1,4 +1,4 @@
-import requests
+import httpx
 import json
 from .models import (
     BatchEvaluationRequest,
@@ -20,7 +20,7 @@ class Evaluation:
         if self.token != "":
             headers["Authorization"] = f"Bearer {self.token}"
 
-        response = requests.post(
+        response = httpx.post(
             f"{self.url}/evaluate/v1/variant",
             headers=headers,
             json=request.dict(),
@@ -35,7 +35,7 @@ class Evaluation:
         if self.token != "":
             headers["Authorization"] = f"Bearer {self.token}"
 
-        response = requests.post(
+        response = httpx.post(
             f"{self.url}/evaluate/v1/boolean",
             headers=headers,
             json=request.dict(),
@@ -50,7 +50,7 @@ class Evaluation:
         if self.token != "":
             headers["Authorization"] = f"Bearer {self.token}"
 
-        response = requests.post(
+        response = httpx.post(
             f"{self.url}/evaluate/v1/batch",
             headers=headers,
             json=request.dict(),
