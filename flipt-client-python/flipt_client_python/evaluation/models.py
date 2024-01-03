@@ -34,25 +34,14 @@ class BooleanEvaluationResponse(BaseModel):
     timestamp: str
 
 
-class ErrorEvaluationReason(str, enum.Enum):
-    UNKNOWN_ERROR_EVALUATION_REASON = "UNKNOWN_ERROR_EVALUATION_REASON"
-    NOT_FOUND_ERROR_EVALUATION_REASON = "NOT_FOUND_ERROR_EVALUATION_REASON"
-
-
 class ErrorEvaluationReponse(BaseModel):
     flag_key: str = Field(..., alias="flagKey")
-    namespace_key: str = Field(..., alias="namespace_key")
-    reason: ErrorEvaluationReason
-
-
-class EvaluationResponseType(str, enum.Enum):
-    VARIANT_EVALUATION_RESPONSE_TYPE = "VARIANT_EVALUATION_RESPONSE_TYPE"
-    BOOLEAN_EVALUATION_RESPONSE_TYPE = "BOOLEAN_EVALUATION_RESPONSE_TYPE"
-    ERROR_EVALUATION_RESPONSE_TYPE = "ERROR_EVALUATION_RESPONSE_TYPE"
+    namespace_key: str = Field(..., alias="namespaceKey")
+    reason: str
 
 
 class EvaluationResponse(BaseModel):
-    type: EvaluationResponseType
+    type: str
     boolean_response: Optional[BooleanEvaluationResponse] = Field(
         default=None, alias="booleanResponse"
     )
