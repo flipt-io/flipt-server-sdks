@@ -1,5 +1,5 @@
 {
-  "name": "@flipt-io/flipt-server-sdk",
+  "name": "@flipt-io/flipt",
   "version": "0.0.1",
   "description": "Flipt Server SDK",
   "main": "dist/index.js",
@@ -17,6 +17,6 @@
   },
   "dependencies": {
     "@types/node": "^20.10.6",
-    "axios": "^1.6.3"
+    "node-fetch": "^3.3.2"
   }
 }

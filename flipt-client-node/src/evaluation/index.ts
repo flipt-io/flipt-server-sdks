@@ -1,11 +1,11 @@
-import axios from 'axios';
+import fetch from "node-fetch";
 import {
   BatchEvaluationRequest,
   BatchEvaluationResponse,
   BooleanEvaluationResponse,
   EvaluationRequest,
   VariantEvaluationResponse
-} from './models';
+} from "./models";
 
 export class Evaluation {
   private url: string;
@@ -22,18 +22,19 @@ export class Evaluation {
     request: EvaluationRequest
   ): Promise<VariantEvaluationResponse> {
     const headers = {};
-    if (this.token !== '') {
-      headers['Authorization'] = `Bearer ${this.token}`;
+    if (this.token !== "") {
+      headers["Authorization"] = `Bearer ${this.token}`;
     }
 
-    const { data } = await axios.post<VariantEvaluationResponse>(
-      `${this.url}/evaluate/v1/variant`,
-      request,
-      {
-        headers,
-        timeout: this.timeout
-      }
-    );
+    const response = await fetch(`${this.url}/evaluate/v1/variant`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(request),
+      signal: AbortSignal.timeout(this.timeout * 1000)
+    });
+
+    const data: VariantEvaluationResponse =
+      (await response.json()) as VariantEvaluationResponse;
 
     return data;
   }
@@ -42,18 +43,19 @@ export class Evaluation {
     request: EvaluationRequest
   ): Promise<BooleanEvaluationResponse> {
     const headers = {};
-    if (this.token !== '') {
-      headers['Authorization'] = `Bearer ${this.token}`;
+    if (this.token !== "") {
+      headers["Authorization"] = `Bearer ${this.token}`;
     }
 
-    const { data } = await axios.post<BooleanEvaluationResponse>(
-      `${this.url}/evaluate/v1/boolean`,
-      request,
-      {
-        headers,
-        timeout: this.timeout
-      }
-    );
+    const response = await fetch(`${this.url}/evaluate/v1/boolean`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(request),
+      signal: AbortSignal.timeout(this.timeout * 1000)
+    });
+
+    const data: BooleanEvaluationResponse =
+      (await response.json()) as BooleanEvaluationResponse;
 
     return data;
   }
@@ -62,18 +64,19 @@ export class Evaluation {
     request: BatchEvaluationRequest
   ): Promise<BatchEvaluationResponse> {
     const headers = {};
-    if (this.token !== '') {
-      headers['Authorization'] = `Bearer ${this.token}`;
+    if (this.token !== "") {
+      headers["Authorization"] = `Bearer ${this.token}`;
     }
 
-    const { data } = await axios.post<BatchEvaluationResponse>(
-      `${this.url}/evaluate/v1/batch`,
-      request,
-      {
-        headers,
-        timeout: this.timeout
-      }
-    );
+    const response = await fetch(`${this.url}/evaluate/v1/batch`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(request),
+      signal: AbortSignal.timeout(this.timeout * 1000)
+    });
+
+    const data: BatchEvaluationResponse =
+      (await response.json()) as BatchEvaluationResponse;
 
     return data;
   }
