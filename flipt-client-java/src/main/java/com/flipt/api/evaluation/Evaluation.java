@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flipt.api.evaluation.models.BooleanEvaluationResponse;
 import com.flipt.api.evaluation.models.EvaluationRequest;
 import com.flipt.api.evaluation.models.VariantEvaluationResponse;
-import com.flipt.api.util.ObjectMappers;
 import okhttp3.*;
 
 import java.io.IOException;
@@ -31,7 +30,7 @@ public class Evaluation {
             Response response = httpClient.newCall(requestBuilder.build()).execute();
             if (response.isSuccessful()) {
                 assert response.body() != null;
-                return ObjectMappers.JSON_MAPPER.readValue(response.body().string(), VariantEvaluationResponse.class);
+                return this.objectMapper.readValue(response.body().string(), VariantEvaluationResponse.class);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -65,7 +64,7 @@ public class Evaluation {
             Response response = httpClient.newCall(requestBuilder.build()).execute();
             if (response.isSuccessful()) {
                 assert response.body() != null;
-                return ObjectMappers.JSON_MAPPER.readValue(response.body().string(), BooleanEvaluationResponse.class);
+                return this.objectMapper.readValue(response.body().string(), BooleanEvaluationResponse.class);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
