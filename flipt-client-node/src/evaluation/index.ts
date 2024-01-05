@@ -33,6 +33,11 @@ export class Evaluation {
       signal: AbortSignal.timeout(this.timeout * 1000)
     });
 
+    if (response.status !== 200) {
+      const body = await response.json();
+      throw new Error(body["message"] || "internal error");
+    }
+
     const data: VariantEvaluationResponse =
       (await response.json()) as VariantEvaluationResponse;
 
@@ -54,6 +59,11 @@ export class Evaluation {
       signal: AbortSignal.timeout(this.timeout * 1000)
     });
 
+    if (response.status !== 200) {
+      const body = await response.json();
+      throw new Error(body["message"] || "internal error");
+    }
+
     const data: BooleanEvaluationResponse =
       (await response.json()) as BooleanEvaluationResponse;
 
@@ -74,6 +84,11 @@ export class Evaluation {
       body: JSON.stringify(request),
       signal: AbortSignal.timeout(this.timeout * 1000)
     });
+
+    if (response.status !== 200) {
+      const body = await response.json();
+      throw new Error(body["message"] || "internal error");
+    }
 
     const data: BatchEvaluationResponse =
       (await response.json()) as BatchEvaluationResponse;
