@@ -7,8 +7,8 @@
   "author": "Flipt Devs <dev@flipt.io>",
   "license": "MIT",
   "scripts": {
-    "fmt": "prettier --config .prettierrc 'src/**/*.ts' --write",
-    "lint": "prettier --check src/**/*.ts",
+    "fmt": "prettier --config .prettierrc 'src/**/*.ts' 'example/index.ts' --write",
+    "lint": "prettier --check src/**/*.ts example/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
