@@ -18,6 +18,7 @@ var (
 	languageToFn = map[string]integrationTestFn{
 		"python": pythonTests,
 		"node":   nodeTests,
+		"rust":   rustTests,
 	}
 	sema = make(chan struct{}, 5)
 )
@@ -138,6 +139,23 @@ func nodeTests(ctx context.Context, client *dagger.Client, flipt *dagger.Contain
 		WithEnvVariable("FLIPT_AUTH_TOKEN", "secret").
 		WithExec([]string{"npm", "install"}).
 		WithExec([]string{"npm", "test"}).
+		Sync(ctx)
+
+	return err
+}
+
+// rustTests runs the rust integration test suite against a container running Flipt.
+func rustTests(ctx context.Context, client *dagger.Client, flipt *dagger.Container, hostDirectory *dagger.Directory) error {
+	_, err := client.Container().From("rust:1.73.0-bookworm").
+		WithWorkdir("/src").
+		// Exclude target directory which contain the build artifacts for Rust.
+		WithDirectory("/src", hostDirectory.Directory("flipt-client-rust"), dagger.ContainerWithDirectoryOpts{
+			Exclude: []string{"./target/"},
+		}).
+		WithServiceBinding("flipt", flipt.WithExec(nil).AsService()).
+		WithEnvVariable("FLIPT_URL", "http://flipt:8080").
+		WithEnvVariable("FLIPT_AUTH_TOKEN", "secret").
+		WithExec([]string{"cargo", "test"}).
 		Sync(ctx)
 
 	return err
