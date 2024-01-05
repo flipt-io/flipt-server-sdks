@@ -1,44 +1,56 @@
 package com.flipt.api.evaluation;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.flipt.api.evaluation.models.BooleanEvaluationResponse;
-import com.flipt.api.evaluation.models.EvaluationRequest;
-import com.flipt.api.evaluation.models.VariantEvaluationResponse;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.flipt.api.error.Error;
+import com.flipt.api.evaluation.models.*;
 import okhttp3.*;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 public class Evaluation {
     private final OkHttpClient httpClient;
-    private final URL url;
+    private final String baseURL;
     private final String token;
-
     private final ObjectMapper objectMapper;
 
-    public Evaluation(OkHttpClient httpClient, URL url, String token) {
+    public Evaluation(OkHttpClient httpClient, String baseURL, String token) {
         this.httpClient = httpClient;
-        this.url = url;
+        this.baseURL = baseURL;
         this.token = token;
-        this.objectMapper = new ObjectMapper();
+        this.objectMapper = JsonMapper.builder().addModule(new Jdk8Module()).disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES).build();
     }
 
     public VariantEvaluationResponse variant(EvaluationRequest request) {
-        Request.Builder requestBuilder = makeRequest(request);
+        URL url;
+
+        try {
+            url = new URL(String.format("%s%s", this.baseURL, "/evaluate/v1/variant"));
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+
+        Request.Builder requestBuilder = makeRequest(request, url);
 
         try {
             Response response = httpClient.newCall(requestBuilder.build()).execute();
-            if (response.isSuccessful()) {
-                assert response.body() != null;
-                return this.objectMapper.readValue(response.body().string(), VariantEvaluationResponse.class);
+            assert response.body() != null;
+
+            if (!response.isSuccessful()) {
+                Error error = this.objectMapper.readValue(response.body().string(), Error.class);
+                throw new RuntimeException(error);
             }
+            return this.objectMapper.readValue(response.body().string(), VariantEvaluationResponse.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return null;
     }
 
-    private Request.Builder makeRequest(EvaluationRequest request) {
+    private Request.Builder makeRequest(EvaluationRequest request, URL url) {
         RequestBody body;
 
         try {
@@ -48,7 +60,7 @@ public class Evaluation {
             throw new RuntimeException(e);
         }
 
-        Request.Builder httpRequest = new Request.Builder().url(this.url).method("POST", body);
+        Request.Builder httpRequest = new Request.Builder().url(url).method("POST", body);
 
         if (!this.token.isEmpty()) {
             httpRequest.addHeader("Authorization", String.format("Bearer %s", this.token));
@@ -57,18 +69,65 @@ public class Evaluation {
         return httpRequest;
     }
 
-    public BooleanEvaluationResponse _boolean(EvaluationRequest request) {
-        Request.Builder requestBuilder = makeRequest(request);
+    public BooleanEvaluationResponse booleanEvaluation(EvaluationRequest request) {
+        URL url;
+
+        try {
+            url = new URL(String.format("%s%s", this.baseURL, "/evaluate/v1/boolean"));
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+
+        Request.Builder requestBuilder = makeRequest(request, url);
 
         try {
             Response response = httpClient.newCall(requestBuilder.build()).execute();
-            if (response.isSuccessful()) {
-                assert response.body() != null;
-                return this.objectMapper.readValue(response.body().string(), BooleanEvaluationResponse.class);
+            assert response.body() != null;
+            if (!response.isSuccessful()) {
+                Error error = this.objectMapper.readValue(response.body().string(), Error.class);
+                throw new RuntimeException(error);
             }
+
+            return this.objectMapper.readValue(response.body().string(), BooleanEvaluationResponse.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return null;
+    }
+
+    public BatchEvaluationResponse batch(BatchEvaluationRequest request) {
+        RequestBody body;
+
+        try {
+            body = RequestBody.create(
+                    this.objectMapper.writeValueAsString(request), MediaType.parse("application/json"));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        URL url;
+        try {
+            url = new URL(String.format("%s%s", this.baseURL, "/evaluate/v1/batch"));
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+
+        Request.Builder httpRequest = new Request.Builder().url(url).method("POST", body);
+
+        if (!this.token.isEmpty()) {
+            httpRequest.addHeader("Authorization", String.format("Bearer %s", this.token));
+        }
+
+        try {
+            Response response = httpClient.newCall(httpRequest.build()).execute();
+            assert response.body() != null;
+            if (!response.isSuccessful()) {
+                Error error = this.objectMapper.readValue(response.body().string(), Error.class);
+                throw new RuntimeException(error);
+            }
+
+            return this.objectMapper.readValue(response.body().string(), BatchEvaluationResponse.class);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -3,9 +3,11 @@ package com.flipt.api.evaluation.models;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.List;
+
 public class VariantEvaluationResponse {
     private final boolean match;
-    private final String[] segmentKeys;
+    private final List<String> segmentKeys;
     private final String reason;
     private final String flagKey;
     private final String variantKey;
@@ -14,7 +16,7 @@ public class VariantEvaluationResponse {
     private final String timestamp;
 
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-    public VariantEvaluationResponse(@JsonProperty("match") boolean match, @JsonProperty("segmentKeys") String[] segmentKeys, @JsonProperty("reason") String reason, @JsonProperty("flagKey") String flagKey, @JsonProperty("variantKey") String variantKey, @JsonProperty("variantAttachment") String variantAttachment, @JsonProperty("requestDurationMillis") float requestDurationMillis, @JsonProperty("timestamp") String timestamp) {
+    public VariantEvaluationResponse(@JsonProperty("match") boolean match, @JsonProperty("segmentKeys") List<String> segmentKeys, @JsonProperty("reason") String reason, @JsonProperty("flagKey") String flagKey, @JsonProperty("variantKey") String variantKey, @JsonProperty("variantAttachment") String variantAttachment, @JsonProperty("requestDurationMillis") float requestDurationMillis, @JsonProperty("timestamp") String timestamp) {
         this.match = match;
         this.segmentKeys = segmentKeys;
         this.reason = reason;
@@ -31,7 +33,7 @@ public class VariantEvaluationResponse {
     }
 
     @JsonProperty("segmentKeys")
-    public String[] getSegmentKeys() {
+    public List<String> getSegmentKeys() {
         return segmentKeys;
     }
 
