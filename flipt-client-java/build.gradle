@@ -19,6 +19,16 @@ dependencies {
     implementation 'com.diffplug.gradle.spotless:spotless:2.3.0'
 }
 
+tasks.named('test', Test) {
+    useJUnitPlatform()
+
+    maxHeapSize = '1G'
+
+    testLogging {
+        events "passed"
+    }
+}
+
 test {
     useJUnitPlatform()
 }

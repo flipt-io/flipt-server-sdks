@@ -19,6 +19,7 @@ var (
 		"python": pythonTests,
 		"node":   nodeTests,
 		"rust":   rustTests,
+		"java":   javaTests,
 	}
 	sema = make(chan struct{}, 5)
 )
@@ -156,6 +157,22 @@ func rustTests(ctx context.Context, client *dagger.Client, flipt *dagger.Contain
 		WithEnvVariable("FLIPT_URL", "http://flipt:8080").
 		WithEnvVariable("FLIPT_AUTH_TOKEN", "secret").
 		WithExec([]string{"cargo", "test"}).
+		Sync(ctx)
+
+	return err
+}
+
+// javaTests runs the java integration test suite against a container running Flipt.
+func javaTests(ctx context.Context, client *dagger.Client, flipt *dagger.Container, hostDirectory *dagger.Directory) error {
+	_, err := client.Container().From("gradle:8.5.0-jdk21").
+		WithWorkdir("/src").
+		WithDirectory("/src", hostDirectory.Directory("flipt-client-java"), dagger.ContainerWithDirectoryOpts{
+			Exclude: []string{"./.gradle", "./.idea", "./build"},
+		}).
+		WithServiceBinding("flipt", flipt.WithExec(nil).AsService()).
+		WithEnvVariable("FLIPT_URL", "http://flipt:8080").
+		WithEnvVariable("FLIPT_AUTH_TOKEN", "secret").
+		WithExec([]string{"./gradlew", "test"}).
 		Sync(ctx)
 
 	return err
