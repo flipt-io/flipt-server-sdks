@@ -15,7 +15,7 @@ class Evaluation:
         self.token = token
         self.timeout = timeout
 
-    def variant(self, request: EvaluationRequest):
+    def variant(self, request: EvaluationRequest) -> VariantEvaluationResponse:
         headers = {}
         if self.token != "":
             headers["Authorization"] = f"Bearer {self.token}"
@@ -23,7 +23,7 @@ class Evaluation:
         response = httpx.post(
             f"{self.url}/evaluate/v1/variant",
             headers=headers,
-            json=request.dict(),
+            json=request.model_dump(),
             timeout=self.timeout,
         )
 
@@ -39,7 +39,7 @@ class Evaluation:
         variant_response = json.dumps(response.json()).encode("utf-8")
         return VariantEvaluationResponse.model_validate_json(variant_response)
 
-    def boolean(self, request: EvaluationRequest):
+    def boolean(self, request: EvaluationRequest) -> BooleanEvaluationResponse:
         headers = {}
         if self.token != "":
             headers["Authorization"] = f"Bearer {self.token}"
@@ -47,7 +47,7 @@ class Evaluation:
         response = httpx.post(
             f"{self.url}/evaluate/v1/boolean",
             headers=headers,
-            json=request.dict(),
+            json=request.model_dump(),
             timeout=self.timeout,
         )
 
@@ -63,7 +63,7 @@ class Evaluation:
         boolean_response = json.dumps(response.json()).encode("utf-8")
         return BooleanEvaluationResponse.model_validate_json(boolean_response)
 
-    def batch(self, request: BatchEvaluationRequest):
+    def batch(self, request: BatchEvaluationRequest) -> BatchEvaluationResponse:
         headers = {}
         if self.token != "":
             headers["Authorization"] = f"Bearer {self.token}"
@@ -71,7 +71,7 @@ class Evaluation:
         response = httpx.post(
             f"{self.url}/evaluate/v1/batch",
             headers=headers,
-            json=request.dict(),
+            json=request.model_dump(),
             timeout=self.timeout,
         )
 
