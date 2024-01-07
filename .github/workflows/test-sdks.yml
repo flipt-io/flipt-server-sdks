@@ -14,9 +14,18 @@ jobs:
       - name: Checkout Sources
         uses: actions/checkout@v4
 
-      - name: Run Dagger Tests
-        uses: dagger/dagger-for-github@v5
+      - name: Install Go
+        uses: actions/setup-go@v4
         with:
-          verb: run
-          args: go run ./test
-          version: "0.9.5"
+          go-version: "1.21.4"
+          check-latest: true
+          cache: true
+
+      - name: Install Dagger
+        run: |
+          cd /usr/local
+          curl -L https://dl.dagger.io/dagger/install.sh | DAGGER_VERSION=0.9.5 sh
+      
+      - name: Run Integration Tests
+        run: |
+          dagger run go run ./test
