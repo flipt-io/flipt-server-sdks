@@ -1,0 +1,22 @@
+name: Test SDKs
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Sources
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v4
+        name: Run Dagger Tests
+        with:
+          verb: run
+          args: go run ./test
+          version: "0.9.5"
