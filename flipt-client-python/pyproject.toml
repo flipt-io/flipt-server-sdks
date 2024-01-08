@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "flipt"
-version = "0.0.1"
+version = "1.0.0"
 description = "Flipt Server SDK"
 authors = ["Flipt Devs <dev@flipt.io>"]
 license = "MIT"
