@@ -64,14 +64,12 @@ jobs:
           components: rustfmt, clippy
 
       - name: Check Formatting
-        working-directory: flipt-client-rust
         uses: actions-rs/cargo@v1
         with:
           command: fmt
           args: --all -- --check
 
       - name: Clippy
-        working-directory: flipt-client-python
         uses: actions-rs/cargo@v1
         with:
           command: clippy
