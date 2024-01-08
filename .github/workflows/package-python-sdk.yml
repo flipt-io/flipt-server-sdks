@@ -1,0 +1,17 @@
+name: Package Python SDK
+on:
+  push:
+    tags: ["flipt-client-python-**"]
+
+permissions:
+  contents: write
+
+env:
+  PYPI_API_KEY: ${{ secrets.PYPI_API_KEY }}
+
+jobs:
+  build:
+    uses: ./.github/workflows/package-sdks.yml
+    with:
+      sdk: python
+    secrets: inherit
