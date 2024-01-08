@@ -1,6 +1,6 @@
 pub mod models;
 
-use crate::util::deserialize;
+use crate::{error::UpstreamError, util::deserialize};
 use models::{
     BatchEvaluationRequest, BatchEvaluationResponse, BooleanEvaluationResponse, EvaluationRequest,
     VariantEvaluationResponse,
@@ -21,10 +21,15 @@ impl Evaluation {
     pub async fn boolean(
         &self,
         request: &EvaluationRequest,
-    ) -> anyhow::Result<BooleanEvaluationResponse> {
+    ) -> Result<BooleanEvaluationResponse, UpstreamError> {
         let endpoint = format!("{}evaluate/v1/boolean", self.url.as_str());
 
-        let response = self.client.post(endpoint).json(request).send().await?;
+        let response = match self.client.post(endpoint).json(request).send().await {
+            Ok(r) => r,
+            Err(e) => {
+                return Err(UpstreamError::default_with_message(e.to_string()));
+            }
+        };
 
         deserialize(response).await
     }
@@ -32,10 +37,15 @@ impl Evaluation {
     pub async fn variant(
         &self,
         request: &EvaluationRequest,
-    ) -> anyhow::Result<VariantEvaluationResponse> {
+    ) -> Result<VariantEvaluationResponse, UpstreamError> {
         let endpoint = format!("{}evaluate/v1/variant", self.url.as_str());
 
-        let response = self.client.post(endpoint).json(request).send().await?;
+        let response = match self.client.post(endpoint).json(request).send().await {
+            Ok(r) => r,
+            Err(e) => {
+                return Err(UpstreamError::default_with_message(e.to_string()));
+            }
+        };
 
         deserialize(response).await
     }
@@ -43,10 +53,15 @@ impl Evaluation {
     pub async fn batch(
         &self,
         batch: &BatchEvaluationRequest,
-    ) -> anyhow::Result<BatchEvaluationResponse> {
+    ) -> Result<BatchEvaluationResponse, UpstreamError> {
         let endpoint = format!("{}evaluate/v1/batch", self.url.as_str());
 
-        let response = self.client.post(endpoint).json(batch).send().await?;
+        let response = match self.client.post(endpoint).json(batch).send().await {
+            Ok(r) => r,
+            Err(e) => {
+                return Err(UpstreamError::default_with_message(e.to_string()));
+            }
+        };
 
         deserialize(response).await
     }

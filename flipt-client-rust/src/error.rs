@@ -12,6 +12,26 @@ pub struct UpstreamError {
     pub details: Option<Vec<serde_json::Value>>,
 }
 
+impl Default for UpstreamError {
+    fn default() -> Self {
+        Self {
+            code: 0,
+            message: "internal error".into(),
+            details: Some(Vec::new()),
+        }
+    }
+}
+
+impl UpstreamError {
+    pub fn default_with_message(message: String) -> Self {
+        Self {
+            code: 0,
+            message,
+            details: Some(Vec::new()),
+        }
+    }
+}
+
 impl Error for UpstreamError {}
 
 impl Display for UpstreamError {
@@ -24,5 +44,24 @@ impl Display for UpstreamError {
             }
         }
         Ok(())
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct ClientError {
+    pub message: String,
+}
+
+impl ClientError {
+    pub fn new(message: String) -> Self {
+        Self { message }
+    }
+}
+
+impl Error for ClientError {}
+
+impl Display for ClientError {
+    fn fmt(&self, f: &mut Formatter) -> std::fmt::Result {
+        write!(f, "Client error: {}", self.message)
     }
 }
