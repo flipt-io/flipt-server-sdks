@@ -1,0 +1,17 @@
+name: Package Rust SDK
+on:
+  push:
+    tags: ["flipt-client-rust-**"]
+
+permissions:
+  contents: write
+
+env:
+  CRATES_TOKEN: ${{ secrets.CRATES_TOKEN }}
+
+jobs:
+  build:
+    uses: ./.github/workflows/package-sdks.yml
+    with:
+      sdk: rust
+    secrets: inherit
