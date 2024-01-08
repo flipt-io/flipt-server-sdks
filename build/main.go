@@ -16,7 +16,6 @@ import (
 var (
 	languages    string
 	push         bool
-	tag          string
 	languageToFn = map[string]buildFn{
 		"python": pythonBuild,
 		"rust":   rustBuild,
@@ -28,7 +27,6 @@ var (
 func init() {
 	flag.StringVar(&languages, "languages", "", "comma separated list of which language(s) to run builds for")
 	flag.BoolVar(&push, "push", false, "push built artifacts to registry")
-	flag.StringVar(&tag, "tag", "", "tag to use for release")
 }
 
 func main() {
