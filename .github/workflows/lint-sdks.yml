@@ -59,17 +59,19 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           profile: minimal
-          toolchain: stable
+          toolchain: 1.75.0
           override: true
           components: rustfmt, clippy
 
       - name: Check Formatting
+        working-directory: flipt-client-rust
         uses: actions-rs/cargo@v1
         with:
           command: fmt
           args: --all -- --check
 
       - name: Clippy
+        working-directory: flipt-client-python
         uses: actions-rs/cargo@v1
         with:
           command: clippy
@@ -92,4 +94,5 @@ jobs:
         uses: gradle/gradle-build-action@v2
       
       - name: Lint Java code
+        working-directory: flipt-client-java
         run: ./gradlew spotlessCheck
