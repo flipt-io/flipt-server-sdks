@@ -4,31 +4,34 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ErrorEvaluationResponse {
-    private final String flagKey;
+  private final String flagKey;
 
-    private final String namespaceKey;
+  private final String namespaceKey;
 
-    private final String reason;
+  private final String reason;
 
-    @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-    public ErrorEvaluationResponse(@JsonProperty("flagKey") String flagKey, @JsonProperty("namespaceKey") String namespaceKey, @JsonProperty("reason") String reason) {
-        this.flagKey = flagKey;
-        this.namespaceKey = namespaceKey;
-        this.reason = reason;
-    }
+  @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+  public ErrorEvaluationResponse(
+      @JsonProperty("flagKey") String flagKey,
+      @JsonProperty("namespaceKey") String namespaceKey,
+      @JsonProperty("reason") String reason) {
+    this.flagKey = flagKey;
+    this.namespaceKey = namespaceKey;
+    this.reason = reason;
+  }
 
-    @JsonProperty("flagKey")
-    public String getFlagKey() {
-        return flagKey;
-    }
+  @JsonProperty("flagKey")
+  public String getFlagKey() {
+    return flagKey;
+  }
 
-    @JsonProperty("namespaceKey")
-    public String getNamespaceKey() {
-        return namespaceKey;
-    }
+  @JsonProperty("namespaceKey")
+  public String getNamespaceKey() {
+    return namespaceKey;
+  }
 
-    @JsonProperty("reason")
-    public String getReason() {
-        return reason;
-    }
+  @JsonProperty("reason")
+  public String getReason() {
+    return reason;
+  }
 }
