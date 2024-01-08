@@ -22,18 +22,15 @@ dependencies {
 
 spotless {
     java {
-        // Use the default importOrder configuration
         importOrder()
 
         removeUnusedImports()
 
-        // Cleanthat will refactor your code, but it may break your style: apply it before your formatter
-        cleanthat()          // has its own section below
+        cleanthat()
 
-        // Choose one of these formatters.
-        googleJavaFormat()   // has its own section below
+        googleJavaFormat()
 
-        formatAnnotations()  // fixes formatting of type annotations, see below
+        formatAnnotations()
     }
 }
 
