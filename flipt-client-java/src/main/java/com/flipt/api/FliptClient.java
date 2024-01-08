@@ -1,4 +1,3 @@
-/* (C) 2024 */
 package com.flipt.api;
 
 import com.flipt.api.evaluation.Evaluation;

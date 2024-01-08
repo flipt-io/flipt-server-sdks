@@ -1,4 +1,3 @@
-/* (C) 2024 */
 package com.flipt.api.evaluation;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;

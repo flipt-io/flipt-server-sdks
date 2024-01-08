@@ -1,4 +1,3 @@
-/* (C) 2024 */
 package com.flipt.api.evaluation.models;
 
 import com.fasterxml.jackson.annotation.JsonInclude;

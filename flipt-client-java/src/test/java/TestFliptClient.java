@@ -1,4 +1,3 @@
-/* (C) 2024 */
 import com.flipt.api.FliptClient;
 import com.flipt.api.evaluation.models.*;
 import java.util.*;
