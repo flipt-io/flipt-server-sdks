@@ -6,10 +6,6 @@ on:
         description: "SDK(s) to build"
         type: string
         required: true
-      tag:
-        description: "Tag to use for SDK(s)"
-        type: string
-        required: false
 
 permissions:
   contents: write
@@ -41,4 +37,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
         run: |
-          dagger run go run ./build --languages=${{ inputs.sdk }} --push=true --tag=${{ inputs.tag }}
+          dagger run go run ./build --languages=${{ inputs.sdk }} --push=true
