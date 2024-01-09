@@ -1,6 +1,6 @@
 # Integration Tests
 
-The different languages clients should all have an integration test suite that is dependent on the dynamic library being present somewhere and a running instance of Flipt.
+The different languages clients should all have an integration test suite that is dependent on an upstream Flipt server protected by auth.
 
 In the `test/` directory we will use [Dagger](https://dagger.io/) to orchestrate setting up the dependencies for running the test suites for the different languages.
 
