@@ -24,7 +24,7 @@ public class TestFliptClient {
     Assertions.assertEquals("flag1", variant.getFlagKey());
     Assertions.assertEquals("MATCH_EVALUATION_REASON", variant.getReason());
     Assertions.assertEquals("variant1", variant.getVariantKey());
-    Assertions.assertEquals("segment1", variant.getSegmentKeys().getFirst());
+    Assertions.assertEquals("segment1", variant.getSegmentKeys().get(0));
   }
 
   @Test
@@ -78,7 +78,7 @@ public class TestFliptClient {
         fc.evaluation.batch(new BatchEvaluationRequest(Optional.of(""), evaluationRequests));
 
     // Variant
-    EvaluationResponse first = batch.getResponses().getFirst();
+    EvaluationResponse first = batch.getResponses().get(0);
     Assertions.assertEquals("VARIANT_EVALUATION_RESPONSE_TYPE", first.getType());
 
     VariantEvaluationResponse variant = first.getVariantResponse().get();
@@ -86,7 +86,7 @@ public class TestFliptClient {
     Assertions.assertEquals("flag1", variant.getFlagKey());
     Assertions.assertEquals("MATCH_EVALUATION_REASON", variant.getReason());
     Assertions.assertEquals("variant1", variant.getVariantKey());
-    Assertions.assertEquals("segment1", variant.getSegmentKeys().getFirst());
+    Assertions.assertEquals("segment1", variant.getSegmentKeys().get(0));
 
     // Boolean
     EvaluationResponse second = batch.getResponses().get(1);

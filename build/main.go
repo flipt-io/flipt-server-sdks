@@ -20,8 +20,9 @@ var (
 		"python": pythonBuild,
 		"rust":   rustBuild,
 		"node":   nodeBuild,
+		"java":   javaBuild,
 	}
-	sema = make(chan struct{}, 4)
+	sema = make(chan struct{}, 5)
 )
 
 func init() {
@@ -176,6 +177,42 @@ func nodeBuild(ctx context.Context, client *dagger.Client, hostDirectory *dagger
 	_, err = container.WithSecretVariable("NPM_TOKEN", npmAPIKeySecret).
 		WithExec([]string{"npm", "config", "set", "--", "//registry.npmjs.org/:_authToken", "${NPM_TOKEN}"}).
 		WithExec([]string{"npm", "publish", "--access", "public"}).
+		Sync(ctx)
+
+	return err
+}
+
+func javaBuild(ctx context.Context, client *dagger.Client, hostDirectory *dagger.Directory) error {
+	container := client.Container().From("gradle:8.5.0-jdk11").
+		WithDirectory("/src", hostDirectory.Directory("flipt-client-java")).
+		WithWorkdir("/src").
+		WithExec([]string{"./gradlew", "build"})
+
+	var err error
+
+	if !push {
+		_, err = container.Sync(ctx)
+		return err
+	}
+
+	if os.Getenv("MAVEN_USERNAME") == "" {
+		return fmt.Errorf("MAVEN_USERNAME is not set")
+	}
+	if os.Getenv("MAVEN_PASSWORD") == "" {
+		return fmt.Errorf("MAVEN_PASSWORD is not set")
+	}
+	if os.Getenv("MAVEN_PUBLISH_REGISTRY_URL") == "" {
+		return fmt.Errorf("MAVEN_PUBLISH_REGISTRY_URL is not set")
+	}
+
+	mavenUsername := client.SetSecret("maven-username", os.Getenv("MAVEN_USERNAME"))
+	mavenPassword := client.SetSecret("maven-password", os.Getenv("MAVEN_PASSWORD"))
+	mavenRegistryUrl := client.SetSecret("maven-registry-url", os.Getenv("MAVEN_PUBLISH_REGISTRY_URL"))
+
+	_, err = container.WithSecretVariable("MAVEN_USERNAME", mavenUsername).
+		WithSecretVariable("MAVEN_PASSWORD", mavenPassword).
+		WithSecretVariable("MAVEN_PUBLISH_REGISTRY_URL", mavenRegistryUrl).
+		WithExec([]string{"./gradlew", "publish"}).
 		Sync(ctx)
 
 	return err

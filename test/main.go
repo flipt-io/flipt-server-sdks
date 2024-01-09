@@ -164,7 +164,7 @@ func rustTests(ctx context.Context, client *dagger.Client, flipt *dagger.Contain
 
 // javaTests runs the java integration test suite against a container running Flipt.
 func javaTests(ctx context.Context, client *dagger.Client, flipt *dagger.Container, hostDirectory *dagger.Directory) error {
-	_, err := client.Container().From("gradle:8.5.0-jdk21").
+	_, err := client.Container().From("gradle:8.5.0-jdk11").
 		WithWorkdir("/src").
 		WithDirectory("/src", hostDirectory.Directory("flipt-client-java"), dagger.ContainerWithDirectoryOpts{
 			Exclude: []string{"./.gradle", "./.idea", "./build"},
