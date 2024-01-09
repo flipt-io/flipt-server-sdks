@@ -13,12 +13,12 @@ if (!authToken) {
 }
 
 test("variant", async () => {
-  const client = new FliptClient(fliptUrl, authToken);
+  const client = new FliptClient({ url: fliptUrl, token: authToken });
 
   const variant = await client.evaluation.variant({
-    namespace_key: "default",
-    flag_key: "flag1",
-    entity_id: "entity",
+    namespaceKey: "default",
+    flagKey: "flag1",
+    entityId: "entity",
     context: { fizz: "buzz" }
   });
 
@@ -30,12 +30,12 @@ test("variant", async () => {
 });
 
 test("boolean", async () => {
-  const client = new FliptClient(fliptUrl, authToken);
+  const client = new FliptClient({ url: fliptUrl, token: authToken });
 
   const boolean = await client.evaluation.boolean({
-    namespace_key: "default",
-    flag_key: "flag_boolean",
-    entity_id: "entity",
+    namespaceKey: "default",
+    flagKey: "flag_boolean",
+    entityId: "entity",
     context: { fizz: "buzz" }
   });
 
@@ -45,25 +45,25 @@ test("boolean", async () => {
 });
 
 test("batch", async () => {
-  const client = new FliptClient(fliptUrl, authToken);
+  const client = new FliptClient({ url: fliptUrl, token: authToken });
   const batch = await client.evaluation.batch({
     requests: [
       {
-        namespace_key: "default",
-        flag_key: "flag1",
-        entity_id: "entity",
+        namespaceKey: "default",
+        flagKey: "flag1",
+        entityId: "entity",
         context: { fizz: "buzz" }
       },
       {
-        namespace_key: "default",
-        flag_key: "flag_boolean",
-        entity_id: "entity",
+        namespaceKey: "default",
+        flagKey: "flag_boolean",
+        entityId: "entity",
         context: { fizz: "buzz" }
       },
       {
-        namespace_key: "default",
-        flag_key: "notfound",
-        entity_id: "entity",
+        namespaceKey: "default",
+        flagKey: "notfound",
+        entityId: "entity",
         context: {}
       }
     ]

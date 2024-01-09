@@ -1,7 +1,7 @@
 export interface EvaluationRequest {
-  namespace_key: string;
-  flag_key: string;
-  entity_id: string;
+  namespaceKey: string;
+  flagKey: string;
+  entityId: string;
   context: object;
 }
 
