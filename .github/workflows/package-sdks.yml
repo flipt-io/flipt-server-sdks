@@ -34,7 +34,5 @@ jobs:
           curl -L https://dl.dagger.io/dagger/install.sh | DAGGER_VERSION=0.9.5 sh
 
       - name: Build Individual SDK(s)
-        env:
-          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
         run: |
           dagger run go run ./build --languages=${{ inputs.sdk }} --push=true
