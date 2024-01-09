@@ -22,7 +22,6 @@ var (
 		"node":   nodeBuild,
 		"java":   javaBuild,
 	}
-	sema = make(chan struct{}, 5)
 )
 
 func init() {
@@ -76,23 +75,12 @@ func run() error {
 
 	for _, fn := range tests {
 		fn := fn
-		g.Go(take(func() error {
+		g.Go(func() error {
 			return fn(ctx, client, dir)
-		}))
+		})
 	}
 
 	return g.Wait()
-}
-
-func take(fn func() error) func() error {
-	return func() error {
-		// insert into semaphore channel to maintain
-		// a max concurrency
-		sema <- struct{}{}
-		defer func() { <-sema }()
-
-		return fn()
-	}
 }
 
 func pythonBuild(ctx context.Context, client *dagger.Client, hostDirectory *dagger.Directory) error {

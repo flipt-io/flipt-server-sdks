@@ -18,7 +18,7 @@ public class TestFliptClient {
     Map<String, String> context = new HashMap<>();
     context.put("fizz", "buzz");
     VariantEvaluationResponse variant =
-        fc.evaluation.variant(new EvaluationRequest("default", "flag1", "entity", context));
+        fc.evaluation().variant(new EvaluationRequest("default", "flag1", "entity", context));
 
     Assertions.assertTrue(variant.isMatch());
     Assertions.assertEquals("flag1", variant.getFlagKey());
@@ -41,8 +41,8 @@ public class TestFliptClient {
     context.put("fizz", "buzz");
 
     BooleanEvaluationResponse booleanEvaluation =
-        fc.evaluation.booleanEvaluation(
-            new EvaluationRequest("default", "flag_boolean", "entity", context));
+        fc.evaluation()
+            .booleanEvaluation(new EvaluationRequest("default", "flag_boolean", "entity", context));
 
     Assertions.assertTrue(booleanEvaluation.isEnabled());
     Assertions.assertEquals("flag_boolean", booleanEvaluation.getFlagKey());
@@ -75,7 +75,7 @@ public class TestFliptClient {
     evaluationRequests.add(errorEvaluationRequest);
 
     BatchEvaluationResponse batch =
-        fc.evaluation.batch(new BatchEvaluationRequest(Optional.of(""), evaluationRequests));
+        fc.evaluation().batch(new BatchEvaluationRequest(Optional.of(""), evaluationRequests));
 
     // Variant
     EvaluationResponse first = batch.getResponses().get(0);

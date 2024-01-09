@@ -21,7 +21,6 @@ var (
 		"rust":   rustTests,
 		"java":   javaTests,
 	}
-	sema = make(chan struct{}, 5)
 )
 
 type integrationTestFn func(context.Context, *dagger.Client, *dagger.Container, *dagger.Directory) error
@@ -73,9 +72,9 @@ func run() error {
 
 	for _, fn := range tests {
 		fn := fn
-		g.Go(take(func() error {
+		g.Go(func() error {
 			return fn(ctx, client, flipt, hostDirectory)
-		}))
+		})
 	}
 
 	return g.Wait()
@@ -97,17 +96,6 @@ func getTestDependencies(ctx context.Context, client *dagger.Client, dir *dagger
 		WithExposedPort(8080)
 
 	return flipt, dir
-}
-
-func take(fn func() error) func() error {
-	return func() error {
-		// insert into semaphore channel to maintain
-		// a max concurrency
-		sema <- struct{}{}
-		defer func() { <-sema }()
-
-		return fn()
-	}
 }
 
 // pythonTests runs the python integration test suite against a container running Flipt.

@@ -24,12 +24,13 @@ public class Main {
     evaluationRequests.add(errorEvaluationRequest);
 
     VariantEvaluationResponse variantEvaluationResponse =
-        fliptClient.evaluation.variant(variantEvaluationRequest);
+        fliptClient.evaluation().variant(variantEvaluationRequest);
     BooleanEvaluationResponse booleanEvaluationResponse =
-        fliptClient.evaluation.booleanEvaluation(booleanEvaluationRequest);
+        fliptClient.evaluation().booleanEvaluation(booleanEvaluationRequest);
 
     BatchEvaluationResponse batchEvaluationResponse =
-        fliptClient.evaluation.batch(
-            new BatchEvaluationRequest(Optional.of(""), evaluationRequests));
+        fliptClient
+            .evaluation()
+            .batch(new BatchEvaluationRequest(Optional.of(""), evaluationRequests));
   }
 }
