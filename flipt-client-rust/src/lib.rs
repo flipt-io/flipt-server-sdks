@@ -3,12 +3,7 @@ pub mod error;
 pub mod evaluation;
 pub mod util;
 
-use evaluation::Evaluation;
 use url::Url;
-
-pub struct ApiClient {
-    pub evaluation: Evaluation,
-}
 
 #[derive(Debug, Clone)]
 pub struct Config {
