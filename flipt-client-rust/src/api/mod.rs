@@ -19,7 +19,7 @@ impl FliptClient {
                     format!("Bearer {}", bearer).parse().unwrap(),
                 );
             }
-            AuthScheme::JWTToken(jwt) => {
+            AuthScheme::JWT(jwt) => {
                 header_map.insert("Authorization", format!("JWT {}", jwt).parse().unwrap());
             }
             AuthScheme::None => {}

@@ -36,7 +36,7 @@ impl Config {
 pub enum AuthScheme {
     None,
     BearerToken(String),
-    JWTToken(String),
+    JWT(String),
 }
 
 impl Default for AuthScheme {
