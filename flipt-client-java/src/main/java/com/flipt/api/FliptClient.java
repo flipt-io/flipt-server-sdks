@@ -5,9 +5,9 @@ import java.time.Duration;
 import okhttp3.OkHttpClient;
 
 public class FliptClient {
-  private Evaluation evaluation;
+  private final Evaluation evaluation;
 
-  public FliptClient(String url, String clientToken, String jwtToken, int timeout) {
+  private FliptClient(String url, String clientToken, String jwtToken, int timeout) {
     OkHttpClient httpClient =
         new OkHttpClient.Builder().callTimeout(Duration.ofSeconds(timeout)).build();
     this.evaluation = new Evaluation(httpClient, url, clientToken, jwtToken);
