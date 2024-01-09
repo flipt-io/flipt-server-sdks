@@ -1,4 +1,4 @@
-use flipt::api::ApiClient;
+use flipt::api::FliptClient;
 use flipt::evaluation::models::{BatchEvaluationRequest, EvaluationRequest};
 use flipt::{AuthScheme, Config};
 use std::{collections::HashMap, env};
@@ -9,7 +9,7 @@ async fn tests() {
     let url = env::var("FLIPT_URL").unwrap();
     let token = env::var("FLIPT_AUTH_TOKEN").unwrap();
 
-    let flipt_client = ApiClient::new(Config::new(
+    let flipt_client = FliptClient::new(Config::new(
         Url::parse(&url).unwrap(),
         AuthScheme::BearerToken(token),
         60,

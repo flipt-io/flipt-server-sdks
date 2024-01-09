@@ -1,23 +1,23 @@
 import { Evaluation } from "./evaluation";
 
-interface FliptApiClientOptions {
+interface FliptClientOptions {
   url?: string;
   clientToken?: string;
   jwtToken?: string;
   timeout?: number;
 }
 
-const defaultFliptClientOptions: FliptApiClientOptions = {
+const defaultFliptClientOptions: FliptClientOptions = {
   url: "http://localhost:8080",
   clientToken: "",
   jwtToken: "",
   timeout: 60
 };
 
-export class FliptApiClient {
+export class FliptClient {
   public evaluation: Evaluation;
 
-  public constructor(options?: FliptApiClientOptions) {
+  public constructor(options?: FliptClientOptions) {
     const clientOptions = {
       ...defaultFliptClientOptions
     };

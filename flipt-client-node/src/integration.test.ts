@@ -1,4 +1,4 @@
-import { FliptApiClient } from ".";
+import { FliptClient } from ".";
 
 const fliptUrl = process.env["FLIPT_URL"];
 if (!fliptUrl) {
@@ -13,7 +13,7 @@ if (!authToken) {
 }
 
 test("variant", async () => {
-  const client = new FliptApiClient({ url: fliptUrl, clientToken: authToken });
+  const client = new FliptClient({ url: fliptUrl, clientToken: authToken });
 
   const variant = await client.evaluation.variant({
     namespaceKey: "default",
@@ -30,7 +30,7 @@ test("variant", async () => {
 });
 
 test("boolean", async () => {
-  const client = new FliptApiClient({ url: fliptUrl, clientToken: authToken });
+  const client = new FliptClient({ url: fliptUrl, clientToken: authToken });
 
   const boolean = await client.evaluation.boolean({
     namespaceKey: "default",
@@ -45,7 +45,7 @@ test("boolean", async () => {
 });
 
 test("batch", async () => {
-  const client = new FliptApiClient({ url: fliptUrl, clientToken: authToken });
+  const client = new FliptClient({ url: fliptUrl, clientToken: authToken });
   const batch = await client.evaluation.batch({
     requests: [
       {

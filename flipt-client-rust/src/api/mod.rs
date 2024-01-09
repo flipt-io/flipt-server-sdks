@@ -4,11 +4,11 @@ use crate::{AuthScheme, Config};
 use reqwest::header::HeaderMap;
 use std::time::Duration;
 
-pub struct ApiClient {
+pub struct FliptClient {
     pub evaluation: Evaluation,
 }
 
-impl ApiClient {
+impl FliptClient {
     pub fn new(config: Config) -> Result<Self, ClientError> {
         let mut header_map = HeaderMap::new();
 
@@ -42,7 +42,7 @@ impl ApiClient {
     }
 }
 
-impl Default for ApiClient {
+impl Default for FliptClient {
     fn default() -> Self {
         Self::new(Config::default()).unwrap()
     }

@@ -2,7 +2,7 @@ import typing
 from .evaluation import Evaluation
 
 
-class FliptApi:
+class FliptClient:
     def __init__(
         self,
         url: str = "http://localhost:8080",

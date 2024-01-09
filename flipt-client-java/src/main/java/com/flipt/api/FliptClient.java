@@ -4,10 +4,10 @@ import com.flipt.api.evaluation.Evaluation;
 import java.time.Duration;
 import okhttp3.OkHttpClient;
 
-public class FliptApiClient {
+public class FliptClient {
   private Evaluation evaluation;
 
-  public FliptApiClient(String url, String clientToken, String jwtToken, int timeout) {
+  public FliptClient(String url, String clientToken, String jwtToken, int timeout) {
     OkHttpClient httpClient =
         new OkHttpClient.Builder().callTimeout(Duration.ofSeconds(timeout)).build();
     this.evaluation = new Evaluation(httpClient, url, clientToken, jwtToken);
@@ -17,11 +17,11 @@ public class FliptApiClient {
     return evaluation;
   }
 
-  public static FliptApiClientBuilder builder() {
-    return new FliptApiClientBuilder();
+  public static FliptClientBuilder builder() {
+    return new FliptClientBuilder();
   }
 
-  public static final class FliptApiClientBuilder {
+  public static final class FliptClientBuilder {
     private String baseURL = "http://localhost:8080";
 
     private String clientToken = "";
@@ -30,30 +30,30 @@ public class FliptApiClient {
 
     private int timeout = 60;
 
-    public FliptApiClientBuilder() {}
+    public FliptClientBuilder() {}
 
-    public FliptApiClientBuilder url(String url) {
+    public FliptClientBuilder url(String url) {
       this.baseURL = url;
       return this;
     }
 
-    public FliptApiClientBuilder clientToken(String token) {
+    public FliptClientBuilder clientToken(String token) {
       this.clientToken = token;
       return this;
     }
 
-    public FliptApiClientBuilder jwtToken(String token) {
+    public FliptClientBuilder jwtToken(String token) {
       this.jwtToken = token;
       return this;
     }
 
-    public FliptApiClientBuilder timeout(int timeout) {
+    public FliptClientBuilder timeout(int timeout) {
       this.timeout = timeout;
       return this;
     }
 
-    public FliptApiClient build() {
-      return new FliptApiClient(baseURL, clientToken, jwtToken, timeout);
+    public FliptClient build() {
+      return new FliptClient(baseURL, clientToken, jwtToken, timeout);
     }
   }
 }

@@ -1,6 +1,6 @@
-import { FliptApiClient } from "../src";
+import { FliptClient } from "../src";
 
-const fliptClient = new FliptApiClient();
+const fliptClient = new FliptClient();
 
 async function example() {
   const variantEvaluationResponse = await fliptClient.evaluation.variant({

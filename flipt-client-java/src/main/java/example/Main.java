@@ -1,12 +1,12 @@
 package example;
 
-import com.flipt.api.FliptApiClient;
+import com.flipt.api.FliptClient;
 import com.flipt.api.evaluation.models.*;
 import java.util.*;
 
 public class Main {
   public static void main(String[] args) {
-    FliptApiClient fliptClient = FliptApiClient.builder().build();
+    FliptClient fliptClient = FliptClient.builder().build();
     Map<String, String> context = new HashMap<>();
 
     context.put("fizz", "buzz");
