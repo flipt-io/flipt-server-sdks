@@ -2,12 +2,12 @@
 
 use std::collections::HashMap;
 
+use flipt::api::ApiClient;
 use flipt::evaluation::models::{BatchEvaluationRequest, EvaluationRequest};
-use flipt::FliptClient;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let client = FliptClient::default();
+    let client = ApiClient::default();
 
     let mut context: HashMap<String, String> = HashMap::new();
 

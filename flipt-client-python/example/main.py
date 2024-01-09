@@ -1,7 +1,7 @@
-from flipt import FliptClient
+from flipt import FliptApi
 from flipt.evaluation import BatchEvaluationRequest, EvaluationRequest
 
-fliptClient = FliptClient()
+fliptClient = FliptApi()
 
 v = fliptClient.evaluation.variant(
     EvaluationRequest(

@@ -14,13 +14,15 @@ import okhttp3.*;
 public class Evaluation {
   private final OkHttpClient httpClient;
   private final String baseURL;
-  private final String token;
+  private final String clientToken;
+  private final String jwtToken;
   private final ObjectMapper objectMapper;
 
-  public Evaluation(OkHttpClient httpClient, String baseURL, String token) {
+  public Evaluation(OkHttpClient httpClient, String baseURL, String clientToken, String jwtToken) {
     this.httpClient = httpClient;
     this.baseURL = baseURL;
-    this.token = token;
+    this.clientToken = clientToken;
+    this.jwtToken = jwtToken;
     this.objectMapper =
         JsonMapper.builder()
             .addModule(new Jdk8Module())
@@ -66,8 +68,10 @@ public class Evaluation {
 
     Request.Builder httpRequest = new Request.Builder().url(url).method("POST", body);
 
-    if (!this.token.isEmpty()) {
-      httpRequest.addHeader("Authorization", String.format("Bearer %s", this.token));
+    if (!this.clientToken.isEmpty()) {
+      httpRequest.addHeader("Authorization", String.format("Bearer %s", this.clientToken));
+    } else if (!this.jwtToken.isEmpty()) {
+      httpRequest.addHeader("Authorization", String.format("JWT %s", this.jwtToken));
     }
 
     return httpRequest;
@@ -118,8 +122,10 @@ public class Evaluation {
 
     Request.Builder httpRequest = new Request.Builder().url(url).method("POST", body);
 
-    if (!this.token.isEmpty()) {
-      httpRequest.addHeader("Authorization", String.format("Bearer %s", this.token));
+    if (!this.clientToken.isEmpty()) {
+      httpRequest.addHeader("Authorization", String.format("Bearer %s", this.clientToken));
+    } else if (!this.jwtToken.isEmpty()) {
+      httpRequest.addHeader("Authorization", String.format("JWT %s", this.jwtToken));
     }
 
     try {
