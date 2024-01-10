@@ -103,7 +103,7 @@ func pythonTests(ctx context.Context, client *dagger.Client, flipt *dagger.Conta
 	_, err := client.Container().From("python:3.11-bookworm").
 		WithExec([]string{"pip", "install", "poetry==1.7.0"}).
 		WithWorkdir("/src").
-		WithDirectory("/src", hostDirectory.Directory("flipt-client-python")).
+		WithDirectory("/src", hostDirectory.Directory("flipt-python")).
 		WithServiceBinding("flipt", flipt.WithExec(nil).AsService()).
 		WithEnvVariable("FLIPT_URL", "http://flipt:8080").
 		WithEnvVariable("FLIPT_AUTH_TOKEN", "secret").
@@ -120,7 +120,7 @@ func nodeTests(ctx context.Context, client *dagger.Client, flipt *dagger.Contain
 		WithWorkdir("/src").
 		// The node_modules should never be version controlled, but we will exclude it here
 		// just to be safe.
-		WithDirectory("/src", hostDirectory.Directory("flipt-client-node"), dagger.ContainerWithDirectoryOpts{
+		WithDirectory("/src", hostDirectory.Directory("flipt-node"), dagger.ContainerWithDirectoryOpts{
 			Exclude: []string{"./node_modules/"},
 		}).
 		WithServiceBinding("flipt", flipt.WithExec(nil).AsService()).
@@ -138,7 +138,7 @@ func rustTests(ctx context.Context, client *dagger.Client, flipt *dagger.Contain
 	_, err := client.Container().From("rust:1.73.0-bookworm").
 		WithWorkdir("/src").
 		// Exclude target directory which contain the build artifacts for Rust.
-		WithDirectory("/src", hostDirectory.Directory("flipt-client-rust"), dagger.ContainerWithDirectoryOpts{
+		WithDirectory("/src", hostDirectory.Directory("flipt-rust"), dagger.ContainerWithDirectoryOpts{
 			Exclude: []string{"./target/"},
 		}).
 		WithServiceBinding("flipt", flipt.WithExec(nil).AsService()).
@@ -154,7 +154,7 @@ func rustTests(ctx context.Context, client *dagger.Client, flipt *dagger.Contain
 func javaTests(ctx context.Context, client *dagger.Client, flipt *dagger.Container, hostDirectory *dagger.Directory) error {
 	_, err := client.Container().From("gradle:8.5.0-jdk11").
 		WithWorkdir("/src").
-		WithDirectory("/src", hostDirectory.Directory("flipt-client-java"), dagger.ContainerWithDirectoryOpts{
+		WithDirectory("/src", hostDirectory.Directory("flipt-java"), dagger.ContainerWithDirectoryOpts{
 			Exclude: []string{"./.gradle", "./.idea", "./build"},
 		}).
 		WithServiceBinding("flipt", flipt.WithExec(nil).AsService()).
