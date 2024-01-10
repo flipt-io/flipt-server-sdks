@@ -3,6 +3,7 @@ export interface EvaluationRequest {
   flagKey: string;
   entityId: string;
   context: object;
+  reference?: string;
 }
 
 export interface VariantEvaluationResponse {
@@ -27,6 +28,7 @@ export interface BooleanEvaluationResponse {
 export interface BatchEvaluationRequest {
   request_id?: string;
   requests: EvaluationRequest[];
+  reference?: string;
 }
 
 interface ErrorEvaluationResponse {
