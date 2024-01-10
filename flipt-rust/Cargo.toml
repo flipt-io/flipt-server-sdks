@@ -1,6 +1,6 @@
 [package]
 name = "flipt"
-description = "Flipt Server SDK"
+description = "Flipt Server Evaluation SDK"
 version = "0.0.0"
 edition = "2021"
 author = ["Flipt Devs <dev@flipt.io>"]
