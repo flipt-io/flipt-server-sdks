@@ -1,7 +1,7 @@
 name: Package Rust SDK
 on:
   push:
-    tags: ["flipt-client-rust-**"]
+    tags: ["flipt-rust-**"]
 
 permissions:
   contents: write

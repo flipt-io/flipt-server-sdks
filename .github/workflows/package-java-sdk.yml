@@ -1,7 +1,7 @@
 name: Package Java SDK
 on:
   push:
-    tags: ["flipt-client-java-**"]
+    tags: ["flipt-java-**"]
 
 permissions:
   contents: write
