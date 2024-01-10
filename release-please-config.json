@@ -6,7 +6,8 @@
   "packages": {
     "flipt-java": {
       "component": "flipt-java",
-      "release-type": "java"
+      "release-type": "java",
+      "extra-files": ["build.gradle"]
     },
     "flipt-node": {
       "component": "flipt-node",
