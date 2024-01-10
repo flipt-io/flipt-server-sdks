@@ -46,7 +46,7 @@ The client shape should be as follows:
 
 1. **Variant** method: Should take in a flag key, entity ID, and context. Should return a variant result. Follow language conventions for naming.
 2. **Boolean** method: Should take in a flag key, entity ID, and context. Should return a boolean result. Follow language conventions for naming.
-3. **Batch** method: Should take in a list of flag keys, entity ID, and context. Should return a list of variant results. Follow language conventions for naming.
+3. **Batch** method: Should take in a list of flag keys, entity ID, and context. Should return a list of results. Follow language conventions for naming.
 
 ### 3. Setup Tests
 
