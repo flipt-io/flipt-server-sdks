@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.flipt.api.authentication.AuthenticationStrategy;
 import com.flipt.api.error.Error;
 import com.flipt.api.evaluation.models.*;
 import java.io.IOException;
@@ -14,15 +15,14 @@ import okhttp3.*;
 public class Evaluation {
   private final OkHttpClient httpClient;
   private final String baseURL;
-  private final String clientToken;
-  private final String jwtToken;
+  private final AuthenticationStrategy authenticationStrategy;
   private final ObjectMapper objectMapper;
 
-  public Evaluation(OkHttpClient httpClient, String baseURL, String clientToken, String jwtToken) {
+  public Evaluation(
+      OkHttpClient httpClient, String baseURL, AuthenticationStrategy authenticationStrategy) {
     this.httpClient = httpClient;
     this.baseURL = baseURL;
-    this.clientToken = clientToken;
-    this.jwtToken = jwtToken;
+    this.authenticationStrategy = authenticationStrategy;
     this.objectMapper =
         JsonMapper.builder()
             .addModule(new Jdk8Module())
@@ -68,10 +68,8 @@ public class Evaluation {
 
     Request.Builder httpRequest = new Request.Builder().url(url).method("POST", body);
 
-    if (!this.clientToken.isEmpty()) {
-      httpRequest.addHeader("Authorization", String.format("Bearer %s", this.clientToken));
-    } else if (!this.jwtToken.isEmpty()) {
-      httpRequest.addHeader("Authorization", String.format("JWT %s", this.jwtToken));
+    if (this.authenticationStrategy != null) {
+      httpRequest.addHeader("Authorization", this.authenticationStrategy.getAuthorizationHeader());
     }
 
     return httpRequest;
@@ -122,10 +120,8 @@ public class Evaluation {
 
     Request.Builder httpRequest = new Request.Builder().url(url).method("POST", body);
 
-    if (!this.clientToken.isEmpty()) {
-      httpRequest.addHeader("Authorization", String.format("Bearer %s", this.clientToken));
-    } else if (!this.jwtToken.isEmpty()) {
-      httpRequest.addHeader("Authorization", String.format("JWT %s", this.jwtToken));
+    if (this.authenticationStrategy != null) {
+      httpRequest.addHeader("Authorization", this.authenticationStrategy.getAuthorizationHeader());
     }
 
     try {

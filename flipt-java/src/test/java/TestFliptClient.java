@@ -1,4 +1,6 @@
 import com.flipt.api.FliptClient;
+import com.flipt.api.authentication.AuthenticationStrategy;
+import com.flipt.api.authentication.ClientTokenAuthenticationStrategy;
 import com.flipt.api.evaluation.models.*;
 import java.util.*;
 import org.junit.jupiter.api.Assertions;
@@ -13,7 +15,11 @@ public class TestFliptClient {
     assert !fliptURL.isEmpty();
     assert !authToken.isEmpty();
 
-    FliptClient fc = FliptClient.builder().url(fliptURL).clientToken(authToken).build();
+    AuthenticationStrategy authenticationStrategy =
+        new ClientTokenAuthenticationStrategy(authToken);
+
+    FliptClient fc =
+        FliptClient.builder().url(fliptURL).authentication(authenticationStrategy).build();
 
     Map<String, String> context = new HashMap<>();
     context.put("fizz", "buzz");
@@ -35,7 +41,11 @@ public class TestFliptClient {
     assert !fliptURL.isEmpty();
     assert !authToken.isEmpty();
 
-    FliptClient fc = FliptClient.builder().url(fliptURL).clientToken(authToken).build();
+    AuthenticationStrategy authenticationStrategy =
+        new ClientTokenAuthenticationStrategy(authToken);
+
+    FliptClient fc =
+        FliptClient.builder().url(fliptURL).authentication(authenticationStrategy).build();
 
     Map<String, String> context = new HashMap<>();
     context.put("fizz", "buzz");
@@ -57,7 +67,11 @@ public class TestFliptClient {
     assert !fliptURL.isEmpty();
     assert !authToken.isEmpty();
 
-    FliptClient fc = FliptClient.builder().url(fliptURL).clientToken(authToken).build();
+    AuthenticationStrategy authenticationStrategy =
+        new ClientTokenAuthenticationStrategy(authToken);
+
+    FliptClient fc =
+        FliptClient.builder().url(fliptURL).authentication(authenticationStrategy).build();
 
     Map<String, String> context = new HashMap<>();
     context.put("fizz", "buzz");
