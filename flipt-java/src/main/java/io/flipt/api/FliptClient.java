@@ -9,7 +9,8 @@ public class FliptClient {
   private final Evaluation evaluation;
 
   private FliptClient(String url, int timeout, AuthenticationStrategy authenticationStrategy) {
-    OkHttpClient httpClient = new OkHttpClient.Builder().callTimeout(Duration.ofSeconds(timeout)).build();
+    OkHttpClient httpClient =
+        new OkHttpClient.Builder().callTimeout(Duration.ofSeconds(timeout)).build();
     this.evaluation = new Evaluation(httpClient, url, authenticationStrategy);
   }
 
@@ -28,8 +29,7 @@ public class FliptClient {
 
     private int timeout = 60;
 
-    public FliptClientBuilder() {
-    }
+    public FliptClientBuilder() {}
 
     public FliptClientBuilder url(String url) {
       this.baseURL = url;

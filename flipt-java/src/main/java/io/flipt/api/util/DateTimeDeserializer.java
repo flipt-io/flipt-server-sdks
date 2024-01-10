@@ -23,8 +23,7 @@ public class DateTimeDeserializer extends JsonDeserializer<OffsetDateTime> {
   }
 
   /**
-   * Gets a module wrapping this deserializer as an adapter for the Jackson
-   * ObjectMapper.
+   * Gets a module wrapping this deserializer as an adapter for the Jackson ObjectMapper.
    *
    * @return A {@link SimpleModule} to be plugged onto Jackson ObjectMapper.
    */
@@ -40,8 +39,9 @@ public class DateTimeDeserializer extends JsonDeserializer<OffsetDateTime> {
       return OffsetDateTime.ofInstant(
           Instant.ofEpochSecond(parser.getValueAsLong()), ZoneOffset.UTC);
     } else {
-      TemporalAccessor temporal = DateTimeFormatter.ISO_DATE_TIME.parseBest(
-          parser.getValueAsString(), OffsetDateTime::from, LocalDateTime::from);
+      TemporalAccessor temporal =
+          DateTimeFormatter.ISO_DATE_TIME.parseBest(
+              parser.getValueAsString(), OffsetDateTime::from, LocalDateTime::from);
 
       if (temporal.query(TemporalQueries.offset()) == null) {
         return LocalDateTime.from(temporal).atOffset(ZoneOffset.UTC);

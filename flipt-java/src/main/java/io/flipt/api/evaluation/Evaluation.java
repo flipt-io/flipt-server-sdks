@@ -23,10 +23,11 @@ public class Evaluation {
     this.httpClient = httpClient;
     this.baseURL = baseURL;
     this.authenticationStrategy = authenticationStrategy;
-    this.objectMapper = JsonMapper.builder()
-        .addModule(new Jdk8Module())
-        .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-        .build();
+    this.objectMapper =
+        JsonMapper.builder()
+            .addModule(new Jdk8Module())
+            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            .build();
   }
 
   public VariantEvaluationResponse variant(EvaluationRequest request) {
@@ -58,8 +59,9 @@ public class Evaluation {
     RequestBody body;
 
     try {
-      body = RequestBody.create(
-          this.objectMapper.writeValueAsString(request), MediaType.parse("application/json"));
+      body =
+          RequestBody.create(
+              this.objectMapper.writeValueAsString(request), MediaType.parse("application/json"));
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -102,8 +104,9 @@ public class Evaluation {
     RequestBody body;
 
     try {
-      body = RequestBody.create(
-          this.objectMapper.writeValueAsString(request), MediaType.parse("application/json"));
+      body =
+          RequestBody.create(
+              this.objectMapper.writeValueAsString(request), MediaType.parse("application/json"));
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
