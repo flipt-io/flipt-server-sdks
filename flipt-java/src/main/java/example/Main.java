@@ -12,11 +12,11 @@ public class Main {
     context.put("fizz", "buzz");
 
     EvaluationRequest variantEvaluationRequest =
-        new EvaluationRequest("default", "flag1", "entity", context);
+        new EvaluationRequest("default", "flag1", "entity", context, Optional.empty());
     EvaluationRequest booleanEvaluationRequest =
-        new EvaluationRequest("default", "flag_boolean", "entity", context);
+        new EvaluationRequest("default", "flag_boolean", "entity", context, Optional.empty());
     EvaluationRequest errorEvaluationRequest =
-        new EvaluationRequest("default", "flag1234", "entity", new HashMap<>());
+        new EvaluationRequest("default", "flag1234", "entity", new HashMap<>(), Optional.empty());
 
     List<EvaluationRequest> evaluationRequests = new ArrayList<>();
     evaluationRequests.add(variantEvaluationRequest);
@@ -31,6 +31,6 @@ public class Main {
     BatchEvaluationResponse batchEvaluationResponse =
         fliptClient
             .evaluation()
-            .batch(new BatchEvaluationRequest(Optional.of(""), evaluationRequests));
+            .batch(new BatchEvaluationRequest(Optional.of(""), evaluationRequests, Optional.empty()));
   }
 }
