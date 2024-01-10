@@ -1,5 +1,6 @@
 package com.flipt.api;
 
+import com.flipt.api.authentication.AuthenticationStrategy;
 import com.flipt.api.evaluation.Evaluation;
 import java.time.Duration;
 import okhttp3.OkHttpClient;
@@ -7,10 +8,10 @@ import okhttp3.OkHttpClient;
 public class FliptClient {
   private final Evaluation evaluation;
 
-  private FliptClient(String url, String clientToken, String jwtToken, int timeout) {
+  private FliptClient(String url, int timeout, AuthenticationStrategy authenticationStrategy) {
     OkHttpClient httpClient =
         new OkHttpClient.Builder().callTimeout(Duration.ofSeconds(timeout)).build();
-    this.evaluation = new Evaluation(httpClient, url, clientToken, jwtToken);
+    this.evaluation = new Evaluation(httpClient, url, authenticationStrategy);
   }
 
   public Evaluation evaluation() {
@@ -24,9 +25,7 @@ public class FliptClient {
   public static final class FliptClientBuilder {
     private String baseURL = "http://localhost:8080";
 
-    private String clientToken = "";
-
-    private String jwtToken = "";
+    private AuthenticationStrategy authenticationStrategy;
 
     private int timeout = 60;
 
@@ -37,13 +36,8 @@ public class FliptClient {
       return this;
     }
 
-    public FliptClientBuilder clientToken(String token) {
-      this.clientToken = token;
-      return this;
-    }
-
-    public FliptClientBuilder jwtToken(String token) {
-      this.jwtToken = token;
+    public FliptClientBuilder authentication(AuthenticationStrategy authenticationStrategy) {
+      this.authenticationStrategy = authenticationStrategy;
       return this;
     }
 
@@ -53,7 +47,7 @@ public class FliptClient {
     }
 
     public FliptClient build() {
-      return new FliptClient(baseURL, clientToken, jwtToken, timeout);
+      return new FliptClient(baseURL, timeout, authenticationStrategy);
     }
   }
 }
