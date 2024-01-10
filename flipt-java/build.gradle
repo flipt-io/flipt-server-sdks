@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.flipt.api'
-version = '1.0-SNAPSHOT'
+version = '0.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -59,7 +59,7 @@ publishing {
         maven(MavenPublication) {
             groupId = 'io.flipt'
             artifactId = 'flipt-java'
-            version = '1.0.0'
+            version = '0.0.0'
             from components.java
         }
     }
