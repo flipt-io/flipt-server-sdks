@@ -1,7 +1,7 @@
 name: Package Python SDK
 on:
   push:
-    tags: ["flipt-client-python-**"]
+    tags: ["flipt-python-**"]
 
 permissions:
   contents: write
