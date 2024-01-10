@@ -24,12 +24,14 @@ async fn tests() {
         flag_key: "flag1".into(),
         entity_id: "entity".into(),
         context: context.clone(),
+        reference: None,
     };
     let boolean_request = EvaluationRequest {
         namespace_key: "default".into(),
         flag_key: "flag_boolean".into(),
         entity_id: "entity".into(),
         context: context.clone(),
+        reference: None,
     };
 
     let variant = flipt_client
@@ -60,9 +62,10 @@ async fn tests() {
         flag_key: "notfound".into(),
         entity_id: "entity".into(),
         context: context.clone(),
+        reference: None,
     });
 
-    let batch_request = BatchEvaluationRequest { requests };
+    let batch_request = BatchEvaluationRequest { requests, reference: None };
     let batch = flipt_client.evaluation.batch(&batch_request).await.unwrap();
 
     // Variant

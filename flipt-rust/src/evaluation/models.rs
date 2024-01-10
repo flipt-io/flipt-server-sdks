@@ -5,6 +5,7 @@ use std::collections::HashMap;
 #[derive(Default, Serialize)]
 pub struct BatchEvaluationRequest {
     pub requests: Vec<EvaluationRequest>,
+    pub reference: Option<String>,
 }
 
 #[derive(Serialize)]
@@ -14,6 +15,7 @@ pub struct EvaluationRequest {
     pub flag_key: String,
     pub entity_id: String,
     pub context: HashMap<String, String>,
+    pub reference: Option<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize)]
