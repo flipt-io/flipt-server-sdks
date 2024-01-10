@@ -13,7 +13,7 @@ public class TestFliptClient {
     assert !fliptURL.isEmpty();
     assert !authToken.isEmpty();
 
-    FliptClient fc = FliptClient.builder().url(fliptURL).token(authToken).build();
+    FliptClient fc = FliptClient.builder().url(fliptURL).clientToken(authToken).build();
 
     Map<String, String> context = new HashMap<>();
     context.put("fizz", "buzz");
@@ -35,7 +35,7 @@ public class TestFliptClient {
     assert !fliptURL.isEmpty();
     assert !authToken.isEmpty();
 
-    FliptClient fc = FliptClient.builder().url(fliptURL).token(authToken).build();
+    FliptClient fc = FliptClient.builder().url(fliptURL).clientToken(authToken).build();
 
     Map<String, String> context = new HashMap<>();
     context.put("fizz", "buzz");
@@ -57,7 +57,7 @@ public class TestFliptClient {
     assert !fliptURL.isEmpty();
     assert !authToken.isEmpty();
 
-    FliptClient fc = FliptClient.builder().url(fliptURL).token(authToken).build();
+    FliptClient fc = FliptClient.builder().url(fliptURL).clientToken(authToken).build();
 
     Map<String, String> context = new HashMap<>();
     context.put("fizz", "buzz");

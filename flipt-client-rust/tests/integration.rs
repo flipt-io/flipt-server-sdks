@@ -1,5 +1,6 @@
+use flipt::api::FliptClient;
 use flipt::evaluation::models::{BatchEvaluationRequest, EvaluationRequest};
-use flipt::FliptClient;
+use flipt::{AuthScheme, Config};
 use std::{collections::HashMap, env};
 use url::Url;
 
@@ -8,7 +9,12 @@ async fn tests() {
     let url = env::var("FLIPT_URL").unwrap();
     let token = env::var("FLIPT_AUTH_TOKEN").unwrap();
 
-    let flipt_client = FliptClient::new(Url::parse(&url).unwrap(), token, 60).unwrap();
+    let flipt_client = FliptClient::new(Config::new(
+        Url::parse(&url).unwrap(),
+        AuthScheme::BearerToken(token),
+        60,
+    ))
+    .unwrap();
 
     let mut context: HashMap<String, String> = HashMap::new();
     context.insert("fizz".into(), "buzz".into());

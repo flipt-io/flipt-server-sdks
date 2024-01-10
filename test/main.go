@@ -144,7 +144,7 @@ func rustTests(ctx context.Context, client *dagger.Client, flipt *dagger.Contain
 		WithServiceBinding("flipt", flipt.WithExec(nil).AsService()).
 		WithEnvVariable("FLIPT_URL", "http://flipt:8080").
 		WithEnvVariable("FLIPT_AUTH_TOKEN", "secret").
-		WithExec([]string{"cargo", "test"}).
+		WithExec([]string{"cargo", "test", "--features", "flipt_integration", "--test", "integration"}).
 		Sync(ctx)
 
 	return err

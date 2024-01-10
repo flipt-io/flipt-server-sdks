@@ -2,10 +2,11 @@
 
 use std::collections::HashMap;
 
+use flipt::api::FliptClient;
 use flipt::evaluation::models::{BatchEvaluationRequest, EvaluationRequest};
-use flipt::FliptClient;
 
 #[tokio::main]
+#[cfg_attr(not(feature = "flipt_integration"), ignore)]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = FliptClient::default();
 

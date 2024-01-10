@@ -5,12 +5,12 @@ import java.time.Duration;
 import okhttp3.OkHttpClient;
 
 public class FliptClient {
-  private Evaluation evaluation;
+  private final Evaluation evaluation;
 
-  public FliptClient(String url, String token, int timeout) {
+  private FliptClient(String url, String clientToken, String jwtToken, int timeout) {
     OkHttpClient httpClient =
         new OkHttpClient.Builder().callTimeout(Duration.ofSeconds(timeout)).build();
-    this.evaluation = new Evaluation(httpClient, url, token);
+    this.evaluation = new Evaluation(httpClient, url, clientToken, jwtToken);
   }
 
   public Evaluation evaluation() {
@@ -24,7 +24,9 @@ public class FliptClient {
   public static final class FliptClientBuilder {
     private String baseURL = "http://localhost:8080";
 
-    private String token = "";
+    private String clientToken = "";
+
+    private String jwtToken = "";
 
     private int timeout = 60;
 
@@ -35,8 +37,13 @@ public class FliptClient {
       return this;
     }
 
-    public FliptClientBuilder token(String token) {
-      this.token = token;
+    public FliptClientBuilder clientToken(String token) {
+      this.clientToken = token;
+      return this;
+    }
+
+    public FliptClientBuilder jwtToken(String token) {
+      this.jwtToken = token;
       return this;
     }
 
@@ -46,7 +53,7 @@ public class FliptClient {
     }
 
     public FliptClient build() {
-      return new FliptClient(baseURL, token, timeout);
+      return new FliptClient(baseURL, clientToken, jwtToken, timeout);
     }
   }
 }

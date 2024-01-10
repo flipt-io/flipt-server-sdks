@@ -1,30 +1,39 @@
 import { Evaluation } from "./evaluation";
 
-interface FliptApiClientOptions {
+interface FliptClientOptions {
   url?: string;
-  token?: string;
+  clientToken?: string;
+  jwtToken?: string;
   timeout?: number;
 }
 
-const defaultFliptClientOptions: FliptApiClientOptions = {
+const defaultFliptClientOptions: FliptClientOptions = {
   url: "http://localhost:8080",
-  token: "",
+  clientToken: "",
+  jwtToken: "",
   timeout: 60
 };
 
 export class FliptClient {
   public evaluation: Evaluation;
 
-  public constructor(options?: FliptApiClientOptions) {
+  public constructor(options?: FliptClientOptions) {
     const clientOptions = {
       ...defaultFliptClientOptions
     };
 
+    if (options?.clientToken !== undefined && options?.jwtToken != undefined) {
+      throw new Error("can not define both client token and jwt token");
+    }
+
     if (options?.url !== undefined) {
       clientOptions.url = options.url;
     }
-    if (options?.token !== undefined) {
-      clientOptions.token = options.token;
+    if (options?.clientToken !== undefined) {
+      clientOptions.clientToken = options.clientToken;
+    }
+    if (options?.jwtToken !== undefined) {
+      clientOptions.jwtToken = options.jwtToken;
     }
     if (options?.timeout !== undefined) {
       clientOptions.timeout = options.timeout;
@@ -32,7 +41,8 @@ export class FliptClient {
 
     this.evaluation = new Evaluation(
       clientOptions.url,
-      clientOptions.token,
+      clientOptions.clientToken,
+      clientOptions.jwtToken,
       clientOptions.timeout
     );
   }

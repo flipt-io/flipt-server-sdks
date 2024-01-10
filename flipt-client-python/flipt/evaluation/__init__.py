@@ -1,4 +1,5 @@
 import httpx
+import typing
 import json
 from .models import (
     BatchEvaluationRequest,
@@ -10,19 +11,25 @@ from .models import (
 
 
 class Evaluation:
-    def __init__(self, url: str, token: str, timeout: int):
+    def __init__(
+        self,
+        url: str,
+        client_token: typing.Optional[str],
+        jwt_token: typing.Optional[str],
+        timeout: int,
+    ):
         self.url = url
-        self.token = token
+        self.headers = {}
+        if client_token != None:
+            self.headers["Authorization"] = f"Bearer {client_token}"
+        if jwt_token != None:
+            self.headers["Authorization"] = f"JWT {jwt_token}"
         self.timeout = timeout
 
     def variant(self, request: EvaluationRequest) -> VariantEvaluationResponse:
-        headers = {}
-        if self.token != "":
-            headers["Authorization"] = f"Bearer {self.token}"
-
         response = httpx.post(
             f"{self.url}/evaluate/v1/variant",
-            headers=headers,
+            headers=self.headers,
             json=request.model_dump(),
             timeout=self.timeout,
         )
@@ -40,13 +47,9 @@ class Evaluation:
         return VariantEvaluationResponse.model_validate_json(variant_response)
 
     def boolean(self, request: EvaluationRequest) -> BooleanEvaluationResponse:
-        headers = {}
-        if self.token != "":
-            headers["Authorization"] = f"Bearer {self.token}"
-
         response = httpx.post(
             f"{self.url}/evaluate/v1/boolean",
-            headers=headers,
+            headers=self.headers,
             json=request.model_dump(),
             timeout=self.timeout,
         )
@@ -64,13 +67,9 @@ class Evaluation:
         return BooleanEvaluationResponse.model_validate_json(boolean_response)
 
     def batch(self, request: BatchEvaluationRequest) -> BatchEvaluationResponse:
-        headers = {}
-        if self.token != "":
-            headers["Authorization"] = f"Bearer {self.token}"
-
         response = httpx.post(
             f"{self.url}/evaluate/v1/batch",
-            headers=headers,
+            headers=self.headers,
             json=request.model_dump(),
             timeout=self.timeout,
         )

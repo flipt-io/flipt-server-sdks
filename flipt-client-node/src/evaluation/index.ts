@@ -8,26 +8,34 @@ import {
 
 export class Evaluation {
   private url: string;
-  private token: string;
+  private headers: object;
   private timeout: number;
 
-  public constructor(url: string, token: string, timeout: number) {
+  public constructor(
+    url: string,
+    clientToken: string,
+    jwtToken: string,
+    timeout: number
+  ) {
     this.url = url;
-    this.token = token;
+    this.headers = {};
+    if (!!clientToken) {
+      this.headers["Authorization"] = `Bearer ${clientToken}`;
+    }
+    if (!!jwtToken) {
+      this.headers["Authorization"] = `JWT ${jwtToken}`;
+    }
     this.timeout = timeout;
   }
 
   public async variant(
     request: EvaluationRequest
   ): Promise<VariantEvaluationResponse> {
-    const headers = {};
-    if (this.token !== "") {
-      headers["Authorization"] = `Bearer ${this.token}`;
-    }
-
     const response = await fetch(`${this.url}/evaluate/v1/variant`, {
       method: "POST",
-      headers,
+      headers: {
+        ...this.headers
+      },
       body: JSON.stringify(request),
       signal: AbortSignal.timeout(this.timeout * 1000)
     });
@@ -46,14 +54,11 @@ export class Evaluation {
   public async boolean(
     request: EvaluationRequest
   ): Promise<BooleanEvaluationResponse> {
-    const headers = {};
-    if (this.token !== "") {
-      headers["Authorization"] = `Bearer ${this.token}`;
-    }
-
     const response = await fetch(`${this.url}/evaluate/v1/boolean`, {
       method: "POST",
-      headers,
+      headers: {
+        ...this.headers
+      },
       body: JSON.stringify(request),
       signal: AbortSignal.timeout(this.timeout * 1000)
     });
@@ -72,14 +77,11 @@ export class Evaluation {
   public async batch(
     request: BatchEvaluationRequest
   ): Promise<BatchEvaluationResponse> {
-    const headers = {};
-    if (this.token !== "") {
-      headers["Authorization"] = `Bearer ${this.token}`;
-    }
-
     const response = await fetch(`${this.url}/evaluate/v1/batch`, {
       method: "POST",
-      headers,
+      headers: {
+        ...this.headers
+      },
       body: JSON.stringify(request),
       signal: AbortSignal.timeout(this.timeout * 1000)
     });
