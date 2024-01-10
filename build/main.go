@@ -86,7 +86,7 @@ func run() error {
 func pythonBuild(ctx context.Context, client *dagger.Client, hostDirectory *dagger.Directory) error {
 	container := client.Container().From("python:3.11-bookworm").
 		WithExec([]string{"pip", "install", "poetry==1.7.0"}).
-		WithDirectory("/src", hostDirectory.Directory("flipt-client-python")).
+		WithDirectory("/src", hostDirectory.Directory("flipt-python")).
 		WithWorkdir("/src").
 		WithExec([]string{"poetry", "install", "--without=dev", "-v"}).
 		WithExec([]string{"poetry", "build", "-v"})
@@ -113,7 +113,7 @@ func pythonBuild(ctx context.Context, client *dagger.Client, hostDirectory *dagg
 
 func rustBuild(ctx context.Context, client *dagger.Client, hostDirectory *dagger.Directory) error {
 	container := client.Container().From("rust:1.73.0-bookworm").
-		WithDirectory("/src", hostDirectory.Directory("flipt-client-rust"), dagger.ContainerWithDirectoryOpts{
+		WithDirectory("/src", hostDirectory.Directory("flipt-rust"), dagger.ContainerWithDirectoryOpts{
 			Exclude: []string{"./target/"},
 		}).
 		WithWorkdir("/src").
@@ -141,7 +141,7 @@ func rustBuild(ctx context.Context, client *dagger.Client, hostDirectory *dagger
 
 func nodeBuild(ctx context.Context, client *dagger.Client, hostDirectory *dagger.Directory) error {
 	container := client.Container().From("node:21.2-bookworm").
-		WithDirectory("/src", hostDirectory.Directory("flipt-client-node"), dagger.ContainerWithDirectoryOpts{
+		WithDirectory("/src", hostDirectory.Directory("flipt-node"), dagger.ContainerWithDirectoryOpts{
 			Exclude: []string{"./node_modules/"},
 		}).
 		WithWorkdir("/src").
@@ -172,7 +172,7 @@ func nodeBuild(ctx context.Context, client *dagger.Client, hostDirectory *dagger
 
 func javaBuild(ctx context.Context, client *dagger.Client, hostDirectory *dagger.Directory) error {
 	container := client.Container().From("gradle:8.5.0-jdk11").
-		WithDirectory("/src", hostDirectory.Directory("flipt-client-java")).
+		WithDirectory("/src", hostDirectory.Directory("flipt-java")).
 		WithWorkdir("/src").
 		WithExec([]string{"./gradlew", "build"})
 
