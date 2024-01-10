@@ -7,7 +7,7 @@ interface FliptClientOptions {
 }
 
 export interface AuthenticationStrategy {
-  authenticate(): Promise<Map<string, string>>;
+  authenticate(): Map<string, string>;
 }
 
 export class ClientTokenAuthentication implements AuthenticationStrategy {
@@ -17,7 +17,7 @@ export class ClientTokenAuthentication implements AuthenticationStrategy {
     this.clientToken = clientToken;
   }
 
-  public async authenticate(): Promise<Map<string, string>> {
+  public authenticate(): Map<string, string> {
     return new Map([["Authorization", `Bearer ${this.clientToken}`]]);
   }
 }
@@ -29,7 +29,7 @@ export class JWTAuthentication implements AuthenticationStrategy {
     this.jwtToken = jwtToken;
   }
 
-  public async authenticate(): Promise<Map<string, string>> {
+  public authenticate(): Map<string, string> {
     return new Map([["Authorization", `JWT ${this.jwtToken}`]]);
   }
 }
@@ -49,6 +49,10 @@ export class FliptClient {
 
     if (options?.url !== undefined) {
       clientOptions.url = options.url;
+    }
+
+    if (options?.timeout !== undefined) {
+      clientOptions.timeout = options.timeout;
     }
 
     if (options?.authenticationStrategy !== undefined) {
