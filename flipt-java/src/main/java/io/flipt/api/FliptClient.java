@@ -1,7 +1,7 @@
-package com.flipt.api;
+package io.flipt.api;
 
-import com.flipt.api.authentication.AuthenticationStrategy;
-import com.flipt.api.evaluation.Evaluation;
+import io.flipt.api.authentication.AuthenticationStrategy;
+import io.flipt.api.evaluation.Evaluation;
 import java.time.Duration;
 import okhttp3.OkHttpClient;
 

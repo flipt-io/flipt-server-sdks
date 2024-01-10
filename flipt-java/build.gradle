@@ -4,7 +4,7 @@ plugins {
     id "com.diffplug.spotless" version "6.23.3"
 }
 
-group = 'com.flipt.api'
+group = 'io.flipt.api'
 version = '1.0-SNAPSHOT'
 
 repositories {

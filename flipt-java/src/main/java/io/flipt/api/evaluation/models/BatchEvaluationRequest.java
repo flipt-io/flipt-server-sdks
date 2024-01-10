@@ -1,4 +1,4 @@
-package com.flipt.api.evaluation.models;
+package io.flipt.api.evaluation.models;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

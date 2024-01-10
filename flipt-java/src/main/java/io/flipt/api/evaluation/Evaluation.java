@@ -1,12 +1,12 @@
-package com.flipt.api.evaluation;
+package io.flipt.api.evaluation;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.flipt.api.authentication.AuthenticationStrategy;
-import com.flipt.api.error.Error;
-import com.flipt.api.evaluation.models.*;
+import io.flipt.api.authentication.AuthenticationStrategy;
+import io.flipt.api.error.Error;
+import io.flipt.api.evaluation.models.*;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;

@@ -1,4 +1,4 @@
-package com.flipt.api.error;
+package io.flipt.api.error;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

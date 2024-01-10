@@ -1,7 +1,7 @@
-import com.flipt.api.FliptClient;
-import com.flipt.api.authentication.AuthenticationStrategy;
-import com.flipt.api.authentication.ClientTokenAuthenticationStrategy;
-import com.flipt.api.evaluation.models.*;
+import io.flipt.api.FliptClient;
+import io.flipt.api.authentication.AuthenticationStrategy;
+import io.flipt.api.authentication.ClientTokenAuthenticationStrategy;
+import io.flipt.api.evaluation.models.*;
 import java.util.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

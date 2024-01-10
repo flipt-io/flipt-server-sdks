@@ -1,4 +1,4 @@
-package com.flipt.api.authentication;
+package io.flipt.api.authentication;
 
 public final class JWTAuthenticationStrategy implements AuthenticationStrategy {
   private final String jwtToken;
