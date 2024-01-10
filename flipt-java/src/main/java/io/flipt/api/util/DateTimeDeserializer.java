@@ -1,5 +1,5 @@
 /* (C) 2024 */
-package com.flipt.api.util;
+package io.flipt.api.util;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
