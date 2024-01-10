@@ -5,7 +5,9 @@ plugins {
 }
 
 group = 'io.flipt'
-version = '0.0-SNAPSHOT' // x-release-please-version
+// x-release-please-start-version
+version = '0.0-SNAPSHOT'
+// x-release-please-end
 
 repositories {
     mavenCentral()
