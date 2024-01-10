@@ -1,3 +1,4 @@
+import { AuthenticationStrategy } from "..";
 import {
   BatchEvaluationRequest,
   BatchEvaluationResponse,
@@ -13,17 +14,15 @@ export class Evaluation {
 
   public constructor(
     url: string,
-    clientToken: string,
-    jwtToken: string,
-    timeout: number
+    timeout: number,
+    authenticationStrategy?: AuthenticationStrategy
   ) {
     this.url = url;
     this.headers = {};
-    if (!!clientToken) {
-      this.headers["Authorization"] = `Bearer ${clientToken}`;
-    }
-    if (!!jwtToken) {
-      this.headers["Authorization"] = `JWT ${jwtToken}`;
+    if (!!authenticationStrategy) {
+      this.headers = Object.fromEntries(
+        authenticationStrategy.authenticate().entries()
+      );
     }
     this.timeout = timeout;
   }
