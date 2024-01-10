@@ -1,7 +1,7 @@
-package com.flipt.api;
+package io.flipt.api;
 
-import com.flipt.api.authentication.AuthenticationStrategy;
-import com.flipt.api.evaluation.Evaluation;
+import io.flipt.api.authentication.AuthenticationStrategy;
+import io.flipt.api.evaluation.Evaluation;
 import java.time.Duration;
 import okhttp3.OkHttpClient;
 
@@ -9,8 +9,7 @@ public class FliptClient {
   private final Evaluation evaluation;
 
   private FliptClient(String url, int timeout, AuthenticationStrategy authenticationStrategy) {
-    OkHttpClient httpClient =
-        new OkHttpClient.Builder().callTimeout(Duration.ofSeconds(timeout)).build();
+    OkHttpClient httpClient = new OkHttpClient.Builder().callTimeout(Duration.ofSeconds(timeout)).build();
     this.evaluation = new Evaluation(httpClient, url, authenticationStrategy);
   }
 
@@ -29,7 +28,8 @@ public class FliptClient {
 
     private int timeout = 60;
 
-    public FliptClientBuilder() {}
+    public FliptClientBuilder() {
+    }
 
     public FliptClientBuilder url(String url) {
       this.baseURL = url;

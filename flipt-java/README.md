@@ -10,7 +10,7 @@ Add the dependency in your `build.gradle`:
 
 ```groovy
 dependencies {
-    implementation 'io.flipt-io:flipt-java:1.x.x'
+    implementation 'io.flipt:flipt-java:1.x.x'
 }
 ```
 

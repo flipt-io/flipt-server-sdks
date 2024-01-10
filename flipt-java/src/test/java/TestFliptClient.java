@@ -1,7 +1,7 @@
-import com.flipt.api.FliptClient;
-import com.flipt.api.authentication.AuthenticationStrategy;
-import com.flipt.api.authentication.ClientTokenAuthenticationStrategy;
-import com.flipt.api.evaluation.models.*;
+import io.flipt.api.FliptClient;
+import io.flipt.api.authentication.AuthenticationStrategy;
+import io.flipt.api.authentication.ClientTokenAuthenticationStrategy;
+import io.flipt.api.evaluation.models.*;
 import java.util.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -15,16 +15,14 @@ public class TestFliptClient {
     assert !fliptURL.isEmpty();
     assert !authToken.isEmpty();
 
-    AuthenticationStrategy authenticationStrategy =
-        new ClientTokenAuthenticationStrategy(authToken);
+    AuthenticationStrategy authenticationStrategy = new ClientTokenAuthenticationStrategy(authToken);
 
-    FliptClient fc =
-        FliptClient.builder().url(fliptURL).authentication(authenticationStrategy).build();
+    FliptClient fc = FliptClient.builder().url(fliptURL).authentication(authenticationStrategy).build();
 
     Map<String, String> context = new HashMap<>();
     context.put("fizz", "buzz");
-    VariantEvaluationResponse variant =
-        fc.evaluation().variant(new EvaluationRequest("default", "flag1", "entity", context));
+    VariantEvaluationResponse variant = fc.evaluation()
+        .variant(new EvaluationRequest("default", "flag1", "entity", context));
 
     Assertions.assertTrue(variant.isMatch());
     Assertions.assertEquals("flag1", variant.getFlagKey());
@@ -41,18 +39,15 @@ public class TestFliptClient {
     assert !fliptURL.isEmpty();
     assert !authToken.isEmpty();
 
-    AuthenticationStrategy authenticationStrategy =
-        new ClientTokenAuthenticationStrategy(authToken);
+    AuthenticationStrategy authenticationStrategy = new ClientTokenAuthenticationStrategy(authToken);
 
-    FliptClient fc =
-        FliptClient.builder().url(fliptURL).authentication(authenticationStrategy).build();
+    FliptClient fc = FliptClient.builder().url(fliptURL).authentication(authenticationStrategy).build();
 
     Map<String, String> context = new HashMap<>();
     context.put("fizz", "buzz");
 
-    BooleanEvaluationResponse booleanEvaluation =
-        fc.evaluation()
-            .booleanEvaluation(new EvaluationRequest("default", "flag_boolean", "entity", context));
+    BooleanEvaluationResponse booleanEvaluation = fc.evaluation()
+        .booleanEvaluation(new EvaluationRequest("default", "flag_boolean", "entity", context));
 
     Assertions.assertTrue(booleanEvaluation.isEnabled());
     Assertions.assertEquals("flag_boolean", booleanEvaluation.getFlagKey());
@@ -67,29 +62,24 @@ public class TestFliptClient {
     assert !fliptURL.isEmpty();
     assert !authToken.isEmpty();
 
-    AuthenticationStrategy authenticationStrategy =
-        new ClientTokenAuthenticationStrategy(authToken);
+    AuthenticationStrategy authenticationStrategy = new ClientTokenAuthenticationStrategy(authToken);
 
-    FliptClient fc =
-        FliptClient.builder().url(fliptURL).authentication(authenticationStrategy).build();
+    FliptClient fc = FliptClient.builder().url(fliptURL).authentication(authenticationStrategy).build();
 
     Map<String, String> context = new HashMap<>();
     context.put("fizz", "buzz");
 
-    EvaluationRequest variantEvaluationRequest =
-        new EvaluationRequest("default", "flag1", "entity", context);
-    EvaluationRequest booleanEvaluationRequest =
-        new EvaluationRequest("default", "flag_boolean", "entity", context);
-    EvaluationRequest errorEvaluationRequest =
-        new EvaluationRequest("default", "flag1234", "entity", new HashMap<>());
+    EvaluationRequest variantEvaluationRequest = new EvaluationRequest("default", "flag1", "entity", context);
+    EvaluationRequest booleanEvaluationRequest = new EvaluationRequest("default", "flag_boolean", "entity", context);
+    EvaluationRequest errorEvaluationRequest = new EvaluationRequest("default", "flag1234", "entity", new HashMap<>());
 
     List<EvaluationRequest> evaluationRequests = new ArrayList<>();
     evaluationRequests.add(variantEvaluationRequest);
     evaluationRequests.add(booleanEvaluationRequest);
     evaluationRequests.add(errorEvaluationRequest);
 
-    BatchEvaluationResponse batch =
-        fc.evaluation().batch(new BatchEvaluationRequest(Optional.of(""), evaluationRequests));
+    BatchEvaluationResponse batch = fc.evaluation()
+        .batch(new BatchEvaluationRequest(Optional.of(""), evaluationRequests));
 
     // Variant
     EvaluationResponse first = batch.getResponses().get(0);

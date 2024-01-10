@@ -1,12 +1,12 @@
-package com.flipt.api.evaluation;
+package io.flipt.api.evaluation;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.flipt.api.authentication.AuthenticationStrategy;
-import com.flipt.api.error.Error;
-import com.flipt.api.evaluation.models.*;
+import io.flipt.api.authentication.AuthenticationStrategy;
+import io.flipt.api.error.Error;
+import io.flipt.api.evaluation.models.*;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -23,11 +23,10 @@ public class Evaluation {
     this.httpClient = httpClient;
     this.baseURL = baseURL;
     this.authenticationStrategy = authenticationStrategy;
-    this.objectMapper =
-        JsonMapper.builder()
-            .addModule(new Jdk8Module())
-            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-            .build();
+    this.objectMapper = JsonMapper.builder()
+        .addModule(new Jdk8Module())
+        .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+        .build();
   }
 
   public VariantEvaluationResponse variant(EvaluationRequest request) {
@@ -59,9 +58,8 @@ public class Evaluation {
     RequestBody body;
 
     try {
-      body =
-          RequestBody.create(
-              this.objectMapper.writeValueAsString(request), MediaType.parse("application/json"));
+      body = RequestBody.create(
+          this.objectMapper.writeValueAsString(request), MediaType.parse("application/json"));
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -104,9 +102,8 @@ public class Evaluation {
     RequestBody body;
 
     try {
-      body =
-          RequestBody.create(
-              this.objectMapper.writeValueAsString(request), MediaType.parse("application/json"));
+      body = RequestBody.create(
+          this.objectMapper.writeValueAsString(request), MediaType.parse("application/json"));
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
