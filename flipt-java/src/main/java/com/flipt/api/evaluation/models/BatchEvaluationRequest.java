@@ -11,7 +11,8 @@ public class BatchEvaluationRequest {
   private final List<EvaluationRequest> requests;
   private Optional<String> reference;
 
-  public BatchEvaluationRequest(Optional<String> requestId, List<EvaluationRequest> requests, Optional<String> reference) {
+  public BatchEvaluationRequest(
+      Optional<String> requestId, List<EvaluationRequest> requests, Optional<String> reference) {
     this.requestId = requestId;
     this.requests = requests;
     this.reference = reference;

@@ -14,7 +14,11 @@ public class EvaluationRequest {
   private final Optional<String> reference;
 
   public EvaluationRequest(
-      String namespaceKey, String flagKey, String entityId, Map<String, String> context, Optional<String> reference) {
+      String namespaceKey,
+      String flagKey,
+      String entityId,
+      Map<String, String> context,
+      Optional<String> reference) {
     this.namespaceKey = namespaceKey;
     this.flagKey = flagKey;
     this.entityId = entityId;

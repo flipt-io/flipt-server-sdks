@@ -31,6 +31,7 @@ public class Main {
     BatchEvaluationResponse batchEvaluationResponse =
         fliptClient
             .evaluation()
-            .batch(new BatchEvaluationRequest(Optional.of(""), evaluationRequests, Optional.empty()));
+            .batch(
+                new BatchEvaluationRequest(Optional.of(""), evaluationRequests, Optional.empty()));
   }
 }

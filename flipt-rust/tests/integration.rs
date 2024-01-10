@@ -65,7 +65,10 @@ async fn tests() {
         reference: None,
     });
 
-    let batch_request = BatchEvaluationRequest { requests, reference: None };
+    let batch_request = BatchEvaluationRequest {
+        requests,
+        reference: None,
+    };
     let batch = flipt_client.evaluation.batch(&batch_request).await.unwrap();
 
     // Variant
