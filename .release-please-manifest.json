@@ -1,6 +1,6 @@
 {
-  "flipt-java": "0.0.0",
-  "flipt-node": "0.0.0",
-  "flipt-python": "0.0.0",
+  "flipt-java": "1.0.0",
+  "flipt-node": "1.0.0",
+  "flipt-python": "0.1.0",
   "flipt-rust": "0.0.0"
 }
