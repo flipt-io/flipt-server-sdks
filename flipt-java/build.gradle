@@ -4,7 +4,7 @@ plugins {
     id "com.diffplug.spotless" version "6.23.3"
 }
 
-group = 'io.flipt.api'
+group = 'io.flipt'
 version = '0.0-SNAPSHOT' // x-release-please-version
 
 repositories {
@@ -57,9 +57,7 @@ test {
 publishing {
     publications {
         maven(MavenPublication) {
-            groupId = group
             artifactId = 'flipt-java'
-            version = version
             from components.java
         }
     }
