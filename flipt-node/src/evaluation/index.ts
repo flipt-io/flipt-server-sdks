@@ -20,7 +20,9 @@ export class Evaluation {
     this.url = url;
     this.headers = {};
     if (!!authenticationStrategy) {
-      this.headers = authenticationStrategy.authenticate();
+      this.headers = Object.fromEntries(
+        authenticationStrategy.authenticate().entries()
+      );
     }
     this.timeout = timeout;
   }
