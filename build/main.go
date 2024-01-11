@@ -258,28 +258,26 @@ func phpBuild(ctx context.Context, client *dagger.Client, hostDirectory *dagger.
 		WithExec([]string{"sh", "-c", `git config --global http.https://github.com/.extraheader "AUTHORIZATION: Basic ${GITHUB_TOKEN}"`})
 
 	repository := git.
-		WithExec([]string{"git", "clone", "https://github.com/flipt-io/flipt-server-sdks.git", "/src"}).
+		WithExec([]string{"git", "clone", "https://github.com/flipt-io/flipt-server-sdks.git", "--branch", "flipt-php-" + targetTag, "/src"}).
 		WithWorkdir("/src")
 
-	filtered := repository.
-		WithEnvVariable("FILTER_BRANCH_SQUELCH_WARNING", "1").
-		WithExec([]string{"git", "filter-branch", "-f", "--prune-empty",
-			"--subdirectory-filter", "flipt-php",
-			"--", tag})
-
 	if !push {
-		_, err := filtered.Sync(ctx)
+		_, err := repository.Sync(ctx)
 		return err
 	}
 
-	// push to target repo/tag
-	_, err := filtered.WithExec([]string{
-		"git",
-		"push",
-		"-f",
-		targetRepo,
-		fmt.Sprintf("%s:%s", tag, targetTag)}).
+	gitCmd := fmt.Sprintf("git push %s `git subtree split --prefix flipt-php`:refs/heads/main --force", targetRepo)
+	_, err := repository.WithExec([]string{"sh", "-c", gitCmd}).
 		Sync(ctx)
+	if err != nil {
+		return err
+	}
 
+	// tag the release
+	_, err = git.WithExec([]string{"git", "clone", targetRepo, "/dst"}).
+		WithWorkdir("/dst").
+		WithExec([]string{"git", "tag", targetTag}).
+		WithExec([]string{"git", "push", "origin", targetTag}).
+		Sync(ctx)
 	return err
 }

@@ -62,6 +62,27 @@ publishing {
         maven(MavenPublication) {
             artifactId = 'flipt-java'
             from components.java
+
+            pom {
+                name = 'Flipt Java SDK'
+                description = 'Flipt Java SDK'
+                url = 'https://github.com/flipt-io/flipt-server-sdks/tree/main/flipt-java'
+
+                licenses {
+                    license {
+                        name = 'MIT'
+                        url = 'https://opensource.org/license/mit/'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'flipt-io'
+                        name = 'Flipt'
+                        email = 'devs@flipt.io'
+                    }
+                }
+            }
         }
     }
     repositories {
