@@ -215,6 +215,13 @@ func phpBuild(ctx context.Context, client *dagger.Client, hostDirectory *dagger.
 	if tag == "" {
 		return fmt.Errorf("tag is not set")
 	}
+
+	const tagPrefix = "refs/tags/flipt-php-"
+
+	if !strings.HasPrefix(tag, tagPrefix) {
+		return fmt.Errorf("tag %q must start with %q", tag, tagPrefix)
+	}
+
 	// because of how Composer works, we need to create a new repo that contains
 	// only the php client code.
 	targetRepo := os.Getenv("TARGET_REPO")
@@ -222,7 +229,7 @@ func phpBuild(ctx context.Context, client *dagger.Client, hostDirectory *dagger.
 		targetRepo = "https://github.com/flipt-io/flipt-php.git"
 	}
 
-	targetTag := strings.TrimPrefix(tag, "refs/tags/flipt-php-")
+	targetTag := strings.TrimPrefix(tag, tagPrefix)
 
 	pat := os.Getenv("GITHUB_TOKEN")
 	if pat == "" {
