@@ -2,6 +2,6 @@
   "flipt-java": "0.0.0",
   "flipt-node": "0.0.0",
   "flipt-python": "0.0.0",
-  "flipt-rust": "0.0.0",
+  "flipt-rust": "1.0.0-rc.1",
   "flipt-php": "0.0.0"
 }
