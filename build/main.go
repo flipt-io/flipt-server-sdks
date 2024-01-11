@@ -229,24 +229,28 @@ func phpBuild(ctx context.Context, client *dagger.Client, hostDirectory *dagger.
 		return errors.New("GITHUB_TOKEN environment variable must be set")
 	}
 
-	encodedPAT := base64.URLEncoding.EncodeToString([]byte("pat:" + pat))
+	var (
+		encodedPAT = base64.URLEncoding.EncodeToString([]byte("pat:" + pat))
+		ghToken    = client.SetSecret("gh-token", encodedPAT)
+	)
 
-	var gitUserName = os.Getenv("GIT_USER_NAME")
+	gitUserName := os.Getenv("GIT_USER_NAME")
 	if gitUserName == "" {
 		gitUserName = "flipt-bot"
 	}
 
-	var gitUserEmail = os.Getenv("GIT_USER_EMAIL")
+	gitUserEmail := os.Getenv("GIT_USER_EMAIL")
 	if gitUserEmail == "" {
 		gitUserEmail = "dev@flipt.io"
 	}
 
 	git := client.Container().From("golang:1.21.3-bookworm").
+		WithSecretVariable("GITHUB_TOKEN", ghToken).
 		WithExec([]string{"git", "config", "--global", "user.email", gitUserEmail}).
 		WithExec([]string{"git", "config", "--global", "user.name", gitUserName}).
 		WithExec([]string{"git", "config", "--global",
 			"http.https://github.com/.extraheader",
-			fmt.Sprintf("AUTHORIZATION: Basic %s", encodedPAT)})
+			"AUTHORIZATION: Basic $GITHUB_TOKEN"})
 
 	repository := git.
 		WithExec([]string{"git", "clone", "https://github.com/flipt-io/flipt-server-sdks.git", "/src"}).
