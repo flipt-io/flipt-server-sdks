@@ -6,8 +6,9 @@ declare(strict_types=1);
 namespace Flipt\Models;
 
 
-class ResponseReasons {
-    
+class ResponseReasons
+{
+
     const UNKNOWN_EVALUATION_REASON = 'UNKNOWN_EVALUATION_REASON';
     const FLAG_DISABLED_EVALUATION_REASON = 'FLAG_DISABLED_EVALUATION_REASON';
     const MATCH_EVALUATION_REASON = 'MATCH_EVALUATION_REASON';
