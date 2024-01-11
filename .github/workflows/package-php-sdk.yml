@@ -11,4 +11,5 @@ jobs:
     uses: ./.github/workflows/package-sdks.yml
     with:
       sdk: php
+      tag: ${{ github.ref }}
     secrets: inherit

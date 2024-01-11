@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"encoding/base64"
+	"errors"
 	"flag"
 	"fmt"
 	"log"
@@ -16,6 +18,7 @@ import (
 var (
 	languages    string
 	push         bool
+	tag          string
 	languageToFn = map[string]buildFn{
 		"python": pythonBuild,
 		"rust":   rustBuild,
@@ -28,6 +31,7 @@ var (
 func init() {
 	flag.StringVar(&languages, "languages", "", "comma separated list of which language(s) to run builds for")
 	flag.BoolVar(&push, "push", false, "push built artifacts to registry")
+	flag.StringVar(&tag, "tag", "", "tag to use for release")
 }
 
 func main() {
@@ -208,21 +212,65 @@ func javaBuild(ctx context.Context, client *dagger.Client, hostDirectory *dagger
 }
 
 func phpBuild(ctx context.Context, client *dagger.Client, hostDirectory *dagger.Directory) error {
-	container := client.Container().From("php:8-cli").
-		WithDirectory("/src", hostDirectory.Directory("flipt-php")).
-		WithEnvVariable("COMPOSER_ALLOW_SUPERUSER", "1").
-		WithExec([]string{"sh", "-c", "curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer"}).
-		WithWorkdir("/src").
-		WithExec([]string{"composer", "install"})
+	if tag == "" {
+		return fmt.Errorf("tag is not set")
+	}
+	// because of how Composer works, we need to create a new repo that contains
+	// only the php lient code. This is because the php client code is in a subdirectory
+	targetRepo := os.Getenv("TARGET_REPO")
+	if targetRepo == "" {
+		targetRepo = "https://github.com/flipt-io/flipt-php.git"
+	}
 
-	var err error
+	targetTag := strings.TrimPrefix(tag, "refs/tags/flipt-php-")
+
+	pat := os.Getenv("GITHUB_TOKEN")
+	if pat == "" {
+		return errors.New("GITHUB_TOKEN environment variable must be set")
+	}
+
+	encodedPAT := base64.URLEncoding.EncodeToString([]byte("pat:" + pat))
+
+	var gitUserName = os.Getenv("GIT_USER_NAME")
+	if gitUserName == "" {
+		gitUserName = "flipt-bot"
+	}
+
+	var gitUserEmail = os.Getenv("GIT_USER_EMAIL")
+	if gitUserEmail == "" {
+		gitUserEmail = "dev@flipt.io"
+	}
+
+	git := client.Container().From("golang:1.21.3-bookworm").
+		WithExec([]string{"git", "config", "--global", "user.email", gitUserEmail}).
+		WithExec([]string{"git", "config", "--global", "user.name", gitUserName}).
+		WithExec([]string{"git", "config", "--global",
+			"http.https://github.com/.extraheader",
+			fmt.Sprintf("AUTHORIZATION: Basic %s", encodedPAT)})
+
+	repository := git.
+		WithExec([]string{"git", "clone", "https://github.com/flipt-io/flipt-server-sdks.git", "/src"}).
+		WithWorkdir("/src")
+
+	filtered := repository.
+		WithEnvVariable("FILTER_BRANCH_SQUELCH_WARNING", "1").
+		WithExec([]string{"git", "filter-branch", "-f", "--prune-empty",
+			"--subdirectory-filter", "flipt-php",
+			"--", tag})
 
 	if !push {
-		_, err = container.Sync(ctx)
+		_, err := filtered.Sync(ctx)
 		return err
 	}
 
-	// TODO
+	// push to target repo/tag
+	_, err := filtered.WithExec([]string{
+		"git",
+		"push",
+		"-f",
+		targetRepo,
+		fmt.Sprintf("%s:%s", tag, targetTag)}).
+		Sync(ctx)
 
 	return err
 }
