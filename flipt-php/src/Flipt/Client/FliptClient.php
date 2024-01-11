@@ -12,19 +12,18 @@ use Flipt\Models\DefaultVariantEvaluationResult;
 final class FliptClient
 {
     protected Client $client;
-    protected string $apiToken;
+    protected AuthenticationStrategy $authentication;
     protected string $namespace;
     protected string $entityId;
     protected array $context;
 
 
-    public function __construct(string|Client $host, string $apiToken, string $namespace, array $context = [], string $entityId = '')
+    public function __construct(string|Client $host, string $namespace, array $context = [], string $entityId = '', AuthenticationStrategy $authentication = null)
     {
-        $this->apiToken = $apiToken;
+        $this->authentication = $authentication;
         $this->namespace = $namespace;
         $this->context = $context;
         $this->entityId = $entityId;
-
         $this->client = (is_string($host)) ? new Client(['base_uri' => $host]) : $host;
     }
 
@@ -100,13 +99,18 @@ final class FliptClient
      */
     protected function apiRequest(string $path, array $body = [], string $method = 'POST')
     {
+        // merge authentication headers
+        $headers = [
+            'Accept' => 'application/json',
+        ];
+
+        if ($this->authentication) {
+            $headers = $this->authentication->authenticate($headers);
+        }
 
         // execute request
         $response = $this->client->request($method, $path, [
-            'headers' => [
-                'Authorization' => 'Bearer ' . $this->apiToken,
-                'Accept' => 'application/json'
-            ],
+            'headers' => $headers,
             'body' => json_encode($body, JSON_FORCE_OBJECT),
         ]);
 
@@ -119,7 +123,7 @@ final class FliptClient
      */
     public function withNamespace(string $namespace)
     {
-        return new FliptClient($this->client, $this->apiToken, $namespace, $this->context, $this->entityId);
+        return new FliptClient($this->client, $namespace, $this->context, $this->entityId, $this->authentication);
     }
 
     /**
@@ -127,11 +131,59 @@ final class FliptClient
      */
     public function withContext(array $context)
     {
-        return new FliptClient($this->client, $this->apiToken, $this->namespace, $context, $this->entityId);
+        return new FliptClient($this->client, $this->namespace, $context, $this->entityId, $this->authentication);
+    }
+
+    /**
+     * Create a new client with a different authentication strategy
+     */
+    public function withAuthentication(AuthenticationStrategy $authentication)
+    {
+        return new FliptClient($this->client, $this->namespace, $this->context, $this->entityId, $authentication);
     }
 }
 
 interface AuthenticationStrategy
 {
     public function authenticate(array $headers);
+}
+
+/**
+ * Authenticate with a client token
+ * @see https://www.flipt.io/docs/authentication/methods#static-token
+ */
+class ClientTokenAuthentication implements AuthenticationStrategy
+{
+    protected string $token;
+
+    public function __construct(string $token)
+    {
+        $this->token = $token;
+    }
+
+    public function authenticate(array $headers)
+    {
+        $headers['Authorization'] = 'Bearer ' . $this->token;
+        return $headers;
+    }
+}
+
+/**
+ * Authenticate with a JWT token
+ * @see https://www.flipt.io/docs/authentication/methods#json-web-tokens
+ */
+class JWTAuthentication implements AuthenticationStrategy
+{
+    protected string $token;
+
+    public function __construct(string $token)
+    {
+        $this->token = $token;
+    }
+
+    public function authenticate(array $headers)
+    {
+        $headers['Authorization'] = 'JWT ' . $this->token;
+        return $headers;
+    }
 }

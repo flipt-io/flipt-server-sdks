@@ -29,7 +29,7 @@ final class FliptClientTest extends TestCase
             'handler' => $handlerStack,
         ]);
 
-        $this->apiClient = new FliptClient($httpClient, 'token', 'namespace', ['context' => 'demo'], 'entityId');
+        $this->apiClient = new FliptClient($httpClient, 'namespace', ['context' => 'demo'], 'entityId');
     }
 
 
@@ -151,21 +151,21 @@ final class FliptClientTest extends TestCase
         ]);
 
         // execute the client function
-        $results = $this->apiClient->batch( [ 'flag1', 'flag2', 'flag3' ], [ 'local' => 'context' ], 'entity' );
+        $results = $this->apiClient->batch(['flag1', 'flag2', 'flag3'], ['local' => 'context'], 'entity');
 
         // get payload on request to validate
         $payload = $this->getLastPayload();
 
         $this->assertEquals($payload, [
             'requests' => [
-                [ 'flagKey' => 'flag1', 'namespaceKey' => 'namespace', 'context' => ['context' => 'demo', 'local' => 'context' ], 'entityId' => 'entity' ],
-                [ 'flagKey' => 'flag2', 'namespaceKey' => 'namespace', 'context' => ['context' => 'demo', 'local' => 'context' ], 'entityId' => 'entity' ],
-                [ 'flagKey' => 'flag3', 'namespaceKey' => 'namespace', 'context' => ['context' => 'demo', 'local' => 'context' ], 'entityId' => 'entity' ],
+                ['flagKey' => 'flag1', 'namespaceKey' => 'namespace', 'context' => ['context' => 'demo', 'local' => 'context'], 'entityId' => 'entity'],
+                ['flagKey' => 'flag2', 'namespaceKey' => 'namespace', 'context' => ['context' => 'demo', 'local' => 'context'], 'entityId' => 'entity'],
+                ['flagKey' => 'flag3', 'namespaceKey' => 'namespace', 'context' => ['context' => 'demo', 'local' => 'context'], 'entityId' => 'entity'],
             ]
         ]);
 
-        $this->assertEquals(count( $results ), 3);
-        
+        $this->assertEquals(count($results), 3);
+
         // flag1 
         $this->assertTrue($results[0]->getEnabled());
         $this->assertEquals($results[0]->getReason(), ResponseReasons::MATCH_EVALUATION_REASON);

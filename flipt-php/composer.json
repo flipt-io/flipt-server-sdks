@@ -1,17 +1,11 @@
 {
   "name": "flipt-io/flipt",
-  "description": "Flipt Server Evaluation SDK",
+  "description": "Flipt Server SDK",
   "keywords": [
     "flipt",
     "flipt php",
     "feature flags",
     "feature toggles"
-  ],
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/flipt-io/flipt-server-sdks/flipt-php"
-    }
   ],
   "license": "MIT",
   "homepage": "https://flipt.io",
