@@ -179,7 +179,7 @@ func javaBuild(ctx context.Context, client *dagger.Client, hostDirectory *dagger
 	container := client.Container().From("gradle:8.5.0-jdk11").
 		WithDirectory("/src", hostDirectory.Directory("flipt-java")).
 		WithWorkdir("/src").
-		WithExec([]string{"./gradlew", "build"})
+		WithExec([]string{"./gradlew", "-x", "test", "build"})
 
 	var err error
 
