@@ -40,6 +40,16 @@ jobs:
           cd /usr/local
           curl -L https://dl.dagger.io/dagger/install.sh | DAGGER_VERSION=0.9.5 sh
 
+      - name: Generate token
+        id: generate_token
+        uses: tibdex/github-app-token@v2
+        with:
+          app_id: ${{ secrets.FLIPT_RELEASE_BOT_APP_ID }}
+          private_key: ${{ secrets.FLIPT_RELEASE_BOT_APP_PEM }}
+          installation_id: ${{ secrets.FLIPT_RELEASE_BOT_INSTALLATION_ID }}
+
       - name: Build Individual SDK(s)
+        env:
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
         run: |
           dagger run go run ./build --languages=${{ inputs.sdk }} --push=true --tag=${{ inputs.tag }}
