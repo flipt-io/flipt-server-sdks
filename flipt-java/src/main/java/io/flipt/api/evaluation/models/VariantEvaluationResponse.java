@@ -7,7 +7,7 @@ import java.util.List;
 public class VariantEvaluationResponse {
   private final boolean match;
   private final List<String> segmentKeys;
-  private final String reason;
+  private final EvaluationReason reason;
   private final String flagKey;
   private final String variantKey;
   private final String variantAttachment;
@@ -18,7 +18,7 @@ public class VariantEvaluationResponse {
   public VariantEvaluationResponse(
       @JsonProperty("match") boolean match,
       @JsonProperty("segmentKeys") List<String> segmentKeys,
-      @JsonProperty("reason") String reason,
+      @JsonProperty("reason") EvaluationReason reason,
       @JsonProperty("flagKey") String flagKey,
       @JsonProperty("variantKey") String variantKey,
       @JsonProperty("variantAttachment") String variantAttachment,
@@ -65,7 +65,7 @@ public class VariantEvaluationResponse {
   }
 
   @JsonProperty("reason")
-  public String getReason() {
+  public EvaluationReason getReason() {
     return reason;
   }
 

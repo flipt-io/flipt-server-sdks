@@ -1,5 +1,8 @@
 use flipt::api::FliptClient;
-use flipt::evaluation::models::{BatchEvaluationRequest, EvaluationRequest};
+use flipt::evaluation::models::{
+    BatchEvaluationRequest, ErrorEvaluationReason, EvaluationReason, EvaluationRequest,
+    EvaluationResponseType,
+};
 use flipt::{AuthScheme, Config};
 use std::{collections::HashMap, env};
 use url::Url;
@@ -40,7 +43,7 @@ async fn tests() {
 
     assert!(variant.r#match);
     assert_eq!(variant.variant_key, "variant1");
-    assert_eq!(variant.reason, "MATCH_EVALUATION_REASON");
+    assert_eq!(variant.reason, EvaluationReason::Match);
     assert_eq!(variant.segment_keys.get(0).unwrap(), "segment1");
 
     let boolean = flipt_client
@@ -50,7 +53,7 @@ async fn tests() {
         .unwrap();
     assert!(boolean.enabled);
     assert_eq!(boolean.flag_key, "flag_boolean");
-    assert_eq!(boolean.reason, "MATCH_EVALUATION_REASON");
+    assert_eq!(boolean.reason, EvaluationReason::Match);
 
     let mut requests: Vec<EvaluationRequest> = Vec::new();
     requests.push(variant_request);
@@ -67,29 +70,29 @@ async fn tests() {
 
     // Variant
     let first_response = batch.responses.get(0).unwrap();
-    assert_eq!(first_response.r#type, "VARIANT_EVALUATION_RESPONSE_TYPE");
+    assert_eq!(first_response.r#type, EvaluationResponseType::Variant);
 
     let variant = first_response.variant_response.clone().unwrap();
     assert!(variant.r#match);
     assert_eq!(variant.variant_key, "variant1");
-    assert_eq!(variant.reason, "MATCH_EVALUATION_REASON");
+    assert_eq!(variant.reason, EvaluationReason::Match);
     assert_eq!(variant.segment_keys.get(0).unwrap(), "segment1");
 
     // Boolean
     let second_response = batch.responses.get(1).unwrap();
-    assert_eq!(second_response.r#type, "BOOLEAN_EVALUATION_RESPONSE_TYPE");
+    assert_eq!(second_response.r#type, EvaluationResponseType::Boolean);
 
     let boolean = second_response.boolean_response.clone().unwrap();
     assert!(boolean.enabled);
     assert_eq!(boolean.flag_key, "flag_boolean");
-    assert_eq!(boolean.reason, "MATCH_EVALUATION_REASON");
+    assert_eq!(boolean.reason, EvaluationReason::Match);
 
     // Error
     let third_response = batch.responses.get(2).unwrap();
-    assert_eq!(third_response.r#type, "ERROR_EVALUATION_RESPONSE_TYPE");
+    assert_eq!(third_response.r#type, EvaluationResponseType::Error);
 
     let error = third_response.error_response.clone().unwrap();
     assert_eq!(error.flag_key, "notfound");
     assert_eq!(error.namespace_key, "default");
-    assert_eq!(error.reason, "NOT_FOUND_ERROR_EVALUATION_REASON");
+    assert_eq!(error.reason, ErrorEvaluationReason::NotFound);
 }
