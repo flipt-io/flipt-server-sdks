@@ -6,6 +6,10 @@ on:
         description: "SDK(s) to build"
         type: string
         required: true
+      tag:
+        description: "Tag to use for SDK(s)"
+        type: string
+        required: false
 
 permissions:
   contents: write
@@ -14,6 +18,9 @@ env:
   CRATES_TOKEN: ${{ secrets.CRATES_TOKEN }}
   NPM_API_KEY: ${{ secrets.NPM_API_KEY }}
   PYPI_API_KEY: ${{ secrets.PYPI_API_KEY }}
+  MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+  MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
+  MAVEN_PUBLISH_REGISTRY_URL: ${{ secrets.MAVEN_PUBLISH_REGISTRY_URL }}
 
 jobs:
   build:
@@ -35,4 +42,4 @@ jobs:
 
       - name: Build Individual SDK(s)
         run: |
-          dagger run go run ./build --languages=${{ inputs.sdk }} --push=true
+          dagger run go run ./build --languages=${{ inputs.sdk }} --push=true --tag=${{ inputs.tag }}
