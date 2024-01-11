@@ -20,6 +20,7 @@ var (
 		"node":   nodeTests,
 		"rust":   rustTests,
 		"java":   javaTests,
+		"php":    phpTests,
 	}
 )
 
@@ -161,6 +162,27 @@ func javaTests(ctx context.Context, client *dagger.Client, flipt *dagger.Contain
 		WithEnvVariable("FLIPT_URL", "http://flipt:8080").
 		WithEnvVariable("FLIPT_AUTH_TOKEN", "secret").
 		WithExec([]string{"./gradlew", "test"}).
+		Sync(ctx)
+
+	return err
+}
+
+// phpTests runs the php integration test suite against a container running Flipt.
+func phpTests(ctx context.Context, client *dagger.Client, flipt *dagger.Container, hostDirectory *dagger.Directory) error {
+	_, err := client.Container().From("php:8-cli").
+		WithEnvVariable("COMPOSER_ALLOW_SUPERUSER", "1").
+		WithExec([]string{"apt-get", "update"}).
+		WithExec([]string{"apt-get", "install", "-y", "git"}).
+		WithExec([]string{"sh", "-c", "curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer"}).
+		WithWorkdir("/src").
+		WithDirectory("/src", hostDirectory.Directory("flipt-php"), dagger.ContainerWithDirectoryOpts{
+			Exclude: []string{"./vendor", "./composer.lock"},
+		}).
+		WithServiceBinding("flipt", flipt.WithExec(nil).AsService()).
+		WithEnvVariable("FLIPT_URL", "http://flipt:8080").
+		WithEnvVariable("FLIPT_AUTH_TOKEN", "secret").
+		WithExec([]string{"composer", "install"}).
+		WithExec([]string{"composer", "test"}).
 		Sync(ctx)
 
 	return err

@@ -1,5 +1,10 @@
 # Flipt Client Pyton
 
+This directory contains the Python source code for the Flipt [server-side](https://www.flipt.io/docs/integration/server/rest) client.
+
+## Documentation
+
+API documentation is available at <https://www.flipt.io/docs/reference/overview>.
 This directory contains the Python source code for the Python server side SDK.
 
 ## Installation

@@ -1,5 +1,10 @@
-# Flipt Client Rust
+# Flipt Rust
 
+This directory contains the Rust source code for the Flipt [server-side](https://www.flipt.io/docs/integration/server/rest) client.
+
+## Documentation
+
+API documentation is available at <https://www.flipt.io/docs/reference/overview>.
 This directory contains the Rust source code for the Rust server side SDK.
 
 ## Installation

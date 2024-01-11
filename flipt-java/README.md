@@ -1,5 +1,10 @@
-# Flipt Client Java
+# Flipt Java
 
+This directory contains the Java source code for the Flipt [server-side](https://www.flipt.io/docs/integration/server/rest) client.
+
+## Documentation
+
+API documentation is available at <https://www.flipt.io/docs/reference/overview>.
 This directory contains the Java source code for the Java server side SDK.
 
 ## Installation
