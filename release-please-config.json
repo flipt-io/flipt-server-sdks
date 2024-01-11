@@ -2,7 +2,8 @@
   "bump-minor-pre-major": true,
   "bump-patch-for-minor-pre-major": true,
   "draft": false,
-  "prerelease": false,
+  "prerelease": true,
+  "separate-pull-requests": true,
   "packages": {
     "flipt-java": {
       "component": "flipt-java",
