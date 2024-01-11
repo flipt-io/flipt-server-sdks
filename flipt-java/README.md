@@ -1,5 +1,7 @@
 # Flipt Java
 
+[![Maven Central](https://img.shields.io/maven-central/v/io.flipt/flipt-java)](https://central.sonatype.com/artifact/io.flipt/flipt-java)
+
 This directory contains the Java source code for the Flipt [server-side](https://www.flipt.io/docs/integration/server/rest) client.
 
 ## Documentation

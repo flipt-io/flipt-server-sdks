@@ -1,5 +1,7 @@
 # Flipt Client Pyton
 
+[![pypi](https://img.shields.io/pypi/v/flipt.svg)](https://pypi.org/project/flipt)
+
 This directory contains the Python source code for the Flipt [server-side](https://www.flipt.io/docs/integration/server/rest) client.
 
 ## Documentation

@@ -1,5 +1,7 @@
 # Flipt Node
 
+[![npm](https://img.shields.io/npm/v/@flipt-io/flipt?label=%40flipt-io%2Fflipt)](https://www.npmjs.com/package/@flipt-io/flipt)
+
 This directory contains the TypeScript source code for the Flipt [server-side](https://www.flipt.io/docs/integration/server/rest) client.
 
 ## Documentation

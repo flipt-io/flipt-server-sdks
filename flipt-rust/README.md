@@ -1,5 +1,7 @@
 # Flipt Rust
 
+[![crates.io](https://img.shields.io/crates/v/flipt.svg)](https://crates.io/crates/flipt)
+
 This directory contains the Rust source code for the Flipt [server-side](https://www.flipt.io/docs/integration/server/rest) client.
 
 ## Documentation
