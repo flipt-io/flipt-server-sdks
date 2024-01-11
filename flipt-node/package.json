@@ -1,7 +1,7 @@
 {
   "name": "@flipt-io/flipt",
   "version": "0.0.0",
-  "description": "Flipt Server Evaluation SDK",
+  "description": "Flipt Server SDK",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Flipt Devs <dev@flipt.io>",
