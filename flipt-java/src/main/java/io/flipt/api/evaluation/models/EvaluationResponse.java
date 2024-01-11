@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Optional;
 
 public class EvaluationResponse {
-  private final String type;
+  private final EvaluationResponseType type;
 
   private final Optional<BooleanEvaluationResponse> booleanResponse;
 
@@ -15,7 +15,7 @@ public class EvaluationResponse {
 
   @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
   public EvaluationResponse(
-      @JsonProperty("type") String type,
+      @JsonProperty("type") EvaluationResponseType type,
       @JsonProperty("booleanResponse") Optional<BooleanEvaluationResponse> booleanResponse,
       @JsonProperty("variantResponse") Optional<VariantEvaluationResponse> variantResponse,
       @JsonProperty("errorResponse") Optional<ErrorEvaluationResponse> errorResponse) {
@@ -26,7 +26,7 @@ public class EvaluationResponse {
   }
 
   @JsonProperty("type")
-  public String getType() {
+  public EvaluationResponseType getType() {
     return type;
   }
 
