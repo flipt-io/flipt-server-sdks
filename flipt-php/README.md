@@ -5,6 +5,9 @@
 
 This directory contains the PHP source code for the Flipt [server-side](https://www.flipt.io/docs/integration/server/rest) client.
 
+> [!NOTE]
+> If you are on the <https://github.com/flipt-io/flipt-php> repository, this is a mirror of the source code. Please file issues and pull requests against the [flipt-io/flipt-server-sdks](https://github.com/flipt-io/flipt-server-sdks) repository.
+
 ## Status
 
 This SDK status is `beta`, and there may be breaking changes between versions without a major version update. Therefore, we recommend pinning your installation of this package wherever necessary.
