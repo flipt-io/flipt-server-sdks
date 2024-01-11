@@ -1,6 +1,10 @@
-# Flipt Client Node
+# Flipt Node
 
-This directory contains the TypeScript source code for the TypeScript server side SDK.
+This directory contains the TypeScript source code for the Flipt [server-side](https://www.flipt.io/docs/integration/server/rest) client.
+
+## Documentation
+
+API documentation is available at <https://www.flipt.io/docs/reference/overview>.
 
 ## Installation
 

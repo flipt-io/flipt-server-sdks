@@ -6,6 +6,7 @@ namespace Flipt\Models;
 
 interface VariantEvaluationResult
 {
+    public function getFlagKey(): string;
     public function getMatch(): bool;
     public function getReason(): string;
     public function getRequestDurationMillis(): float;

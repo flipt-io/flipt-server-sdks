@@ -4,7 +4,7 @@
          
 >
     <testsuites>
-        <testsuite name="unit">
+        <testsuite name="integration">
             <directory>tests</directory>
         </testsuite>
     </testsuites>

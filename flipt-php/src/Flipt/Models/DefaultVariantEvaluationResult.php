@@ -8,6 +8,7 @@ use Flipt\Models\VariantEvaluationResult;
 
 final class DefaultVariantEvaluationResult implements VariantEvaluationResult
 {
+    public string $flagKey;
     public bool $match;
     public string $reason;
     public float $requestDurationMillis;
@@ -18,6 +19,7 @@ final class DefaultVariantEvaluationResult implements VariantEvaluationResult
     public ?string $variantAttachment;
 
     public function __construct(
+        string $flagKey,
         bool $match,
         string $reason,
         float $requestDurationMillis,
@@ -27,6 +29,7 @@ final class DefaultVariantEvaluationResult implements VariantEvaluationResult
         ?string $variantKey,
         ?string $variantAttachment
     ) {
+        $this->flagKey = $flagKey;
         $this->match = $match;
         $this->reason = $reason;
         $this->requestDurationMillis = $requestDurationMillis;
@@ -35,6 +38,11 @@ final class DefaultVariantEvaluationResult implements VariantEvaluationResult
         $this->segmentKeys = $segmentKeys;
         $this->variantKey = $variantKey;
         $this->variantAttachment = $variantAttachment;
+    }
+
+    public function getFlagKey(): string
+    {
+        return $this->flagKey;
     }
 
     public function getMatch(): bool

@@ -12,13 +12,13 @@ use Flipt\Models\DefaultVariantEvaluationResult;
 final class FliptClient
 {
     protected Client $client;
-    protected AuthenticationStrategy $authentication;
+    protected AuthenticationStrategy|null $authentication;
     protected string $namespace;
     protected string $entityId;
     protected array $context;
 
 
-    public function __construct(string|Client $host, string $namespace, array $context = [], string $entityId = '', AuthenticationStrategy $authentication = null)
+    public function __construct(string|Client $host, string $namespace = "default", array $context = [], string $entityId = '', AuthenticationStrategy $authentication = null)
     {
         $this->authentication = $authentication;
         $this->namespace = $namespace;
@@ -34,7 +34,7 @@ final class FliptClient
     public function boolean(string $name, $context = [], $entityId = NULL): BooleanEvaluationResult
     {
         $response = $this->apiRequest('/evaluate/v1/boolean', $this->mergeRequestParams($name, $context, $entityId));
-        return new DefaultBooleanEvaluationResult($response['enabled'], $response['reason'], $response['requestDurationMillis'], $response['requestId'], $response['timestamp']);
+        return new DefaultBooleanEvaluationResult($response['flagKey'], $response['enabled'], $response['reason'], $response['requestDurationMillis'], $response['requestId'], $response['timestamp']);
     }
 
 
@@ -45,7 +45,7 @@ final class FliptClient
     public function variant(string $name, $context = [], $entityId = NULL): VariantEvaluationResult
     {
         $response = $this->apiRequest('/evaluate/v1/variant', $this->mergeRequestParams($name, $context, $entityId));
-        return new DefaultVariantEvaluationResult($response['match'], $response['reason'], $response['requestDurationMillis'], $response['requestId'], $response['timestamp'], $response['segmentKeys'], $response['variantKey'], $response['variantAttachment']);
+        return new DefaultVariantEvaluationResult($response['flagKey'], $response['match'], $response['reason'], $response['requestDurationMillis'], $response['requestId'], $response['timestamp'], $response['segmentKeys'], $response['variantKey'], $response['variantAttachment']);
     }
 
 
@@ -68,13 +68,13 @@ final class FliptClient
             if ($resp['type'] == 'VARIANT_EVALUATION_RESPONSE_TYPE') {
                 // get the variant response
                 $vr = $resp['variantResponse'];
-                return new DefaultVariantEvaluationResult($vr['match'], $vr['reason'], $vr['requestDurationMillis'], $vr['requestId'], $vr['timestamp'], $vr['segmentKeys'], $vr['variantKey'], $vr['variantAttachment']);
+                return new DefaultVariantEvaluationResult($vr['flagKey'], $vr['match'], $vr['reason'], $vr['requestDurationMillis'], $vr['requestId'], $vr['timestamp'], $vr['segmentKeys'], $vr['variantKey'], $vr['variantAttachment']);
             }
 
             if ($resp['type'] == 'BOOLEAN_EVALUATION_RESPONSE_TYPE') {
                 // get the boolean response
                 $vr = $resp['booleanResponse'];
-                return new DefaultBooleanEvaluationResult($vr['enabled'], $vr['reason'], $vr['requestDurationMillis'], $vr['requestId'], $vr['timestamp']);
+                return new DefaultBooleanEvaluationResult($vr['flagKey'], $vr['enabled'], $vr['reason'], $vr['requestDurationMillis'], $vr['requestId'], $vr['timestamp']);
             }
 
             return null;

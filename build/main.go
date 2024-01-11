@@ -21,6 +21,7 @@ var (
 		"rust":   rustBuild,
 		"node":   nodeBuild,
 		"java":   javaBuild,
+		"php":    phpBuild,
 	}
 )
 
@@ -201,6 +202,39 @@ func javaBuild(ctx context.Context, client *dagger.Client, hostDirectory *dagger
 		WithSecretVariable("MAVEN_PASSWORD", mavenPassword).
 		WithSecretVariable("MAVEN_PUBLISH_REGISTRY_URL", mavenRegistryUrl).
 		WithExec([]string{"./gradlew", "publish"}).
+		Sync(ctx)
+
+	return err
+}
+
+func phpBuild(ctx context.Context, client *dagger.Client, hostDirectory *dagger.Directory) error {
+	container := client.Container().From("php:8-cli").
+		WithDirectory("/src", hostDirectory.Directory("flipt-php")).
+		WithEnvVariable("COMPOSER_ALLOW_SUPERUSER", "1").
+		WithExec([]string{"sh", "-c", "curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer"}).
+		WithWorkdir("/src").
+		WithExec([]string{"composer", "install"})
+
+	var err error
+
+	if !push {
+		_, err = container.Sync(ctx)
+		return err
+	}
+
+	if os.Getenv("PACKAGIST_USERNAME") == "" {
+		return fmt.Errorf("PACKAGIST_USERNAME is not set")
+	}
+	if os.Getenv("PACKAGIST_TOKEN") == "" {
+		return fmt.Errorf("PACKAGIST_TOKEN is not set")
+	}
+
+	packagistUsername := client.SetSecret("packagist-username", os.Getenv("PACKAGIST_USERNAME"))
+	packagistToken := client.SetSecret("packagist-token", os.Getenv("PACKAGIST_TOKEN"))
+
+	_, err = container.WithSecretVariable("PACKAGIST_USERNAME", packagistUsername).
+		WithSecretVariable("PACKAGIST_TOKEN", packagistToken).
+		WithExec([]string{"composer", "publish"}).
 		Sync(ctx)
 
 	return err

@@ -16,6 +16,7 @@ We are constantly growing our list of clients. Currently, we support the followi
 2. [NodeJS](./flipt-node)
 3. [Java](./flipt-java)
 4. [Rust](./flipt-rust)
+5. [PHP](./flipt-php)
 
 Want to see a client in a language we don't support? [Open an issue](https://github.com/flipt-io/flipt-server-sdks/issues/new?assignees=&labels=new-language&projects=&template=new_language.yml) and let us know!
 
