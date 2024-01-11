@@ -138,7 +138,7 @@ func rustBuild(ctx context.Context, client *dagger.Client, hostDirectory *dagger
 	cargoAPIKeySecret := client.SetSecret("rust-api-key", os.Getenv("CRATES_TOKEN"))
 
 	_, err = container.WithSecretVariable("CRATES_TOKEN", cargoAPIKeySecret).
-		WithExec([]string{"cargo", "publish", "--token", "${CRATES_TOKEN}"}).
+		WithExec([]string{"sh", "-c", "cargo publish --token $CRATES_TOKEN"}).
 		Sync(ctx)
 
 	return err
