@@ -222,20 +222,7 @@ func phpBuild(ctx context.Context, client *dagger.Client, hostDirectory *dagger.
 		return err
 	}
 
-	if os.Getenv("PACKAGIST_USERNAME") == "" {
-		return fmt.Errorf("PACKAGIST_USERNAME is not set")
-	}
-	if os.Getenv("PACKAGIST_TOKEN") == "" {
-		return fmt.Errorf("PACKAGIST_TOKEN is not set")
-	}
-
-	packagistUsername := client.SetSecret("packagist-username", os.Getenv("PACKAGIST_USERNAME"))
-	packagistToken := client.SetSecret("packagist-token", os.Getenv("PACKAGIST_TOKEN"))
-
-	_, err = container.WithSecretVariable("PACKAGIST_USERNAME", packagistUsername).
-		WithSecretVariable("PACKAGIST_TOKEN", packagistToken).
-		WithExec([]string{"composer", "publish"}).
-		Sync(ctx)
+	// TODO
 
 	return err
 }
