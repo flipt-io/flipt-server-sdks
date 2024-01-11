@@ -1,0 +1,42 @@
+{
+  "name": "flipt-io/flipt",
+  "description": "Flipt Server Evaluation SDK",
+  "keywords": [
+    "flipt",
+    "flipt php",
+    "feature flags",
+    "feature toggles"
+  ],
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/flipt-io/flipt-server-sdks/flipt-php"
+    }
+  ],
+  "license": "MIT",
+  "homepage": "https://flipt.io",
+  "require": {
+    "php": ">=8.0",
+    "guzzlehttp/guzzle": "^7"
+  },
+  "require-dev": {
+    "phpunit/php-code-coverage": "^10",
+    "phpunit/phpunit": "^10"
+  },
+  "autoload": {
+    "psr-4": {
+      "Flipt\\": "src/Flipt/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Flipt\\Tests\\": "tests/"
+    }
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "scripts": {
+    "test": "./vendor/bin/phpunit tests"
+  }
+}
