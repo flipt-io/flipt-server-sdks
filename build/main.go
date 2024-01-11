@@ -248,9 +248,7 @@ func phpBuild(ctx context.Context, client *dagger.Client, hostDirectory *dagger.
 		WithSecretVariable("GITHUB_TOKEN", ghToken).
 		WithExec([]string{"git", "config", "--global", "user.email", gitUserEmail}).
 		WithExec([]string{"git", "config", "--global", "user.name", gitUserName}).
-		WithExec([]string{"git", "config", "--global",
-			"http.https://github.com/.extraheader",
-			"AUTHORIZATION: Basic $GITHUB_TOKEN"})
+		WithExec([]string{"sh", "-c", `git config --global http.https://github.com/.extraheader "AUTHORIZATION: Basic ${GITHUB_TOKEN}"`})
 
 	repository := git.
 		WithExec([]string{"git", "clone", "https://github.com/flipt-io/flipt-server-sdks.git", "/src"}).
