@@ -8,13 +8,13 @@ public class ErrorEvaluationResponse {
 
   private final String namespaceKey;
 
-  private final String reason;
+  private final ErrorEvaluationReason reason;
 
   @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
   public ErrorEvaluationResponse(
       @JsonProperty("flagKey") String flagKey,
       @JsonProperty("namespaceKey") String namespaceKey,
-      @JsonProperty("reason") String reason) {
+      @JsonProperty("reason") ErrorEvaluationReason reason) {
     this.flagKey = flagKey;
     this.namespaceKey = namespaceKey;
     this.reason = reason;
@@ -31,7 +31,7 @@ public class ErrorEvaluationResponse {
   }
 
   @JsonProperty("reason")
-  public String getReason() {
+  public ErrorEvaluationReason getReason() {
     return reason;
   }
 }

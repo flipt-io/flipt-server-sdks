@@ -8,7 +8,7 @@ public class BooleanEvaluationResponse {
 
   private final String flagKey;
 
-  private final String reason;
+  private final EvaluationReason reason;
 
   private final float requestDurationMillis;
 
@@ -18,7 +18,7 @@ public class BooleanEvaluationResponse {
   public BooleanEvaluationResponse(
       @JsonProperty("enabled") boolean enabled,
       @JsonProperty("flagKey") String flagKey,
-      @JsonProperty("reason") String reason,
+      @JsonProperty("reason") EvaluationReason reason,
       @JsonProperty("requestDurationMillis") float requestDurationMillis,
       @JsonProperty("timesteamp") String timestamp) {
     this.enabled = enabled;
@@ -39,7 +39,7 @@ public class BooleanEvaluationResponse {
   }
 
   @JsonProperty("reason")
-  public String getReason() {
+  public EvaluationReason getReason() {
     return reason;
   }
 
