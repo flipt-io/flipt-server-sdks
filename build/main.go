@@ -216,7 +216,7 @@ func phpBuild(ctx context.Context, client *dagger.Client, hostDirectory *dagger.
 		return fmt.Errorf("tag is not set")
 	}
 	// because of how Composer works, we need to create a new repo that contains
-	// only the php lient code. This is because the php client code is in a subdirectory
+	// only the php client code.
 	targetRepo := os.Getenv("TARGET_REPO")
 	if targetRepo == "" {
 		targetRepo = "https://github.com/flipt-io/flipt-php.git"
