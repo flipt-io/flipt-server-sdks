@@ -26,7 +26,7 @@ To start tracking feature flags on Datadog:
 
 ```typescript
 import { datadogRum } from '@datadog/browser-rum';
-import { FliptMetrics } from '@flipt-io/flipt';
+import { FliptClient, FliptMetrics } from '@flipt-io/flipt';
 
 datadogRum.init({
   applicationId: '<APPLICATION_ID>',
