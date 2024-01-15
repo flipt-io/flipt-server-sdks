@@ -1,3 +1,4 @@
+import fetch from "node-fetch";
 import { AuthenticationStrategy } from "..";
 import {
   BatchEvaluationRequest,
