@@ -3,6 +3,7 @@ __pycache__/
 
 # Node
 node_modules/
+dist/
 
 # Rust
 target/
