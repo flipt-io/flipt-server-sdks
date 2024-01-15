@@ -3,7 +3,7 @@ use flipt::evaluation::models::{
     BatchEvaluationRequest, ErrorEvaluationReason, EvaluationReason, EvaluationRequest,
     EvaluationResponseType,
 };
-use flipt::{AuthScheme, Config};
+use flipt::{ClientTokenAuthentication, Config};
 use std::{collections::HashMap, env};
 use url::Url;
 
@@ -14,7 +14,7 @@ async fn tests() {
 
     let flipt_client = FliptClient::new(Config::new(
         Url::parse(&url).unwrap(),
-        AuthScheme::BearerToken(token),
+        ClientTokenAuthentication::new(token),
         60,
     ))
     .unwrap();
