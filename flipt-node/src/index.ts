@@ -1,4 +1,9 @@
 import { Evaluation } from "./evaluation";
+import {
+  BooleanEvaluationResponse,
+  EvaluationRequest,
+  VariantEvaluationResponse
+} from "./evaluation/models";
 
 interface FliptClientOptions {
   url?: string;
@@ -64,5 +69,39 @@ export class FliptClient {
       clientOptions.timeout,
       clientOptions.authenticationStrategy
     );
+  }
+}
+
+export class FliptMetrics {
+  evaluationClient: Evaluation;
+  datadogRum: any;
+
+  constructor(evaluationClient: Evaluation, datadogRum: any) {
+    this.evaluationClient = evaluationClient;
+    this.datadogRum = datadogRum;
+  }
+
+  public async boolean(
+    request: EvaluationRequest
+  ): Promise<BooleanEvaluationResponse> {
+    const response = await this.evaluationClient.boolean(request);
+
+    this.datadogRum.addFeatureFlagEvaluation(
+      `${request.namespaceKey}/${request.flagKey}`,
+      response.enabled
+    );
+    return response;
+  }
+
+  public async variant(
+    request: EvaluationRequest
+  ): Promise<VariantEvaluationResponse> {
+    const response = await this.evaluationClient.variant(request);
+
+    this.datadogRum.addFeatureFlagEvaluation(
+      `${request.namespaceKey}/${request.flagKey}`,
+      response.variantKey
+    );
+    return response;
   }
 }
