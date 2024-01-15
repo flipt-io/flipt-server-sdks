@@ -1,6 +1,6 @@
 use crate::error::ClientError;
 use crate::evaluation::Evaluation;
-use crate::{AuthenticationStrategy, ClientTokenAuthentication, Config};
+use crate::{AuthenticationStrategy, Config, NoneAuthentication};
 use reqwest::header::HeaderMap;
 use std::time::Duration;
 
@@ -37,6 +37,6 @@ impl FliptClient {
 
 impl Default for FliptClient {
     fn default() -> Self {
-        Self::new::<ClientTokenAuthentication>(Config::default()).unwrap()
+        Self::new::<NoneAuthentication>(Config::default()).unwrap()
     }
 }

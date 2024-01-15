@@ -46,6 +46,14 @@ pub trait AuthenticationStrategy {
     fn authenticate(self) -> HeaderMap;
 }
 
+pub struct NoneAuthentication {}
+
+impl AuthenticationStrategy for NoneAuthentication {
+    fn authenticate(self) -> HeaderMap {
+        HeaderMap::new()
+    }
+}
+
 pub struct JWTAuthentication {
     jwt_token: String,
 }
