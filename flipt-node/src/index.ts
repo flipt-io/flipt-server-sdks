@@ -40,8 +40,7 @@ export class JWTAuthentication implements AuthenticationStrategy {
 }
 
 const defaultFliptClientOptions: FliptClientOptions = {
-  url: "http://localhost:8080",
-  timeout: 60
+  url: "http://localhost:8080"
 };
 
 export class FliptClient {
