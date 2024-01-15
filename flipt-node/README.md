@@ -22,6 +22,12 @@ In the [example](./example) directory, there is an example TypeScript program wh
 
 There is support for [Datadog RUM](https://docs.datadoghq.com/real_user_monitoring/) through this client. This allows you to track the values of feature flag evaluation and how it relates to active browser sessions.
 
+You can first install the datadog RUM client like so:
+
+```
+npm install --save @datadog/browser-rum
+```
+
 To start tracking feature flags on Datadog:
 
 ```typescript
