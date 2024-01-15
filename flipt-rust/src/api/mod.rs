@@ -1,7 +1,6 @@
 use crate::error::ClientError;
 use crate::evaluation::Evaluation;
 use crate::{AuthenticationStrategy, Config, NoneAuthentication};
-use reqwest::header::HeaderMap;
 use std::time::Duration;
 
 pub struct FliptClient {
@@ -13,10 +12,7 @@ impl FliptClient {
     where
         T: AuthenticationStrategy,
     {
-        let header_map = match config.auth_strategy {
-            Some(a) => a.authenticate(),
-            None => HeaderMap::new(),
-        };
+        let header_map = config.auth_strategy.authenticate();
 
         let client = match reqwest::Client::builder()
             .timeout(Duration::from_secs(config.timeout))

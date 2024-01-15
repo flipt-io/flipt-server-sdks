@@ -12,18 +12,15 @@ where
     T: AuthenticationStrategy,
 {
     endpoint: Url,
-    auth_strategy: Option<T>,
+    auth_strategy: T,
     timeout: u64,
 }
 
-impl<T> Default for Config<T>
-where
-    T: AuthenticationStrategy,
-{
+impl Default for Config<NoneAuthentication> {
     fn default() -> Self {
         Self {
             endpoint: Url::parse("http://localhost:8080").unwrap(),
-            auth_strategy: None,
+            auth_strategy: NoneAuthentication::default(),
             timeout: 60,
         }
     }
@@ -36,7 +33,7 @@ where
     pub fn new(endpoint: Url, auth_strategy: T, timeout: u64) -> Self {
         Self {
             endpoint,
-            auth_strategy: Some(auth_strategy),
+            auth_strategy,
             timeout,
         }
     }
@@ -47,6 +44,18 @@ pub trait AuthenticationStrategy {
 }
 
 pub struct NoneAuthentication {}
+
+impl NoneAuthentication {
+    pub fn new() -> Self {
+        Self {}
+    }
+}
+
+impl Default for NoneAuthentication {
+    fn default() -> Self {
+        Self::new()
+    }
+}
 
 impl AuthenticationStrategy for NoneAuthentication {
     fn authenticate(self) -> HeaderMap {
