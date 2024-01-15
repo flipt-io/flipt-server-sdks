@@ -1,6 +1,6 @@
 use crate::error::ClientError;
 use crate::evaluation::Evaluation;
-use crate::{AuthScheme, Config};
+use crate::{AuthenticationStrategy, ClientTokenAuthentication, Config};
 use reqwest::header::HeaderMap;
 use std::time::Duration;
 
@@ -9,20 +9,13 @@ pub struct FliptClient {
 }
 
 impl FliptClient {
-    pub fn new(config: Config) -> Result<Self, ClientError> {
-        let mut header_map = HeaderMap::new();
-
-        match config.auth_scheme {
-            AuthScheme::BearerToken(bearer) => {
-                header_map.insert(
-                    "Authorization",
-                    format!("Bearer {}", bearer).parse().unwrap(),
-                );
-            }
-            AuthScheme::JWT(jwt) => {
-                header_map.insert("Authorization", format!("JWT {}", jwt).parse().unwrap());
-            }
-            AuthScheme::None => {}
+    pub fn new<T>(config: Config<T>) -> Result<Self, ClientError>
+    where
+        T: AuthenticationStrategy,
+    {
+        let header_map = match config.auth_strategy {
+            Some(a) => a.authenticate(),
+            None => HeaderMap::new(),
         };
 
         let client = match reqwest::Client::builder()
@@ -44,6 +37,6 @@ impl FliptClient {
 
 impl Default for FliptClient {
     fn default() -> Self {
-        Self::new(Config::default()).unwrap()
+        Self::new::<ClientTokenAuthentication>(Config::default()).unwrap()
     }
 }
