@@ -36,10 +36,7 @@ export class Evaluation {
         ...this.headers
       },
       body: JSON.stringify(request),
-      signal:
-        this.timeout === undefined
-          ? null
-          : AbortSignal.timeout(this.timeout * 1000)
+      signal: this.timeout && AbortSignal.timeout(this.timeout * 1000)
     });
 
     if (response.status !== 200) {
@@ -62,10 +59,7 @@ export class Evaluation {
         ...this.headers
       },
       body: JSON.stringify(request),
-      signal:
-        this.timeout === undefined
-          ? null
-          : AbortSignal.timeout(this.timeout * 1000)
+      signal: this.timeout && AbortSignal.timeout(this.timeout * 1000)
     });
 
     if (response.status !== 200) {
@@ -88,10 +82,7 @@ export class Evaluation {
         ...this.headers
       },
       body: JSON.stringify(request),
-      signal:
-        this.timeout === undefined
-          ? null
-          : AbortSignal.timeout(this.timeout * 1000)
+      signal: this.timeout && AbortSignal.timeout(this.timeout * 1000)
     });
 
     if (response.status !== 200) {
