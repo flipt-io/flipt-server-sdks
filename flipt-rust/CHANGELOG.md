@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.0-rc.2](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-rust-v1.0.0-rc.2...flipt-rust-v1.0.0-rc.2) (2024-01-16)
+
+
+### Miscellaneous Chores
+
+* release 1.0.0-rc.2 ([856609b](https://github.com/flipt-io/flipt-server-sdks/commit/856609ba9981d00ffbe855b660149fe782a87f61))
+
 ## [1.0.0-rc.2](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-rust-v1.0.0-rc.1...flipt-rust-v1.0.0-rc.2) (2024-01-16)
 
 
