@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 public class TestFliptClient {
   @Test
-  void testVariant() {
+  void testVariantEvaluation() {
     String fliptURL = System.getenv().get("FLIPT_URL");
     String authToken = System.getenv().get("FLIPT_AUTH_TOKEN");
 
@@ -25,7 +25,7 @@ public class TestFliptClient {
     context.put("fizz", "buzz");
     VariantEvaluationResponse variant =
         fc.evaluation()
-            .variant(
+            .evaluateVariant(
                 new EvaluationRequest("default", "flag1", "entity", context, Optional.empty()));
 
     Assertions.assertTrue(variant.isMatch());
@@ -36,7 +36,7 @@ public class TestFliptClient {
   }
 
   @Test
-  void testBoolean() {
+  void testBooleanEvaluation() {
     String fliptURL = System.getenv().get("FLIPT_URL");
     String authToken = System.getenv().get("FLIPT_AUTH_TOKEN");
 
@@ -54,7 +54,7 @@ public class TestFliptClient {
 
     BooleanEvaluationResponse booleanEvaluation =
         fc.evaluation()
-            .booleanEvaluation(
+            .evaluateBoolean(
                 new EvaluationRequest(
                     "default", "flag_boolean", "entity", context, Optional.empty()));
 
@@ -64,7 +64,7 @@ public class TestFliptClient {
   }
 
   @Test
-  void testBatch() {
+  void testBatchEvaluation() {
     String fliptURL = System.getenv().get("FLIPT_URL");
     String authToken = System.getenv().get("FLIPT_AUTH_TOKEN");
 
@@ -94,7 +94,7 @@ public class TestFliptClient {
 
     BatchEvaluationResponse batch =
         fc.evaluation()
-            .batch(
+            .evaluateBatch(
                 new BatchEvaluationRequest(Optional.of(""), evaluationRequests, Optional.empty()));
 
     // Variant
