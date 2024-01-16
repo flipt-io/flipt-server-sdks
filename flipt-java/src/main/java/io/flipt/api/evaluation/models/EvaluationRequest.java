@@ -2,9 +2,6 @@ package io.flipt.api.evaluation.models;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import io.flipt.api.FliptClient.FliptClientBuilder;
-
 import java.util.Map;
 import java.util.Optional;
 
@@ -65,8 +62,7 @@ public class EvaluationRequest {
     private Map<String, String> context;
     private Optional<String> reference;
 
-    public EvaluationRequestBuilder() {
-    }
+    public EvaluationRequestBuilder() {}
 
     public EvaluationRequestBuilder namespaceKey(String namespaceKey) {
       this.namespaceKey = namespaceKey;

@@ -42,8 +42,7 @@ public class BatchEvaluationRequest {
     private List<EvaluationRequest> requests;
     private Optional<String> reference;
 
-    public BatchEvaluationRequestBuilder() {
-    }
+    public BatchEvaluationRequestBuilder() {}
 
     public BatchEvaluationRequestBuilder requestId(Optional<String> requestId) {
       this.requestId = requestId;
