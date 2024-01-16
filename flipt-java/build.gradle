@@ -5,9 +5,7 @@ plugins {
 }
 
 group = 'io.flipt'
-// x-release-please-start-version
 version = '1.0.0-rc.2-SNAPSHOT'
-// x-release-please-end
 description = 'Flipt Server SDK'
 
 repositories {
