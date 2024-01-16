@@ -58,8 +58,8 @@ final class FliptClient
         $response = $this->apiRequest('/evaluate/v1/batch', [
             'requests' => array_map(function ($name) use ($context, $entityId) {
                 return $this->mergeRequestParams($name, $context, $entityId);
-            }, $names)
-            'reference' => $reference,
+            }, $names),
+            'reference' => $reference
         ]);
 
 
