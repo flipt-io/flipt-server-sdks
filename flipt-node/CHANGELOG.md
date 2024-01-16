@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.0.0-rc.2](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-node-v1.0.0-rc.1...flipt-node-v1.0.0-rc.2) (2024-01-16)
+
+
+### Features
+
+* **datadog:** Add support for getting RUM metrics for the TypeScript client ([#65](https://github.com/flipt-io/flipt-server-sdks/issues/65)) ([664c0b3](https://github.com/flipt-io/flipt-server-sdks/commit/664c0b3158b3265637a720305f95b7327e896525))
+* **node:** conditional signal ([#69](https://github.com/flipt-io/flipt-server-sdks/issues/69)) ([3876b02](https://github.com/flipt-io/flipt-server-sdks/commit/3876b020655b24d377cf0d5c67f2b186c16999a7))
+
+
+### Miscellaneous Chores
+
+* release 1.0.0-rc.2 ([709ef35](https://github.com/flipt-io/flipt-server-sdks/commit/709ef35e9959ee5bdc6630b60599de04f29f667d))
+
 ## 1.0.0-rc.1 (2024-01-11)
 
 ### Features
