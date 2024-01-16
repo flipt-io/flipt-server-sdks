@@ -30,7 +30,7 @@ public class Evaluation {
             .build();
   }
 
-  public VariantEvaluationResponse variant(EvaluationRequest request) {
+  public VariantEvaluationResponse evaluateVariant(EvaluationRequest request) {
     URL url;
 
     try {
@@ -55,27 +55,7 @@ public class Evaluation {
     }
   }
 
-  private Request.Builder makeRequest(EvaluationRequest request, URL url) {
-    RequestBody body;
-
-    try {
-      body =
-          RequestBody.create(
-              this.objectMapper.writeValueAsString(request), MediaType.parse("application/json"));
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
-
-    Request.Builder httpRequest = new Request.Builder().url(url).method("POST", body);
-
-    if (this.authenticationStrategy != null) {
-      httpRequest.addHeader("Authorization", this.authenticationStrategy.getAuthorizationHeader());
-    }
-
-    return httpRequest;
-  }
-
-  public BooleanEvaluationResponse booleanEvaluation(EvaluationRequest request) {
+  public BooleanEvaluationResponse evaluateBoolean(EvaluationRequest request) {
     URL url;
 
     try {
@@ -100,7 +80,7 @@ public class Evaluation {
     }
   }
 
-  public BatchEvaluationResponse batch(BatchEvaluationRequest request) {
+  public BatchEvaluationResponse evaluateBatch(BatchEvaluationRequest request) {
     RequestBody body;
 
     try {
@@ -136,5 +116,25 @@ public class Evaluation {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  private Request.Builder makeRequest(EvaluationRequest request, URL url) {
+    RequestBody body;
+
+    try {
+      body =
+          RequestBody.create(
+              this.objectMapper.writeValueAsString(request), MediaType.parse("application/json"));
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+
+    Request.Builder httpRequest = new Request.Builder().url(url).method("POST", body);
+
+    if (this.authenticationStrategy != null) {
+      httpRequest.addHeader("Authorization", this.authenticationStrategy.getAuthorizationHeader());
+    }
+
+    return httpRequest;
   }
 }
