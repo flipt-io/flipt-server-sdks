@@ -1,0 +1,42 @@
+{
+  "name": "flipt-io/flipt",
+  "description": "Flipt Server SDK",
+  "keywords": [
+    "flipt",
+    "flipt php",
+    "feature flags",
+    "feature toggles"
+  ],
+  "license": "MIT",
+  "homepage": "https://flipt.io",
+  "require": {
+    "php": ">=8.0",
+    "guzzlehttp/guzzle": "^7"
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/flipt-io/flipt-php"
+    }
+  ],
+  "require-dev": {
+    "phpunit/php-code-coverage": "^10",
+    "phpunit/phpunit": "^10"
+  },
+  "autoload": {
+    "psr-4": {
+      "Flipt\\": "src/Flipt/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Flipt\\Tests\\": "tests/"
+    }
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "scripts": {
+    "test": "./vendor/bin/phpunit tests"
+  }
+}

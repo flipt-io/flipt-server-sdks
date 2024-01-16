@@ -1,0 +1,15 @@
+name: Package PHP SDK
+on:
+  push:
+    tags: ["flipt-php-**"]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    uses: ./.github/workflows/package-sdks.yml
+    with:
+      sdk: php
+      tag: ${{ github.ref }}
+    secrets: inherit

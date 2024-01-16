@@ -2,6 +2,7 @@ import os
 import unittest
 from flipt import FliptClient
 from flipt.evaluation import BatchEvaluationRequest, EvaluationRequest
+from flipt.authentication import ClientTokenAuthentication
 
 
 class TestFliptEvaluationClient(unittest.TestCase):
@@ -14,7 +15,9 @@ class TestFliptEvaluationClient(unittest.TestCase):
         if auth_token is None:
             raise Exception("FLIPT_AUTH_TOKEN not set")
 
-        self.flipt_client = FliptClient(url=flipt_url, client_token=auth_token)
+        self.flipt_client = FliptClient(
+            url=flipt_url, authentication=ClientTokenAuthentication(auth_token)
+        )
 
     def test_variant(self):
         variant = self.flipt_client.evaluation.variant(

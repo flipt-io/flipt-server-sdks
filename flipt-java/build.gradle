@@ -1,11 +1,14 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
-    id "com.diffplug.spotless" version "6.23.3"
+    id "com.diffplug.spotless" version "6.24.0"
 }
 
-group = 'com.flipt.api'
-version = '1.0-SNAPSHOT'
+group = 'io.flipt'
+// x-release-please-start-version
+version = '1.0.0-rc.1'
+// x-release-please-end
+description = 'Flipt Server SDK'
 
 repositories {
     mavenCentral()
@@ -19,7 +22,7 @@ java {
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.10.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
-    api 'com.squareup.okhttp3:okhttp:4.9.3'
+    api 'com.squareup.okhttp3:okhttp:4.12.0'
     api 'com.fasterxml.jackson.core:jackson-databind:2.16.1'
     api 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.1'
     api 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.16.1'
@@ -57,10 +60,29 @@ test {
 publishing {
     publications {
         maven(MavenPublication) {
-            groupId = 'io.flipt'
             artifactId = 'flipt-java'
-            version = '1.0.0'
             from components.java
+
+            pom {
+                name = 'Flipt Java SDK'
+                description = 'Flipt Java SDK'
+                url = 'https://github.com/flipt-io/flipt-server-sdks/tree/main/flipt-java'
+
+                licenses {
+                    license {
+                        name = 'MIT'
+                        url = 'https://opensource.org/license/mit/'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'flipt-io'
+                        name = 'Flipt'
+                        email = 'devs@flipt.io'
+                    }
+                }
+            }
         }
     }
     repositories {

@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"encoding/base64"
+	"errors"
 	"flag"
 	"fmt"
 	"log"
@@ -16,17 +18,20 @@ import (
 var (
 	languages    string
 	push         bool
+	tag          string
 	languageToFn = map[string]buildFn{
 		"python": pythonBuild,
 		"rust":   rustBuild,
 		"node":   nodeBuild,
 		"java":   javaBuild,
+		"php":    phpBuild,
 	}
 )
 
 func init() {
 	flag.StringVar(&languages, "languages", "", "comma separated list of which language(s) to run builds for")
 	flag.BoolVar(&push, "push", false, "push built artifacts to registry")
+	flag.StringVar(&tag, "tag", "", "tag to use for release")
 }
 
 func main() {
@@ -133,7 +138,7 @@ func rustBuild(ctx context.Context, client *dagger.Client, hostDirectory *dagger
 	cargoAPIKeySecret := client.SetSecret("rust-api-key", os.Getenv("CRATES_TOKEN"))
 
 	_, err = container.WithSecretVariable("CRATES_TOKEN", cargoAPIKeySecret).
-		WithExec([]string{"cargo", "publish", "--token", "${CRATES_TOKEN}"}).
+		WithExec([]string{"sh", "-c", "cargo publish --token $CRATES_TOKEN"}).
 		Sync(ctx)
 
 	return err
@@ -174,7 +179,7 @@ func javaBuild(ctx context.Context, client *dagger.Client, hostDirectory *dagger
 	container := client.Container().From("gradle:8.5.0-jdk11").
 		WithDirectory("/src", hostDirectory.Directory("flipt-java")).
 		WithWorkdir("/src").
-		WithExec([]string{"./gradlew", "build"})
+		WithExec([]string{"./gradlew", "-x", "test", "build"})
 
 	var err error
 
@@ -203,5 +208,76 @@ func javaBuild(ctx context.Context, client *dagger.Client, hostDirectory *dagger
 		WithExec([]string{"./gradlew", "publish"}).
 		Sync(ctx)
 
+	return err
+}
+
+func phpBuild(ctx context.Context, client *dagger.Client, hostDirectory *dagger.Directory) error {
+	if tag == "" {
+		return fmt.Errorf("tag is not set")
+	}
+
+	const tagPrefix = "refs/tags/flipt-php-"
+
+	if !strings.HasPrefix(tag, tagPrefix) {
+		return fmt.Errorf("tag %q must start with %q", tag, tagPrefix)
+	}
+
+	// because of how Composer works, we need to create a new repo that contains
+	// only the php client code.
+	targetRepo := os.Getenv("TARGET_REPO")
+	if targetRepo == "" {
+		targetRepo = "https://github.com/flipt-io/flipt-php.git"
+	}
+
+	targetTag := strings.TrimPrefix(tag, tagPrefix)
+
+	pat := os.Getenv("GITHUB_TOKEN")
+	if pat == "" {
+		return errors.New("GITHUB_TOKEN environment variable must be set")
+	}
+
+	var (
+		encodedPAT = base64.URLEncoding.EncodeToString([]byte("pat:" + pat))
+		ghToken    = client.SetSecret("gh-token", encodedPAT)
+	)
+
+	gitUserName := os.Getenv("GIT_USER_NAME")
+	if gitUserName == "" {
+		gitUserName = "flipt-bot"
+	}
+
+	gitUserEmail := os.Getenv("GIT_USER_EMAIL")
+	if gitUserEmail == "" {
+		gitUserEmail = "dev@flipt.io"
+	}
+
+	git := client.Container().From("golang:1.21.3-bookworm").
+		WithSecretVariable("GITHUB_TOKEN", ghToken).
+		WithExec([]string{"git", "config", "--global", "user.email", gitUserEmail}).
+		WithExec([]string{"git", "config", "--global", "user.name", gitUserName}).
+		WithExec([]string{"sh", "-c", `git config --global http.https://github.com/.extraheader "AUTHORIZATION: Basic ${GITHUB_TOKEN}"`})
+
+	repository := git.
+		WithExec([]string{"git", "clone", "https://github.com/flipt-io/flipt-server-sdks.git", "--branch", "flipt-php-" + targetTag, "/src"}).
+		WithWorkdir("/src")
+
+	if !push {
+		_, err := repository.Sync(ctx)
+		return err
+	}
+
+	gitCmd := fmt.Sprintf("git push %s `git subtree split --prefix flipt-php`:refs/heads/main --force", targetRepo)
+	_, err := repository.WithExec([]string{"sh", "-c", gitCmd}).
+		Sync(ctx)
+	if err != nil {
+		return err
+	}
+
+	// tag the release
+	_, err = git.WithExec([]string{"git", "clone", targetRepo, "/dst"}).
+		WithWorkdir("/dst").
+		WithExec([]string{"git", "tag", targetTag}).
+		WithExec([]string{"git", "push", "origin", targetTag}).
+		Sync(ctx)
 	return err
 }

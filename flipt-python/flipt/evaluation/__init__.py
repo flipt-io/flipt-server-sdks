@@ -8,23 +8,21 @@ from .models import (
     EvaluationRequest,
     VariantEvaluationResponse,
 )
+from ..authentication import AuthenticationStrategy
 
 
 class Evaluation:
     def __init__(
         self,
         url: str,
-        client_token: typing.Optional[str],
-        jwt_token: typing.Optional[str],
         timeout: int,
+        authentication: typing.Optional[AuthenticationStrategy] = None,
     ):
         self.url = url
         self.headers = {}
-        if client_token != None:
-            self.headers["Authorization"] = f"Bearer {client_token}"
-        if jwt_token != None:
-            self.headers["Authorization"] = f"JWT {jwt_token}"
         self.timeout = timeout
+        if authentication:
+            authentication.authenticate(self.headers)
 
     def variant(self, request: EvaluationRequest) -> VariantEvaluationResponse:
         response = httpx.post(

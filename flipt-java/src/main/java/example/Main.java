@@ -1,7 +1,7 @@
 package example;
 
-import com.flipt.api.FliptClient;
-import com.flipt.api.evaluation.models.*;
+import io.flipt.api.FliptClient;
+import io.flipt.api.evaluation.models.*;
 import java.util.*;
 
 public class Main {

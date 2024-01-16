@@ -3,6 +3,24 @@ from pydantic import BaseModel, Field
 from typing import List, Optional
 
 
+class EvaluationResponseType(str, enum.Enum):
+    VARIANT_EVALUATION_RESPONSE_TYPE = "VARIANT_EVALUATION_RESPONSE_TYPE"
+    BOOLEAN_EVALUATION_RESPONSE_TYPE = "BOOLEAN_EVALUATION_RESPONSE_TYPE"
+    ERROR_EVALUATION_RESPONSE_TYPE = "ERROR_EVALUATION_RESPONSE_TYPE"
+
+
+class EvaluationReason(str, enum.Enum):
+    UNKNOWN_EVALUATION_REASON = "UNKNOWN_EVALUATION_REASON"
+    FLAG_DISABLED_EVALUATION_REASON = "FLAG_DISABLED_EVALUATION_REASON"
+    MATCH_EVALUATION_REASON = "MATCH_EVALUATION_REASON"
+    DEFAULT_EVALUATION_REASON = "DEFAULT_EVALUATION_REASON"
+
+
+class ErrorEvaluationReason(str, enum.Enum):
+    UNKNOWN_ERROR_EVALUATION_REASON = "UNKNOWN_ERROR_EVALUATION_REASON"
+    NOT_FOUND_ERROR_EVALUATION_REASON = "NOT_FOUND_ERROR_EVALUATION_REASON"
+
+
 class EvaluationRequest(BaseModel):
     namespace_key: str = Field(default="default")
     flag_key: str
@@ -20,7 +38,7 @@ class BatchEvaluationRequest(BaseModel):
 class VariantEvaluationResponse(BaseModel):
     match: bool
     segment_keys: List[str] = Field(..., alias="segmentKeys")
-    reason: str
+    reason: EvaluationReason
     flag_key: str = Field(..., alias="flagKey")
     variant_key: str = Field(..., alias="variantKey")
     variant_attachment: str = Field(..., alias="variantAttachment")
@@ -31,7 +49,7 @@ class VariantEvaluationResponse(BaseModel):
 class BooleanEvaluationResponse(BaseModel):
     enabled: bool
     flag_key: str = Field(..., alias="flagKey")
-    reason: str
+    reason: EvaluationReason
     request_duration_millis: float = Field(..., alias="requestDurationMillis")
     timestamp: str
 
@@ -39,11 +57,11 @@ class BooleanEvaluationResponse(BaseModel):
 class ErrorEvaluationResponse(BaseModel):
     flag_key: str = Field(..., alias="flagKey")
     namespace_key: str = Field(..., alias="namespaceKey")
-    reason: str
+    reason: ErrorEvaluationReason
 
 
 class EvaluationResponse(BaseModel):
-    type: str
+    type: EvaluationResponseType
     boolean_response: Optional[BooleanEvaluationResponse] = Field(
         default=None, alias="booleanResponse"
     )
