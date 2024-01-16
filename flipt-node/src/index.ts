@@ -39,8 +39,10 @@ export class JWTAuthentication implements AuthenticationStrategy {
   }
 }
 
+const defaultURL = "http://localhost:8080";
+
 const defaultFliptClientOptions: FliptClientOptions = {
-  url: "http://localhost:8080"
+  url: defaultURL
 };
 
 export class FliptClient {
@@ -64,7 +66,7 @@ export class FliptClient {
     }
 
     this.evaluation = new Evaluation(
-      clientOptions.url,
+      clientOptions.url || defaultURL,
       clientOptions.timeout,
       clientOptions.authenticationStrategy
     );
