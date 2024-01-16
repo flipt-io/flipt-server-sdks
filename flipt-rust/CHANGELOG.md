@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0-rc.1](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-rust-v1.0.0-rc.1...flipt-rust-v1.1.0-rc.1) (2024-01-16)
+
+
+### Features
+
+* **rust:** Add traits for generalizing the token strategy ([#67](https://github.com/flipt-io/flipt-server-sdks/issues/67)) ([e4b898d](https://github.com/flipt-io/flipt-server-sdks/commit/e4b898dc62fb98764cba735e293fc632b9c34aa8))
+
 ## 1.0.0-rc.1 (2024-01-11)
 
 

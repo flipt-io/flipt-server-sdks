@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1-rc.1](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-php-v1.0.0-rc.1...flipt-php-v1.0.1-rc.1) (2024-01-16)
+
+
+### Miscellaneous Chores
+
+* fix php workflow to copy and push source to the other repo ([#55](https://github.com/flipt-io/flipt-server-sdks/issues/55)) ([b864ff1](https://github.com/flipt-io/flipt-server-sdks/commit/b864ff149e57192ce55eedea29d20894ce5fa76e))
+
 ## 1.0.0-rc.1 (2024-01-11)
 
 
