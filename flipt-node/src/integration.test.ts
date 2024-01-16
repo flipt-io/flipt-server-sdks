@@ -85,6 +85,11 @@ test("batch", async () => {
   // Variant
   expect(batch.responses[0].type).toEqual("VARIANT_EVALUATION_RESPONSE_TYPE");
   const variant = batch.responses[0].variantResponse;
+
+  if (!variant) {
+    throw new Error("variant is undefined");
+  }
+
   expect(variant.flagKey).toEqual("flag1");
   expect(variant.match).toEqual(true);
   expect(variant.reason).toEqual("MATCH_EVALUATION_REASON");
@@ -94,6 +99,11 @@ test("batch", async () => {
   // Boolean
   expect(batch.responses[1].type).toEqual("BOOLEAN_EVALUATION_RESPONSE_TYPE");
   const boolean = batch.responses[1].booleanResponse;
+
+  if (!boolean) {
+    throw new Error("boolean is undefined");
+  }
+
   expect(boolean.flagKey).toEqual("flag_boolean");
   expect(boolean.enabled).toEqual(true);
   expect(boolean.reason).toEqual("MATCH_EVALUATION_REASON");
@@ -101,6 +111,11 @@ test("batch", async () => {
   // Error
   expect(batch.responses[2].type).toEqual("ERROR_EVALUATION_RESPONSE_TYPE");
   const error = batch.responses[2].errorResponse;
+
+  if (!error) {
+    throw new Error("error is undefined");
+  }
+
   expect(error.flagKey).toEqual("notfound");
   expect(error.namespaceKey).toEqual("default");
   expect(error.reason).toEqual("NOT_FOUND_ERROR_EVALUATION_REASON");
