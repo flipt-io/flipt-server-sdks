@@ -84,8 +84,8 @@ public class EvaluationRequest {
       return this;
     }
 
-    public EvaluationRequestBuilder reference(Optional<String> reference) {
-      this.reference = reference;
+    public EvaluationRequestBuilder reference(String reference) {
+      this.reference = Optional.of(reference);
       return this;
     }
 

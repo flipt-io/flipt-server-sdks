@@ -44,8 +44,8 @@ public class BatchEvaluationRequest {
 
     public BatchEvaluationRequestBuilder() {}
 
-    public BatchEvaluationRequestBuilder requestId(Optional<String> requestId) {
-      this.requestId = requestId;
+    public BatchEvaluationRequestBuilder requestId(String requestId) {
+      this.requestId = Optional.of(requestId);
       return this;
     }
 
@@ -54,8 +54,8 @@ public class BatchEvaluationRequest {
       return this;
     }
 
-    public BatchEvaluationRequestBuilder reference(Optional<String> reference) {
-      this.reference = reference;
+    public BatchEvaluationRequestBuilder reference(String reference) {
+      this.reference = Optional.of(reference);
       return this;
     }
 
