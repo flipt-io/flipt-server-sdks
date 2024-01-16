@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.0-rc.2](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-python-v1.0.0-rc.1...flipt-python-v1.0.0-rc.2) (2024-01-16)
+
+
+### Miscellaneous Chores
+
+* release 1.0.0-rc.2 ([709ef35](https://github.com/flipt-io/flipt-server-sdks/commit/709ef35e9959ee5bdc6630b60599de04f29f667d))
+
 ## 1.0.0-rc.1 (2024-01-11)
 
 
