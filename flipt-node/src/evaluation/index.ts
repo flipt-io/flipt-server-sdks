@@ -10,11 +10,11 @@ import {
 export class Evaluation {
   private url: string;
   private headers: object;
-  private timeout: number;
+  private timeout?: number;
 
   public constructor(
     url: string,
-    timeout: number,
+    timeout?: number,
     authenticationStrategy?: AuthenticationStrategy
   ) {
     this.url = url;
@@ -30,14 +30,19 @@ export class Evaluation {
   public async variant(
     request: EvaluationRequest
   ): Promise<VariantEvaluationResponse> {
-    const response = await fetch(`${this.url}/evaluate/v1/variant`, {
+    const args: RequestInit = {
       method: "POST",
       headers: {
         ...this.headers
       },
-      body: JSON.stringify(request),
-      signal: this.timeout && AbortSignal.timeout(this.timeout * 1000)
-    });
+      body: JSON.stringify(request)
+    };
+
+    if (this.timeout !== undefined && this.timeout > 0) {
+      args.signal = AbortSignal.timeout(this.timeout * 1000);
+    }
+
+    const response = await fetch(`${this.url}/evaluate/v1/variant`, args);
 
     if (response.status !== 200) {
       const body = await response.json();
@@ -53,14 +58,19 @@ export class Evaluation {
   public async boolean(
     request: EvaluationRequest
   ): Promise<BooleanEvaluationResponse> {
-    const response = await fetch(`${this.url}/evaluate/v1/boolean`, {
+    const args: RequestInit = {
       method: "POST",
       headers: {
         ...this.headers
       },
-      body: JSON.stringify(request),
-      signal: this.timeout && AbortSignal.timeout(this.timeout * 1000)
-    });
+      body: JSON.stringify(request)
+    };
+
+    if (this.timeout !== undefined && this.timeout > 0) {
+      args.signal = AbortSignal.timeout(this.timeout * 1000);
+    }
+
+    const response = await fetch(`${this.url}/evaluate/v1/boolean`, args);
 
     if (response.status !== 200) {
       const body = await response.json();
@@ -76,14 +86,19 @@ export class Evaluation {
   public async batch(
     request: BatchEvaluationRequest
   ): Promise<BatchEvaluationResponse> {
-    const response = await fetch(`${this.url}/evaluate/v1/batch`, {
+    const args: RequestInit = {
       method: "POST",
       headers: {
         ...this.headers
       },
-      body: JSON.stringify(request),
-      signal: this.timeout && AbortSignal.timeout(this.timeout * 1000)
-    });
+      body: JSON.stringify(request)
+    };
+
+    if (this.timeout !== undefined && this.timeout > 0) {
+      args.signal = AbortSignal.timeout(this.timeout * 1000);
+    }
+
+    const response = await fetch(`${this.url}/evaluate/v1/batch`, args);
 
     if (response.status !== 200) {
       const body = await response.json();

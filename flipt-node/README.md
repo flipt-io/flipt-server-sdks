@@ -31,34 +31,37 @@ npm install --save @datadog/browser-rum
 To start tracking feature flags on Datadog:
 
 ```typescript
-import { datadogRum } from '@datadog/browser-rum';
-import { FliptClient, FliptMetrics } from '@flipt-io/flipt';
+import { datadogRum } from "@datadog/browser-rum";
+import { FliptClient, FliptMetrics } from "@flipt-io/flipt";
 
 datadogRum.init({
-  applicationId: '<APPLICATION_ID>',
-  clientToken: '<CLIENT_TOKEN>',
-  site: 'datadoghq.com',
-  service:'<SERVICE_NAME>',
-  env:'<ENV_NAME>',
+  applicationId: "<APPLICATION_ID>",
+  clientToken: "<CLIENT_TOKEN>",
+  site: "datadoghq.com",
+  service: "<SERVICE_NAME>",
+  env: "<ENV_NAME>",
   enableExperimentalFeatures: ["feature_flags"],
-  sessionSampleRate:100,
+  sessionSampleRate: 100,
   sessionReplaySampleRate: 20,
   trackUserInteractions: true,
   trackResources: true,
   trackLongTasks: true,
-  defaultPrivacyLevel:'mask-user-input'
+  defaultPrivacyLevel: "mask-user-input"
 });
-  
+
 datadogRum.startSessionReplayRecording();
 
-const metricsClient = new FliptMetrics(new FliptClient({
-  url: "http://localhost:8080",
-}).evaluation, datadogRum);
+const metricsClient = new FliptMetrics(
+  new FliptClient({
+    url: "http://localhost:8080"
+  }).evaluation,
+  datadogRum
+);
 
 const response = await metricsClient.variant({
   namespaceKey: "default",
   flagKey: "hello-this",
   entityId: uuidv4(),
-  context: {},
+  context: {}
 });
 ```
