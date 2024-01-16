@@ -31,9 +31,9 @@ final class FliptClient
     /**
      * Returns the boolean evaluation result
      */
-    public function boolean(string $name, $context = [], $entityId = NULL): BooleanEvaluationResult
+    public function boolean(string $name, $context = [], $entityId = NULL, $reference = ""): BooleanEvaluationResult
     {
-        $response = $this->apiRequest('/evaluate/v1/boolean', $this->mergeRequestParams($name, $context, $entityId));
+        $response = $this->apiRequest('/evaluate/v1/boolean', $this->mergeRequestParams($name, $context, $entityId, $reference));
         return new DefaultBooleanEvaluationResult($response['flagKey'], $response['enabled'], $response['reason'], $response['requestDurationMillis'], $response['requestId'], $response['timestamp']);
     }
 
@@ -42,9 +42,9 @@ final class FliptClient
     /**
      * Returns the variant evaluation result
      */
-    public function variant(string $name, $context = [], $entityId = NULL): VariantEvaluationResult
+    public function variant(string $name, $context = [], $entityId = NULL, $reference = ""): VariantEvaluationResult
     {
-        $response = $this->apiRequest('/evaluate/v1/variant', $this->mergeRequestParams($name, $context, $entityId));
+        $response = $this->apiRequest('/evaluate/v1/variant', $this->mergeRequestParams($name, $context, $entityId, $reference));
         return new DefaultVariantEvaluationResult($response['flagKey'], $response['match'], $response['reason'], $response['requestDurationMillis'], $response['requestId'], $response['timestamp'], $response['segmentKeys'], $response['variantKey'], $response['variantAttachment']);
     }
 
@@ -52,13 +52,14 @@ final class FliptClient
     /**
      * Batch return evaluation requests
      */
-    public function batch(array $names, $context = [], $entityId = NULL): array
+    public function batch(array $names, $context = [], $entityId = NULL, $reference = ""): array
     {
 
         $response = $this->apiRequest('/evaluate/v1/batch', [
             'requests' => array_map(function ($name) use ($context, $entityId) {
                 return $this->mergeRequestParams($name, $context, $entityId);
             }, $names)
+            'reference' => $reference,
         ]);
 
 
@@ -82,13 +83,14 @@ final class FliptClient
     }
 
 
-    protected function mergeRequestParams(string $name, $context = [], $entityId = NULL)
+    protected function mergeRequestParams(string $name, $context = [], $entityId = NULL, $reference = "")
     {
         return [
             'context' => array_merge($this->context, $context),
             'entityId' => isset($entityId) ? $entityId : $this->entityId,
             'flagKey' => $name,
             'namespaceKey' => $this->namespace,
+            'reference' => $this->reference,
         ];
     }
 
