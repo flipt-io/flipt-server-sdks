@@ -1,7 +1,7 @@
 {
-  "flipt-java": "1.0.0-rc.2",
-  "flipt-node": "1.0.0-rc.2",
-  "flipt-python": "1.0.0-rc.2",
-  "flipt-rust": "1.0.0-rc.2",
-  "flipt-php": "1.0.0-rc.2"
+  "flipt-java": "1.0.0",
+  "flipt-node": "1.0.0",
+  "flipt-python": "1.0.0",
+  "flipt-rust": "1.0.0",
+  "flipt-php": "1.0.0"
 }

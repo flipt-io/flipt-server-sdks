@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.0.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-java-v1.0.0-rc.2...flipt-java-v1.0.0) (2024-01-16)
+
+
+### Features
+
+* add builder pattern for eval requests for java sdk ([#78](https://github.com/flipt-io/flipt-server-sdks/issues/78)) ([f2f5c6c](https://github.com/flipt-io/flipt-server-sdks/commit/f2f5c6c237a9b112c3df36ab54601fc007c9e7eb))
+* **java:** Get release-please working with Java ([#80](https://github.com/flipt-io/flipt-server-sdks/issues/80)) ([a4cc0bd](https://github.com/flipt-io/flipt-server-sdks/commit/a4cc0bd68b7e9c9ff4075b323a9c96c02d7274dd))
+
+
+### Miscellaneous Chores
+
+* release 1.0.0 ([6d301f7](https://github.com/flipt-io/flipt-server-sdks/commit/6d301f71ff2059748ac2c6899aa10b1cd275b50d))
+
 ## 1.0.0-rc.1 (2024-01-11)
 
 ### Features

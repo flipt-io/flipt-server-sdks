@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-node-v1.0.0-rc.2...flipt-node-v1.0.0) (2024-01-16)
+
+
+### Miscellaneous Chores
+
+* release 1.0.0 ([6d301f7](https://github.com/flipt-io/flipt-server-sdks/commit/6d301f71ff2059748ac2c6899aa10b1cd275b50d))
+* release 1.0.0-rc.2 ([856609b](https://github.com/flipt-io/flipt-server-sdks/commit/856609ba9981d00ffbe855b660149fe782a87f61))
+
 ## [1.0.0-rc.2](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-node-v1.0.0-rc.1...flipt-node-v1.0.0-rc.2) (2024-01-16)
 
 
