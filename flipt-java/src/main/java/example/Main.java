@@ -12,11 +12,27 @@ public class Main {
     context.put("fizz", "buzz");
 
     EvaluationRequest variantEvaluationRequest =
-        new EvaluationRequest("default", "flag1", "entity", context, Optional.empty());
+        EvaluationRequest.builder()
+            .namespaceKey("default")
+            .flagKey("flag1")
+            .entityId("entity")
+            .context(context)
+            .build();
+
     EvaluationRequest booleanEvaluationRequest =
-        new EvaluationRequest("default", "flag_boolean", "entity", context, Optional.empty());
+        EvaluationRequest.builder()
+            .namespaceKey("default")
+            .flagKey("flag_boolean")
+            .entityId("entity")
+            .context(context)
+            .build();
+
     EvaluationRequest errorEvaluationRequest =
-        new EvaluationRequest("default", "flag1234", "entity", new HashMap<>(), Optional.empty());
+        EvaluationRequest.builder()
+            .namespaceKey("default")
+            .flagKey("flag1234")
+            .entityId("entityId")
+            .build();
 
     List<EvaluationRequest> evaluationRequests = new ArrayList<>();
     evaluationRequests.add(variantEvaluationRequest);
@@ -25,13 +41,13 @@ public class Main {
 
     VariantEvaluationResponse variantEvaluationResponse =
         fliptClient.evaluation().variant(variantEvaluationRequest);
+
     BooleanEvaluationResponse booleanEvaluationResponse =
         fliptClient.evaluation().booleanEvaluation(booleanEvaluationRequest);
 
     BatchEvaluationResponse batchEvaluationResponse =
         fliptClient
             .evaluation()
-            .batch(
-                new BatchEvaluationRequest(Optional.of(""), evaluationRequests, Optional.empty()));
+            .batch(BatchEvaluationRequest.builder().requests(evaluationRequests).build());
   }
 }
