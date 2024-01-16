@@ -32,4 +32,36 @@ public class BatchEvaluationRequest {
   public Optional<String> getReference() {
     return reference;
   }
+
+  public static BatchEvaluationRequestBuilder builder() {
+    return new BatchEvaluationRequestBuilder();
+  }
+
+  public static final class BatchEvaluationRequestBuilder {
+    private Optional<String> requestId;
+    private List<EvaluationRequest> requests;
+    private Optional<String> reference;
+
+    public BatchEvaluationRequestBuilder() {
+    }
+
+    public BatchEvaluationRequestBuilder requestId(Optional<String> requestId) {
+      this.requestId = requestId;
+      return this;
+    }
+
+    public BatchEvaluationRequestBuilder requests(List<EvaluationRequest> requests) {
+      this.requests = requests;
+      return this;
+    }
+
+    public BatchEvaluationRequestBuilder reference(Optional<String> reference) {
+      this.reference = reference;
+      return this;
+    }
+
+    public BatchEvaluationRequest build() {
+      return new BatchEvaluationRequest(requestId, requests, reference);
+    }
+  }
 }
