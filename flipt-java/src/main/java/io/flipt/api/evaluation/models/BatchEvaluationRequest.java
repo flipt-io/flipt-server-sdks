@@ -9,10 +9,13 @@ import java.util.Optional;
 public class BatchEvaluationRequest {
   private final Optional<String> requestId;
   private final List<EvaluationRequest> requests;
+  private Optional<String> reference;
 
-  public BatchEvaluationRequest(Optional<String> requestId, List<EvaluationRequest> requests) {
+  public BatchEvaluationRequest(
+      Optional<String> requestId, List<EvaluationRequest> requests, Optional<String> reference) {
     this.requestId = requestId;
     this.requests = requests;
+    this.reference = reference;
   }
 
   @JsonProperty("requests")
@@ -23,5 +26,10 @@ public class BatchEvaluationRequest {
   @JsonProperty("requestId")
   public Optional<String> getRequestId() {
     return requestId;
+  }
+
+  @JsonProperty("reference")
+  public Optional<String> getReference() {
+    return reference;
   }
 }

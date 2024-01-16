@@ -12,8 +12,8 @@ public class TestFliptClient {
     String fliptURL = System.getenv().get("FLIPT_URL");
     String authToken = System.getenv().get("FLIPT_AUTH_TOKEN");
 
-    assert !fliptURL.isEmpty();
-    assert !authToken.isEmpty();
+    assert fliptURL != null && !fliptURL.isEmpty();
+    assert authToken != null && !authToken.isEmpty();
 
     AuthenticationStrategy authenticationStrategy =
         new ClientTokenAuthenticationStrategy(authToken);
@@ -24,7 +24,9 @@ public class TestFliptClient {
     Map<String, String> context = new HashMap<>();
     context.put("fizz", "buzz");
     VariantEvaluationResponse variant =
-        fc.evaluation().variant(new EvaluationRequest("default", "flag1", "entity", context));
+        fc.evaluation()
+            .variant(
+                new EvaluationRequest("default", "flag1", "entity", context, Optional.empty()));
 
     Assertions.assertTrue(variant.isMatch());
     Assertions.assertEquals("flag1", variant.getFlagKey());
@@ -38,8 +40,8 @@ public class TestFliptClient {
     String fliptURL = System.getenv().get("FLIPT_URL");
     String authToken = System.getenv().get("FLIPT_AUTH_TOKEN");
 
-    assert !fliptURL.isEmpty();
-    assert !authToken.isEmpty();
+    assert fliptURL != null && !fliptURL.isEmpty();
+    assert authToken != null && !authToken.isEmpty();
 
     AuthenticationStrategy authenticationStrategy =
         new ClientTokenAuthenticationStrategy(authToken);
@@ -52,7 +54,9 @@ public class TestFliptClient {
 
     BooleanEvaluationResponse booleanEvaluation =
         fc.evaluation()
-            .booleanEvaluation(new EvaluationRequest("default", "flag_boolean", "entity", context));
+            .booleanEvaluation(
+                new EvaluationRequest(
+                    "default", "flag_boolean", "entity", context, Optional.empty()));
 
     Assertions.assertTrue(booleanEvaluation.isEnabled());
     Assertions.assertEquals("flag_boolean", booleanEvaluation.getFlagKey());
@@ -64,8 +68,8 @@ public class TestFliptClient {
     String fliptURL = System.getenv().get("FLIPT_URL");
     String authToken = System.getenv().get("FLIPT_AUTH_TOKEN");
 
-    assert !fliptURL.isEmpty();
-    assert !authToken.isEmpty();
+    assert fliptURL != null && !fliptURL.isEmpty();
+    assert authToken != null && !authToken.isEmpty();
 
     AuthenticationStrategy authenticationStrategy =
         new ClientTokenAuthenticationStrategy(authToken);
@@ -77,11 +81,11 @@ public class TestFliptClient {
     context.put("fizz", "buzz");
 
     EvaluationRequest variantEvaluationRequest =
-        new EvaluationRequest("default", "flag1", "entity", context);
+        new EvaluationRequest("default", "flag1", "entity", context, Optional.empty());
     EvaluationRequest booleanEvaluationRequest =
-        new EvaluationRequest("default", "flag_boolean", "entity", context);
+        new EvaluationRequest("default", "flag_boolean", "entity", context, Optional.empty());
     EvaluationRequest errorEvaluationRequest =
-        new EvaluationRequest("default", "flag1234", "entity", new HashMap<>());
+        new EvaluationRequest("default", "flag1234", "entity", new HashMap<>(), Optional.empty());
 
     List<EvaluationRequest> evaluationRequests = new ArrayList<>();
     evaluationRequests.add(variantEvaluationRequest);
@@ -89,7 +93,9 @@ public class TestFliptClient {
     evaluationRequests.add(errorEvaluationRequest);
 
     BatchEvaluationResponse batch =
-        fc.evaluation().batch(new BatchEvaluationRequest(Optional.of(""), evaluationRequests));
+        fc.evaluation()
+            .batch(
+                new BatchEvaluationRequest(Optional.of(""), evaluationRequests, Optional.empty()));
 
     // Variant
     EvaluationResponse first = batch.getResponses().get(0);

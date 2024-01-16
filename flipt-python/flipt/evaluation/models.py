@@ -26,11 +26,13 @@ class EvaluationRequest(BaseModel):
     flag_key: str
     entity_id: str
     context: dict
+    reference: Optional[str] = None
 
 
 class BatchEvaluationRequest(BaseModel):
     request_id: Optional[str] = None
     requests: List[EvaluationRequest]
+    reference: Optional[str] = None
 
 
 class VariantEvaluationResponse(BaseModel):
@@ -52,7 +54,7 @@ class BooleanEvaluationResponse(BaseModel):
     timestamp: str
 
 
-class ErrorEvaluationReponse(BaseModel):
+class ErrorEvaluationResponse(BaseModel):
     flag_key: str = Field(..., alias="flagKey")
     namespace_key: str = Field(..., alias="namespaceKey")
     reason: ErrorEvaluationReason
@@ -66,7 +68,7 @@ class EvaluationResponse(BaseModel):
     variant_response: Optional[VariantEvaluationResponse] = Field(
         default=None, alias="variantResponse"
     )
-    error_response: Optional[ErrorEvaluationReponse] = Field(
+    error_response: Optional[ErrorEvaluationResponse] = Field(
         default=None, alias="errorResponse"
     )
 
