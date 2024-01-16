@@ -30,7 +30,7 @@ public class Evaluation {
             .build();
   }
 
-  public VariantEvaluationResponse variant(EvaluationRequest request) {
+  public VariantEvaluationResponse variantEvaluation(EvaluationRequest request) {
     URL url;
 
     try {
@@ -100,7 +100,7 @@ public class Evaluation {
     }
   }
 
-  public BatchEvaluationResponse batch(BatchEvaluationRequest request) {
+  public BatchEvaluationResponse batchEvaluation(BatchEvaluationRequest request) {
     RequestBody body;
 
     try {

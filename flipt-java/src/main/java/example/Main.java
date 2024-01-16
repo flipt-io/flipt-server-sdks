@@ -40,7 +40,7 @@ public class Main {
     evaluationRequests.add(errorEvaluationRequest);
 
     VariantEvaluationResponse variantEvaluationResponse =
-        fliptClient.evaluation().variant(variantEvaluationRequest);
+        fliptClient.evaluation().variantEvaluation(variantEvaluationRequest);
 
     BooleanEvaluationResponse booleanEvaluationResponse =
         fliptClient.evaluation().booleanEvaluation(booleanEvaluationRequest);
@@ -48,6 +48,6 @@ public class Main {
     BatchEvaluationResponse batchEvaluationResponse =
         fliptClient
             .evaluation()
-            .batch(BatchEvaluationRequest.builder().requests(evaluationRequests).build());
+            .batchEvaluation(BatchEvaluationRequest.builder().requests(evaluationRequests).build());
   }
 }
