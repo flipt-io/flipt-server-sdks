@@ -3,11 +3,6 @@
   "bump-patch-for-minor-pre-major": true,
   "draft": false,
   "packages": {
-    "flipt-java": {
-      "component": "flipt-java",
-      "release-type": "java",
-      "extra-files": ["build.gradle"]
-    },
     "flipt-node": {
       "component": "flipt-node",
       "release-type": "node"
