@@ -1,6 +1,7 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
+    id 'signing'
     id "com.diffplug.spotless" version "6.24.0"
 }
 
@@ -59,6 +60,8 @@ test {
     useJUnitPlatform()
 }
 
+
+
 publishing {
     publications {
         maven(MavenPublication) {
@@ -84,6 +87,12 @@ publishing {
                         email = 'devs@flipt.io'
                     }
                 }
+
+                scm {
+                    connection = 'scm:git:git://github.com/flipt-io/flipt-server-sdks.git'
+                    developerConnection = 'scm:git:ssh://github.com/flipt-io/flipt-server-sdks.git'
+                    url = 'https://github.com/flipt-io/flipt-server-sdks/tree/main/flipt-java'
+                }
             }
         }
     }
@@ -98,4 +107,11 @@ publishing {
             }
         }
     }
+}
+
+signing {
+    def signingKey = System.getenv('PGP_PRIVATE_KEY')
+    def signingPassphrase = System.getenv('PGP_PASSPHRASE')
+    useInMemoryPgpKeys(signingKey, signingPassphrase)
+    sign publishing.publications.maven
 }
