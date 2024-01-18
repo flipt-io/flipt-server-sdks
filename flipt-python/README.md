@@ -1,4 +1,4 @@
-# Flipt Client Pyton
+# Flipt Python
 
 [![pypi](https://img.shields.io/pypi/v/flipt.svg)](https://pypi.org/project/flipt)
 
