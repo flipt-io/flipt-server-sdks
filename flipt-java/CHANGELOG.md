@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-java-v1.0.0...flipt-java-v1.0.1) (2024-01-23)
+
+
+### Bug Fixes
+
+* missing jackson annotation dep ([#92](https://github.com/flipt-io/flipt-server-sdks/issues/92)) ([8d9355c](https://github.com/flipt-io/flipt-server-sdks/commit/8d9355c0dc58265ecec46d72b8b1fb3f01a2e9d6))
+
 ## [1.0.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-java-v1.0.0-rc.2...flipt-java-v1.0.0) (2024-01-16)
 
 
