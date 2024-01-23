@@ -23,10 +23,10 @@ java {
 }
 
 dependencies {
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.1'
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
     testImplementation platform('org.junit:junit-bom:5.10.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
-    api 'com.squareup.okhttp3:okhttp:4.12.0'
-    api 'com.fasterxml.jackson.core:jackson-databind:2.16.1'
     api 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.1'
     api 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.16.1'
     api 'com.diffplug.gradle.spotless:spotless:2.4.1'
