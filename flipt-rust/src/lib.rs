@@ -108,16 +108,3 @@ impl AuthenticationStrategy for ClientTokenAuthentication {
         header_map
     }
 }
-
-#[derive(Debug, Clone)]
-pub enum AuthScheme {
-    None,
-    BearerToken(String),
-    JWT(String),
-}
-
-impl Default for AuthScheme {
-    fn default() -> Self {
-        Self::None
-    }
-}
