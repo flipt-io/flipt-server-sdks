@@ -21,6 +21,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             flag_key: "flag1".into(),
             entity_id: "entity".into(),
             context: context.clone(),
+            reference: None,
         })
         .await
         .unwrap();
@@ -34,6 +35,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             flag_key: "flag_boolean".into(),
             entity_id: "entity".into(),
             context: context.clone(),
+            reference: None,
         })
         .await
         .unwrap();
@@ -46,18 +48,23 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             flag_key: "flag1".into(),
             entity_id: "entity".into(),
             context: context.clone(),
+            reference: None,
         },
         EvaluationRequest {
             namespace_key: "default".into(),
             flag_key: "flag_boolean".into(),
             entity_id: "entity".into(),
             context: context.clone(),
+            reference: None,
         },
     ];
 
     let batch_result = client
         .evaluation
-        .batch(&BatchEvaluationRequest { requests })
+        .batch(&BatchEvaluationRequest {
+            requests,
+            reference: None,
+        })
         .await
         .unwrap();
 
