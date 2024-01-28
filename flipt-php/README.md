@@ -1,16 +1,11 @@
 # Flipt PHP
 
 [![Packagist Version](https://img.shields.io/packagist/v/flipt-io/flipt)](https://packagist.org/packages/flipt-io/flipt)
-![beta](https://img.shields.io/badge/status-beta-yellow)
 
 This directory contains the PHP source code for the Flipt [server-side](https://www.flipt.io/docs/integration/server/rest) client.
 
 > [!NOTE]
 > If you are on the <https://github.com/flipt-io/flipt-php> repository, this is a mirror of the source code. Please file issues and pull requests against the [flipt-io/flipt-server-sdks](https://github.com/flipt-io/flipt-server-sdks) repository.
-
-## Status
-
-This SDK status is `beta`, and there may be breaking changes between versions without a major version update. Therefore, we recommend pinning your installation of this package wherever necessary.
 
 ## Requirements
 
@@ -29,7 +24,18 @@ composer install flipt-io/flipt
 
 ## Usage
 
-TODO
+In your PHP code you can import this client and use it as so:
+
+```php
+<?php
+use Flipt\Client\FliptClient;
+
+$fliptClient = new FliptClient();
+
+$result = $fliptClient->variant('flag1', ['fizz' => 'buzz'], 'entity');
+```
+
+There is a more detailed example in the [tests](./tests) directory.
 
 ## Thanks :tada:
 

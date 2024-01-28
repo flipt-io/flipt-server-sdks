@@ -7,7 +7,6 @@ This directory contains the Rust source code for the Flipt [server-side](https:/
 ## Documentation
 
 API documentation is available at <https://www.flipt.io/docs/reference/overview>.
-This directory contains the Rust source code for the Rust server side SDK.
 
 ## Installation
 
@@ -17,4 +16,35 @@ cargo add flipt
 
 ## Usage
 
-In the [examples](./examples) directory, there is an example Rust program which imports in the flipt client, and uses it appropriately, please refer to that for how to use the client.
+In your Rust code you can import this client and use it as so:
+
+```rust
+use std::collections::HashMap;
+
+use flipt::api::FliptClient;
+use flipt::evaluation::models::EvaluationRequest;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let client = FliptClient::default();
+
+    let mut context: HashMap<String, String> = HashMap::new();
+
+    context.insert("fizz".into(), "buzz".into());
+
+    let variant_result = client
+        .evaluation
+        .variant(&EvaluationRequest {
+            namespace_key: "default".into(),
+            flag_key: "flag1".into(),
+            entity_id: "entity".into(),
+            context: context.clone(),
+            reference: None,
+        })
+        .await
+        .unwrap();
+
+    print!("{:?}", variant_result);
+```
+
+There is a more detailed example in the [examples](./examples) directory.

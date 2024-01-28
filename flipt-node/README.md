@@ -16,7 +16,26 @@ npm i @flipt-io/flipt@{version}
 
 ## Usage
 
-In the [example](./example) directory, there is an example TypeScript program which imports in the flipt client, and uses it appropriately, please refer to that for how to use the client.
+In your Node code you can import this client and use it as so:
+
+```typescript
+import { FliptClient } from "@flipt-io/flipt";
+
+const fliptClient = new FliptClient();
+
+async function evaluate() {
+  const variantEvaluationResponse = await fliptClient.evaluation.variant({
+    namespaceKey: "default",
+    flagKey: "flag1",
+    entityId: "entity",
+    context: { fizz: "buzz" }
+  });
+
+  console.log(variantEvaluationResponse);
+}
+```
+
+There is a more detailed example in the [examples](./examples) directory.
 
 ### Metrics
 

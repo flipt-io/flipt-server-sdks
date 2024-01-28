@@ -7,7 +7,6 @@ This directory contains the Python source code for the Flipt [server-side](https
 ## Documentation
 
 API documentation is available at <https://www.flipt.io/docs/reference/overview>.
-This directory contains the Python source code for the Python server side SDK.
 
 ## Installation
 
@@ -17,4 +16,24 @@ pip install flipt=={version}
 
 ## Usage
 
-In the [example](./example) directory, there is an example Python program which imports in the flipt client, and uses it appropriately, please refer to that for how to use the client.
+In your Python code you can import this client and use it as so:
+
+```python
+from flipt import FliptClient
+from flipt.evaluation import BatchEvaluationRequest, EvaluationRequest
+
+fliptClient = FliptClient()
+
+v = fliptClient.evaluation.variant(
+    EvaluationRequest(
+        namespace_key="default",
+        flag_key="flagll",
+        entity_id="entity",
+        context={"fizz": "buzz"},
+    )
+)
+
+print(v)
+```
+
+There is a more detailed example in the [examples](./examples) directory.
