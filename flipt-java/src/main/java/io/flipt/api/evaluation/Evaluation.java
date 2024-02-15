@@ -30,6 +30,7 @@ public class Evaluation {
             .build();
   }
 
+  @SuppressWarnings("resource")
   public VariantEvaluationResponse evaluateVariant(EvaluationRequest request) {
     URL url;
 
@@ -41,8 +42,10 @@ public class Evaluation {
 
     Request.Builder requestBuilder = makeRequest(request, url);
 
+    Response response = null;
+
     try {
-      Response response = httpClient.newCall(requestBuilder.build()).execute();
+      response = httpClient.newCall(requestBuilder.build()).execute();
       assert response.body() != null;
 
       if (!response.isSuccessful()) {
@@ -52,9 +55,14 @@ public class Evaluation {
       return this.objectMapper.readValue(response.body().string(), VariantEvaluationResponse.class);
     } catch (IOException e) {
       throw new RuntimeException(e);
+    } finally {
+      if (response != null) {
+        response.close();
+      }
     }
   }
 
+  @SuppressWarnings("resource")
   public BooleanEvaluationResponse evaluateBoolean(EvaluationRequest request) {
     URL url;
 
@@ -66,8 +74,9 @@ public class Evaluation {
 
     Request.Builder requestBuilder = makeRequest(request, url);
 
+    Response response = null;
     try {
-      Response response = httpClient.newCall(requestBuilder.build()).execute();
+      response = httpClient.newCall(requestBuilder.build()).execute();
       assert response.body() != null;
       if (!response.isSuccessful()) {
         Error error = this.objectMapper.readValue(response.body().string(), Error.class);
@@ -77,9 +86,14 @@ public class Evaluation {
       return this.objectMapper.readValue(response.body().string(), BooleanEvaluationResponse.class);
     } catch (IOException e) {
       throw new RuntimeException(e);
+    } finally {
+      if (response != null) {
+        response.close();
+      }
     }
   }
 
+  @SuppressWarnings("resource")
   public BatchEvaluationResponse evaluateBatch(BatchEvaluationRequest request) {
     RequestBody body;
 
@@ -104,8 +118,10 @@ public class Evaluation {
       httpRequest.addHeader("Authorization", this.authenticationStrategy.getAuthorizationHeader());
     }
 
+    Response response = null;
+
     try {
-      Response response = httpClient.newCall(httpRequest.build()).execute();
+      response = httpClient.newCall(httpRequest.build()).execute();
       assert response.body() != null;
       if (!response.isSuccessful()) {
         Error error = this.objectMapper.readValue(response.body().string(), Error.class);
@@ -115,6 +131,10 @@ public class Evaluation {
       return this.objectMapper.readValue(response.body().string(), BatchEvaluationResponse.class);
     } catch (IOException e) {
       throw new RuntimeException(e);
+    } finally {
+      if (response != null) {
+        response.close();
+      }
     }
   }
 
