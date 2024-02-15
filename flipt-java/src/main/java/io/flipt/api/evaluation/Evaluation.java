@@ -23,13 +23,13 @@ public class Evaluation {
     this.httpClient = httpClient;
     this.baseURL = baseURL;
     this.authenticationStrategy = authenticationStrategy;
-    this.objectMapper =
-        JsonMapper.builder()
-            .addModule(new Jdk8Module())
-            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-            .build();
+    this.objectMapper = JsonMapper.builder()
+        .addModule(new Jdk8Module())
+        .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+        .build();
   }
 
+  @SuppressWarnings("resource")
   public VariantEvaluationResponse evaluateVariant(EvaluationRequest request) {
     URL url;
 
@@ -41,8 +41,10 @@ public class Evaluation {
 
     Request.Builder requestBuilder = makeRequest(request, url);
 
+    Response response = null;
+
     try {
-      Response response = httpClient.newCall(requestBuilder.build()).execute();
+      response = httpClient.newCall(requestBuilder.build()).execute();
       assert response.body() != null;
 
       if (!response.isSuccessful()) {
@@ -52,9 +54,14 @@ public class Evaluation {
       return this.objectMapper.readValue(response.body().string(), VariantEvaluationResponse.class);
     } catch (IOException e) {
       throw new RuntimeException(e);
+    } finally {
+      if (response != null) {
+        response.close();
+      }
     }
   }
 
+  @SuppressWarnings("resource")
   public BooleanEvaluationResponse evaluateBoolean(EvaluationRequest request) {
     URL url;
 
@@ -66,8 +73,9 @@ public class Evaluation {
 
     Request.Builder requestBuilder = makeRequest(request, url);
 
+    Response response = null;
     try {
-      Response response = httpClient.newCall(requestBuilder.build()).execute();
+      response = httpClient.newCall(requestBuilder.build()).execute();
       assert response.body() != null;
       if (!response.isSuccessful()) {
         Error error = this.objectMapper.readValue(response.body().string(), Error.class);
@@ -77,16 +85,20 @@ public class Evaluation {
       return this.objectMapper.readValue(response.body().string(), BooleanEvaluationResponse.class);
     } catch (IOException e) {
       throw new RuntimeException(e);
+    } finally {
+      if (response != null) {
+        response.close();
+      }
     }
   }
 
+  @SuppressWarnings("resource")
   public BatchEvaluationResponse evaluateBatch(BatchEvaluationRequest request) {
     RequestBody body;
 
     try {
-      body =
-          RequestBody.create(
-              this.objectMapper.writeValueAsString(request), MediaType.parse("application/json"));
+      body = RequestBody.create(
+          this.objectMapper.writeValueAsString(request), MediaType.parse("application/json"));
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -104,8 +116,10 @@ public class Evaluation {
       httpRequest.addHeader("Authorization", this.authenticationStrategy.getAuthorizationHeader());
     }
 
+    Response response = null;
+
     try {
-      Response response = httpClient.newCall(httpRequest.build()).execute();
+      response = httpClient.newCall(httpRequest.build()).execute();
       assert response.body() != null;
       if (!response.isSuccessful()) {
         Error error = this.objectMapper.readValue(response.body().string(), Error.class);
@@ -115,6 +129,10 @@ public class Evaluation {
       return this.objectMapper.readValue(response.body().string(), BatchEvaluationResponse.class);
     } catch (IOException e) {
       throw new RuntimeException(e);
+    } finally {
+      if (response != null) {
+        response.close();
+      }
     }
   }
 
@@ -122,9 +140,8 @@ public class Evaluation {
     RequestBody body;
 
     try {
-      body =
-          RequestBody.create(
-              this.objectMapper.writeValueAsString(request), MediaType.parse("application/json"));
+      body = RequestBody.create(
+          this.objectMapper.writeValueAsString(request), MediaType.parse("application/json"));
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
