@@ -1,24 +1,14 @@
 # Changelog
 
-## [1.0.1](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-php-v1.0.0...flipt-php-v1.0.1) (2024-02-19)
-
-
-### Miscellaneous Chores
-
-* README updates/examples ([3c9d357](https://github.com/flipt-io/flipt-server-sdks/commit/3c9d3577588fdd8bf16af6792ecb1dffcd89bf8c))
-
 ## [1.0.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-php-v1.0.0-rc.2...flipt-php-v1.0.0) (2024-01-16)
-
 
 ### Features
 
 * **php:** add reference to requests ([78f901f](https://github.com/flipt-io/flipt-server-sdks/commit/78f901fe7eab67eaed6a9858ba04cb0a701ab2dc))
 
-
 ### Bug Fixes
 
 * **php:** use comma in correct place in array ([08d5e6d](https://github.com/flipt-io/flipt-server-sdks/commit/08d5e6d606841d4136937fa1036af7f30c4de520))
-
 
 ### Miscellaneous Chores
 
@@ -27,7 +17,6 @@
 
 ## [1.0.0-rc.2](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-php-v1.0.0-rc.1...flipt-php-v1.0.0-rc.2) (2024-01-16)
 
-
 ### Miscellaneous Chores
 
 * fix php workflow to copy and push source to the other repo ([#55](https://github.com/flipt-io/flipt-server-sdks/issues/55)) ([b864ff1](https://github.com/flipt-io/flipt-server-sdks/commit/b864ff149e57192ce55eedea29d20894ce5fa76e))
@@ -35,11 +24,9 @@
 
 ## 1.0.0-rc.1 (2024-01-11)
 
-
 ### Features
 
 * Add php ([#36](https://github.com/flipt-io/flipt-server-sdks/issues/36)) ([4a47331](https://github.com/flipt-io/flipt-server-sdks/commit/4a47331b0da56e55f0e31b312cffbe0e10248229))
-
 
 ### Miscellaneous Chores
 
