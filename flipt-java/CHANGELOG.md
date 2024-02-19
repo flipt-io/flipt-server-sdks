@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-java-v1.0.1...flipt-java-v1.0.2) (2024-02-19)
+
+
+### Bug Fixes
+
+* close http response object in java SDK ([#110](https://github.com/flipt-io/flipt-server-sdks/issues/110)) ([9b23287](https://github.com/flipt-io/flipt-server-sdks/commit/9b2328781f4c9fdf41e78219baff807916a0c4df))
+
 ## [1.0.1](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-java-v1.0.0...flipt-java-v1.0.1) (2024-01-23)
 
 
