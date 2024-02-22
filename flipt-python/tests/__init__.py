@@ -45,6 +45,8 @@ class TestFliptEvaluationClient(unittest.TestCase):
             self.assertEqual(expectation.match, variant.match)
             self.assertEqual(expectation.variant_key, variant.variant_key)
             self.assertEqual(expectation.reason, variant.reason)
+            for segment in variant.segment_keys:
+                self.assertIn(segment, expectation.segment_keys)
 
     def test_boolean(self):
         boolean_tests = self.data["BOOLEAN"]

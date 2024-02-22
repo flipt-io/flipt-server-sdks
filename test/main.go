@@ -137,6 +137,7 @@ func nodeTests(ctx context.Context, client *dagger.Client, flipt *dagger.Contain
 		WithWorkdir("/src").
 		// The node_modules should never be version controlled, but we will exclude it here
 		// just to be safe.
+		WithFile("/src/tests.json", args.testsFile).
 		WithDirectory("/src", args.hostDir.Directory("flipt-node"), dagger.ContainerWithDirectoryOpts{
 			Exclude: []string{"./node_modules/"},
 		}).
@@ -154,6 +155,7 @@ func nodeTests(ctx context.Context, client *dagger.Client, flipt *dagger.Contain
 func rustTests(ctx context.Context, client *dagger.Client, flipt *dagger.Container, args testArgs) error {
 	_, err := client.Container().From("rust:1.73.0-bookworm").
 		WithWorkdir("/src").
+		WithFile("/src/tests.json", args.testsFile).
 		// Exclude target directory which contain the build artifacts for Rust.
 		WithDirectory("/src", args.hostDir.Directory("flipt-rust"), dagger.ContainerWithDirectoryOpts{
 			Exclude: []string{"./target/"},
