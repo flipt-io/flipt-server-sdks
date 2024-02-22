@@ -1,3 +1,4 @@
+from .async_evaluation_client import AsyncEvaluation
 from .models import (
     BatchEvaluationRequest,
     BatchEvaluationResponse,
@@ -14,6 +15,7 @@ from .sync_evaluation_client import Evaluation
 
 __all__ = [
     'Evaluation',
+    'AsyncEvaluation',
     'EvaluationResponseType',
     'EvaluationReason',
     'ErrorEvaluationReason',
