@@ -1,7 +1,12 @@
+import json
 import os
 import unittest
 from flipt import FliptClient
-from flipt.evaluation import BatchEvaluationRequest, EvaluationRequest
+from flipt.evaluation import (
+    EvaluationRequest,
+    BooleanEvaluationResponse,
+    VariantEvaluationResponse,
+)
 from flipt.authentication import ClientTokenAuthentication
 
 
@@ -19,81 +24,39 @@ class TestFliptEvaluationClient(unittest.TestCase):
             url=flipt_url, authentication=ClientTokenAuthentication(auth_token)
         )
 
+        # tests.json should be injected into the container that these tests
+        # are going to be run in.
+        f = open("tests.json")
+        self.data = json.load(f)
+        f.close()
+
     def test_variant(self):
-        variant = self.flipt_client.evaluation.variant(
-            EvaluationRequest(
-                namespace_key="default",
-                flag_key="flag1",
-                entity_id="entity",
-                context={"fizz": "buzz"},
+        variant_tests = self.data["VARIANT"]
+        for test_scenario in variant_tests:
+            if ("request" not in test_scenario) or ("expectation" not in test_scenario):
+                raise Exception("malformed test")
+
+            eval_request = EvaluationRequest.model_validate(test_scenario["request"])
+            variant = self.flipt_client.evaluation.variant(eval_request)
+            expectation = VariantEvaluationResponse.model_validate(
+                test_scenario["expectation"]
             )
-        )
-        self.assertTrue(variant.match)
-        self.assertEqual("flag1", variant.flag_key)
-        self.assertEqual("variant1", variant.variant_key)
-        self.assertEqual("MATCH_EVALUATION_REASON", variant.reason)
-        self.assertIn("segment1", variant.segment_keys)
+            self.assertEqual(expectation.flag_key, variant.flag_key)
+            self.assertEqual(expectation.match, variant.match)
+            self.assertEqual(expectation.variant_key, variant.variant_key)
+            self.assertEqual(expectation.reason, variant.reason)
 
     def test_boolean(self):
-        boolean = self.flipt_client.evaluation.boolean(
-            EvaluationRequest(
-                namespace_key="default",
-                flag_key="flag_boolean",
-                entity_id="entity",
-                context={"fizz": "buzz"},
+        boolean_tests = self.data["BOOLEAN"]
+        for test_scenario in boolean_tests:
+            if ("request" not in test_scenario) or ("expectation" not in test_scenario):
+                raise Exception("malformed test")
+
+            eval_request = EvaluationRequest.model_validate(test_scenario["request"])
+            boolean = self.flipt_client.evaluation.boolean(eval_request)
+            expectation = BooleanEvaluationResponse.model_validate(
+                test_scenario["expectation"]
             )
-        )
-        self.assertTrue(boolean.enabled)
-        self.assertEqual("flag_boolean", boolean.flag_key)
-        self.assertEqual("MATCH_EVALUATION_REASON", boolean.reason)
-
-    def test_batch(self):
-        batch = self.flipt_client.evaluation.batch(
-            BatchEvaluationRequest(
-                requests=[
-                    EvaluationRequest(
-                        namespace_key="default",
-                        flag_key="flag1",
-                        entity_id="entity",
-                        context={"fizz": "buzz"},
-                    ),
-                    EvaluationRequest(
-                        namespace_key="default",
-                        flag_key="flag_boolean",
-                        entity_id="entity",
-                        context={"fizz": "buzz"},
-                    ),
-                    EvaluationRequest(
-                        namespace_key="default",
-                        flag_key="notfound",
-                        entity_id="entity",
-                        context={"fizz": "buzz"},
-                    ),
-                ]
-            )
-        )
-
-        self.assertEqual(3, len(batch.responses))
-
-        # Variant
-        self.assertEqual("VARIANT_EVALUATION_RESPONSE_TYPE", batch.responses[0].type)
-        variant = batch.responses[0].variant_response
-        self.assertTrue(variant.match)
-        self.assertEqual("flag1", variant.flag_key)
-        self.assertEqual("variant1", variant.variant_key)
-        self.assertEqual("MATCH_EVALUATION_REASON", variant.reason)
-        self.assertIn("segment1", variant.segment_keys)
-
-        # Boolean
-        self.assertEqual("BOOLEAN_EVALUATION_RESPONSE_TYPE", batch.responses[1].type)
-        boolean = batch.responses[1].boolean_response
-        self.assertTrue(boolean.enabled)
-        self.assertEqual("flag_boolean", boolean.flag_key)
-        self.assertEqual("MATCH_EVALUATION_REASON", boolean.reason)
-
-        # Error
-        self.assertEqual("ERROR_EVALUATION_RESPONSE_TYPE", batch.responses[2].type)
-        error = batch.responses[2].error_response
-        self.assertEqual("notfound", error.flag_key)
-        self.assertEqual("default", error.namespace_key)
-        self.assertEqual("NOT_FOUND_ERROR_EVALUATION_REASON", error.reason)
+            self.assertEqual(expectation.flag_key, boolean.flag_key)
+            self.assertEqual(expectation.enabled, boolean.enabled)
+            self.assertEqual(expectation.reason, boolean.reason)

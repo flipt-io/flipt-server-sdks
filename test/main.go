@@ -24,7 +24,12 @@ var (
 	}
 )
 
-type integrationTestFn func(context.Context, *dagger.Client, *dagger.Container, *dagger.Directory) error
+type testArgs struct {
+	testsFile *dagger.File
+	hostDir   *dagger.Directory
+}
+
+type integrationTestFn func(context.Context, *dagger.Client, *dagger.Container, testArgs) error
 
 func init() {
 	flag.StringVar(&languages, "languages", "", "comma separated list of which language(s) to run integration tests for")
@@ -67,26 +72,36 @@ func run() error {
 
 	dir := client.Host().Directory(".")
 
-	flipt, hostDirectory := getTestDependencies(ctx, client, dir)
-
 	var g errgroup.Group
+
+	gitRepo := client.
+		Git("https://github.com/flipt-io/test-corpus.git").
+		Branch("main").
+		Tree()
+
+	flipt := getTestDependencies(ctx, client, gitRepo.Directory("."))
+
+	testsFile := gitRepo.File("tests.json")
 
 	for _, fn := range tests {
 		fn := fn
 		g.Go(func() error {
-			return fn(ctx, client, flipt, hostDirectory)
+			return fn(ctx, client, flipt, testArgs{
+				testsFile: testsFile,
+				hostDir:   dir,
+			})
 		})
 	}
 
 	return g.Wait()
 }
 
-func getTestDependencies(ctx context.Context, client *dagger.Client, dir *dagger.Directory) (*dagger.Container, *dagger.Directory) {
+func getTestDependencies(ctx context.Context, client *dagger.Client, dir *dagger.Directory) *dagger.Container {
 	// Flipt
-	flipt := client.Container().From("flipt/flipt:latest").
+	flipt := client.Container().From("flipt/flipt:nightly").
 		WithUser("root").
 		WithExec([]string{"mkdir", "-p", "/var/data/flipt"}).
-		WithDirectory("/var/data/flipt", dir.Directory("test/fixtures/testdata")).
+		WithDirectory("/var/data/flipt", dir.Directory("testdata")).
 		WithExec([]string{"chown", "-R", "flipt:flipt", "/var/data/flipt"}).
 		WithUser("flipt").
 		WithEnvVariable("FLIPT_STORAGE_TYPE", "local").
@@ -96,15 +111,16 @@ func getTestDependencies(ctx context.Context, client *dagger.Client, dir *dagger
 		WithEnvVariable("FLIPT_AUTHENTICATION_REQUIRED", "1").
 		WithExposedPort(8080)
 
-	return flipt, dir
+	return flipt
 }
 
 // pythonTests runs the python integration test suite against a container running Flipt.
-func pythonTests(ctx context.Context, client *dagger.Client, flipt *dagger.Container, hostDirectory *dagger.Directory) error {
+func pythonTests(ctx context.Context, client *dagger.Client, flipt *dagger.Container, args testArgs) error {
 	_, err := client.Container().From("python:3.11-bookworm").
 		WithExec([]string{"pip", "install", "poetry==1.7.0"}).
 		WithWorkdir("/src").
-		WithDirectory("/src", hostDirectory.Directory("flipt-python")).
+		WithFile("/src/tests.json", args.testsFile).
+		WithDirectory("/src", args.hostDir.Directory("flipt-python")).
 		WithServiceBinding("flipt", flipt.WithExec(nil).AsService()).
 		WithEnvVariable("FLIPT_URL", "http://flipt:8080").
 		WithEnvVariable("FLIPT_AUTH_TOKEN", "secret").
@@ -116,12 +132,12 @@ func pythonTests(ctx context.Context, client *dagger.Client, flipt *dagger.Conta
 }
 
 // nodeTests runs the node integration test suite against a container running Flipt.
-func nodeTests(ctx context.Context, client *dagger.Client, flipt *dagger.Container, hostDirectory *dagger.Directory) error {
+func nodeTests(ctx context.Context, client *dagger.Client, flipt *dagger.Container, args testArgs) error {
 	_, err := client.Container().From("node:21.2-bookworm").
 		WithWorkdir("/src").
 		// The node_modules should never be version controlled, but we will exclude it here
 		// just to be safe.
-		WithDirectory("/src", hostDirectory.Directory("flipt-node"), dagger.ContainerWithDirectoryOpts{
+		WithDirectory("/src", args.hostDir.Directory("flipt-node"), dagger.ContainerWithDirectoryOpts{
 			Exclude: []string{"./node_modules/"},
 		}).
 		WithServiceBinding("flipt", flipt.WithExec(nil).AsService()).
@@ -135,11 +151,11 @@ func nodeTests(ctx context.Context, client *dagger.Client, flipt *dagger.Contain
 }
 
 // rustTests runs the rust integration test suite against a container running Flipt.
-func rustTests(ctx context.Context, client *dagger.Client, flipt *dagger.Container, hostDirectory *dagger.Directory) error {
+func rustTests(ctx context.Context, client *dagger.Client, flipt *dagger.Container, args testArgs) error {
 	_, err := client.Container().From("rust:1.73.0-bookworm").
 		WithWorkdir("/src").
 		// Exclude target directory which contain the build artifacts for Rust.
-		WithDirectory("/src", hostDirectory.Directory("flipt-rust"), dagger.ContainerWithDirectoryOpts{
+		WithDirectory("/src", args.hostDir.Directory("flipt-rust"), dagger.ContainerWithDirectoryOpts{
 			Exclude: []string{"./target/"},
 		}).
 		WithServiceBinding("flipt", flipt.WithExec(nil).AsService()).
@@ -152,10 +168,10 @@ func rustTests(ctx context.Context, client *dagger.Client, flipt *dagger.Contain
 }
 
 // javaTests runs the java integration test suite against a container running Flipt.
-func javaTests(ctx context.Context, client *dagger.Client, flipt *dagger.Container, hostDirectory *dagger.Directory) error {
+func javaTests(ctx context.Context, client *dagger.Client, flipt *dagger.Container, args testArgs) error {
 	_, err := client.Container().From("gradle:8.5.0-jdk11").
 		WithWorkdir("/src").
-		WithDirectory("/src", hostDirectory.Directory("flipt-java"), dagger.ContainerWithDirectoryOpts{
+		WithDirectory("/src", args.hostDir.Directory("flipt-java"), dagger.ContainerWithDirectoryOpts{
 			Exclude: []string{"./.gradle", "./.idea", "./build"},
 		}).
 		WithServiceBinding("flipt", flipt.WithExec(nil).AsService()).
@@ -168,14 +184,14 @@ func javaTests(ctx context.Context, client *dagger.Client, flipt *dagger.Contain
 }
 
 // phpTests runs the php integration test suite against a container running Flipt.
-func phpTests(ctx context.Context, client *dagger.Client, flipt *dagger.Container, hostDirectory *dagger.Directory) error {
+func phpTests(ctx context.Context, client *dagger.Client, flipt *dagger.Container, args testArgs) error {
 	_, err := client.Container().From("php:8-cli").
 		WithEnvVariable("COMPOSER_ALLOW_SUPERUSER", "1").
 		WithExec([]string{"apt-get", "update"}).
 		WithExec([]string{"apt-get", "install", "-y", "git"}).
 		WithExec([]string{"sh", "-c", "curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer"}).
 		WithWorkdir("/src").
-		WithDirectory("/src", hostDirectory.Directory("flipt-php"), dagger.ContainerWithDirectoryOpts{
+		WithDirectory("/src", args.hostDir.Directory("flipt-php"), dagger.ContainerWithDirectoryOpts{
 			Exclude: []string{"./vendor", "./composer.lock"},
 		}).
 		WithServiceBinding("flipt", flipt.WithExec(nil).AsService()).
