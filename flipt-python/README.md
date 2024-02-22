@@ -22,9 +22,9 @@ In your Python code you can import this client and use it as so:
 from flipt import FliptClient
 from flipt.evaluation import BatchEvaluationRequest, EvaluationRequest
 
-fliptClient = FliptClient()
+flipt_client = FliptClient()
 
-v = fliptClient.evaluation.variant(
+variant_flag = flipt_client.evaluation.variant(
     EvaluationRequest(
         namespace_key="default",
         flag_key="flagll",
@@ -33,7 +33,13 @@ v = fliptClient.evaluation.variant(
     )
 )
 
-print(v)
+print(variant_flag)
 ```
 
 There is a more detailed example in the [examples](./examples) directory.
+
+
+## For developers
+
+After adding new code, please don't forget to add unit tests for new features.
+To format the code, check it with linters and run tests, use the `make check` command. 
