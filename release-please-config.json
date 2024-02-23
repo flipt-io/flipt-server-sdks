@@ -3,6 +3,7 @@
   "bump-patch-for-minor-pre-major": true,
   "draft": false,
   "skip-snapshot": true,
+  "last-release-sha": "6c6cb90845c74889638391c1ff7e0ba97c8778a3",
   "packages": {
     "flipt-java": {
       "component": "flipt-java",
