@@ -14,3 +14,8 @@ Cargo.lock
 
 .vscode/
 .envrc
+
+/flipt-python/.coverage
+/flipt-python/.mypy_cache/
+/flipt-python/.pytest_cache/
+/flipt-python/.ruff_cache/

@@ -28,7 +28,7 @@ jobs:
         working-directory: flipt-python
         run: |
           poetry install
-          poetry run black --check .
+          make lint
 
   lint-typescript:
     name: Lint TypeScript

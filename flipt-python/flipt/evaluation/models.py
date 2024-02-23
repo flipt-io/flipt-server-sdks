@@ -1,79 +1,81 @@
-import enum
-from pydantic import BaseModel, Field
-from typing import List, Optional
+from enum import StrEnum
+
+from pydantic import AliasGenerator, BaseModel, ConfigDict, Field
+from pydantic.alias_generators import to_camel
 
 
-class EvaluationResponseType(str, enum.Enum):
+class EvaluationResponseType(StrEnum):
     VARIANT_EVALUATION_RESPONSE_TYPE = "VARIANT_EVALUATION_RESPONSE_TYPE"
     BOOLEAN_EVALUATION_RESPONSE_TYPE = "BOOLEAN_EVALUATION_RESPONSE_TYPE"
     ERROR_EVALUATION_RESPONSE_TYPE = "ERROR_EVALUATION_RESPONSE_TYPE"
 
 
-class EvaluationReason(str, enum.Enum):
+class EvaluationReason(StrEnum):
     UNKNOWN_EVALUATION_REASON = "UNKNOWN_EVALUATION_REASON"
     FLAG_DISABLED_EVALUATION_REASON = "FLAG_DISABLED_EVALUATION_REASON"
     MATCH_EVALUATION_REASON = "MATCH_EVALUATION_REASON"
     DEFAULT_EVALUATION_REASON = "DEFAULT_EVALUATION_REASON"
 
 
-class ErrorEvaluationReason(str, enum.Enum):
+class ErrorEvaluationReason(StrEnum):
     UNKNOWN_ERROR_EVALUATION_REASON = "UNKNOWN_ERROR_EVALUATION_REASON"
     NOT_FOUND_ERROR_EVALUATION_REASON = "NOT_FOUND_ERROR_EVALUATION_REASON"
 
 
-class EvaluationRequest(BaseModel):
+class CamelAliasModel(BaseModel):
+    model_config = ConfigDict(
+        alias_generator=AliasGenerator(alias=to_camel),
+        populate_by_name=True,
+    )
+
+
+class EvaluationRequest(CamelAliasModel):
     namespace_key: str = Field(default="default")
     flag_key: str
     entity_id: str
     context: dict
-    reference: Optional[str] = None
+    reference: str | None = None
 
 
-class BatchEvaluationRequest(BaseModel):
-    request_id: Optional[str] = None
-    requests: List[EvaluationRequest]
-    reference: Optional[str] = None
+class BatchEvaluationRequest(CamelAliasModel):
+    request_id: str | None = None
+    requests: list[EvaluationRequest]
+    reference: str | None = None
 
 
-class VariantEvaluationResponse(BaseModel):
+class VariantEvaluationResponse(CamelAliasModel):
     match: bool
-    segment_keys: List[str] = Field(..., alias="segmentKeys")
+    segment_keys: list[str]
     reason: EvaluationReason
-    flag_key: str = Field(..., alias="flagKey")
-    variant_key: str = Field(..., alias="variantKey")
-    variant_attachment: str = Field(..., alias="variantAttachment")
-    request_duration_millis: float = Field(..., alias="requestDurationMillis")
+    flag_key: str
+    variant_key: str
+    variant_attachment: str
+    request_duration_millis: float
     timestamp: str
 
 
-class BooleanEvaluationResponse(BaseModel):
+class BooleanEvaluationResponse(CamelAliasModel):
     enabled: bool
-    flag_key: str = Field(..., alias="flagKey")
+    flag_key: str
     reason: EvaluationReason
-    request_duration_millis: float = Field(..., alias="requestDurationMillis")
+    request_duration_millis: float
     timestamp: str
 
 
-class ErrorEvaluationResponse(BaseModel):
-    flag_key: str = Field(..., alias="flagKey")
-    namespace_key: str = Field(..., alias="namespaceKey")
+class ErrorEvaluationResponse(CamelAliasModel):
+    flag_key: str
+    namespace_key: str
     reason: ErrorEvaluationReason
 
 
-class EvaluationResponse(BaseModel):
+class EvaluationResponse(CamelAliasModel):
     type: EvaluationResponseType
-    boolean_response: Optional[BooleanEvaluationResponse] = Field(
-        default=None, alias="booleanResponse"
-    )
-    variant_response: Optional[VariantEvaluationResponse] = Field(
-        default=None, alias="variantResponse"
-    )
-    error_response: Optional[ErrorEvaluationResponse] = Field(
-        default=None, alias="errorResponse"
-    )
+    boolean_response: BooleanEvaluationResponse | None = None
+    variant_response: VariantEvaluationResponse | None = None
+    error_response: ErrorEvaluationResponse | None = None
 
 
-class BatchEvaluationResponse(BaseModel):
-    request_id: str = Field(..., alias="requestId")
-    responses: List[EvaluationResponse]
-    request_duration_millis: float = Field(..., alias="requestDurationMillis")
+class BatchEvaluationResponse(CamelAliasModel):
+    request_id: str
+    responses: list[EvaluationResponse]
+    request_duration_millis: float
