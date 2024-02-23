@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.1](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-php-v1.0.0...flipt-php-v1.0.1) (2024-02-23)
+
+
+### Miscellaneous Chores
+
+* README updates/examples ([3c9d357](https://github.com/flipt-io/flipt-server-sdks/commit/3c9d3577588fdd8bf16af6792ecb1dffcd89bf8c))
+* release main ([#111](https://github.com/flipt-io/flipt-server-sdks/issues/111)) ([c03b665](https://github.com/flipt-io/flipt-server-sdks/commit/c03b66525c9557c83d8fca53150a63981dc133de))
+
 ## [1.0.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-php-v1.0.0-rc.2...flipt-php-v1.0.0) (2024-01-16)
 
 ### Features
