@@ -2,22 +2,11 @@
 
 ## [1.1.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-python-v1.0.0...flipt-python-v1.1.0) (2024-02-23)
 
-
 ### Features
 
 * **python:** added async client ([893f98d](https://github.com/flipt-io/flipt-server-sdks/commit/893f98df91fd9515a01a46545da3d7caf5d077a0))
-* **python:** added Makefile and updated ci step ([cdae9ea](https://github.com/flipt-io/flipt-server-sdks/commit/cdae9ea538d0ae746c6491a2bf883b529abb4379))
-* **python:** added py.typed file ([d128642](https://github.com/flipt-io/flipt-server-sdks/commit/d128642bb89be7cde391c28c219fcc57c51a8e02))
-* **python:** added tests ([a1f6473](https://github.com/flipt-io/flipt-server-sdks/commit/a1f647394ec0b12e2321e4accecf6abda72f94e9))
-* **python:** fixed evaluation models ([e7388f4](https://github.com/flipt-io/flipt-server-sdks/commit/e7388f4731dcf174bf08be92af8db8cbee56d299))
-* **python:** fixed typing ([8a2fb02](https://github.com/flipt-io/flipt-server-sdks/commit/8a2fb02136ea6995818fc1852e897b046946d815))
-* **python:** separated __init__ files ([a029fcb](https://github.com/flipt-io/flipt-server-sdks/commit/a029fcbe5976885fd177ce5e63919f832e0a983f))
-* **python:** updated examples ([aa33c65](https://github.com/flipt-io/flipt-server-sdks/commit/aa33c6539d31924abc936bd816afa15bbe543efb))
-* **python:** updated poetry.toml ([5116e7f](https://github.com/flipt-io/flipt-server-sdks/commit/5116e7f2d8b74ebca8e1433f3718bd3611f52a86))
-* **python:** updated README.md ([34ede88](https://github.com/flipt-io/flipt-server-sdks/commit/34ede883fba2060970be7c7f0df9a91693296e27))
 
 ## [1.0.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-python-v1.0.0-rc.2...flipt-python-v1.0.0) (2024-01-16)
-
 
 ### Miscellaneous Chores
 
@@ -26,20 +15,17 @@
 
 ## [1.0.0-rc.2](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-python-v1.0.0-rc.1...flipt-python-v1.0.0-rc.2) (2024-01-16)
 
-
 ### Miscellaneous Chores
 
 * release 1.0.0-rc.2 ([709ef35](https://github.com/flipt-io/flipt-server-sdks/commit/709ef35e9959ee5bdc6630b60599de04f29f667d))
 
 ## 1.0.0-rc.1 (2024-01-11)
 
-
 ### Features
 
 * Add php ([#36](https://github.com/flipt-io/flipt-server-sdks/issues/36)) ([4a47331](https://github.com/flipt-io/flipt-server-sdks/commit/4a47331b0da56e55f0e31b312cffbe0e10248229))
 * **rust/java/node/python:** Use enums for types with limited values for better type inference on caller side ([#33](https://github.com/flipt-io/flipt-server-sdks/issues/33)) ([03e8d30](https://github.com/flipt-io/flipt-server-sdks/commit/03e8d30f3421f48a5d320bed922b0a589c58aa59))
 * use auth strategy for python ([#28](https://github.com/flipt-io/flipt-server-sdks/issues/28)) ([930291a](https://github.com/flipt-io/flipt-server-sdks/commit/930291a47d3a756cd8a4f03d52d369ef7a43edb9))
-
 
 ### Miscellaneous Chores
 
