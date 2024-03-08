@@ -1,7 +1,8 @@
 from enum import StrEnum
 
-from pydantic import AliasGenerator, BaseModel, ConfigDict, Field
-from pydantic.alias_generators import to_camel
+from pydantic import Field
+
+from flipt.models import CamelAliasModel
 
 
 class EvaluationResponseType(StrEnum):
@@ -20,13 +21,6 @@ class EvaluationReason(StrEnum):
 class ErrorEvaluationReason(StrEnum):
     UNKNOWN_ERROR_EVALUATION_REASON = "UNKNOWN_ERROR_EVALUATION_REASON"
     NOT_FOUND_ERROR_EVALUATION_REASON = "NOT_FOUND_ERROR_EVALUATION_REASON"
-
-
-class CamelAliasModel(BaseModel):
-    model_config = ConfigDict(
-        alias_generator=AliasGenerator(alias=to_camel),
-        populate_by_name=True,
-    )
 
 
 class EvaluationRequest(CamelAliasModel):

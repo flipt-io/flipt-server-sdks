@@ -2,6 +2,7 @@ import httpx
 
 from .authentication import AuthenticationStrategy
 from .evaluation import AsyncEvaluation
+from .flags import AsyncFlag
 
 
 class AsyncFliptClient:
@@ -14,6 +15,7 @@ class AsyncFliptClient:
         self.httpx_client = httpx.AsyncClient(timeout=timeout)
 
         self.evaluation = AsyncEvaluation(url, authentication, self.httpx_client)
+        self.flag = AsyncFlag(url, authentication, self.httpx_client)
 
     async def close(self) -> None:
         await self.httpx_client.aclose()
