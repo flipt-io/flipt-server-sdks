@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-python-v1.1.0...flipt-python-v1.2.0) (2024-03-08)
+
+
+### Features
+
+* **python:** Add `ListFlags` api ([#127](https://github.com/flipt-io/flipt-server-sdks/issues/127)) ([e862964](https://github.com/flipt-io/flipt-server-sdks/commit/e862964bb6f1606d72180ee9705d99ab3d021a5e))
+
 ## [1.1.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-python-v1.0.0...flipt-python-v1.1.0) (2024-02-23)
 
 ### Features
