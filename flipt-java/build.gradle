@@ -27,7 +27,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:4.12.0'
     testImplementation platform('org.junit:junit-bom:5.10.2')
     testImplementation 'org.junit.jupiter:junit-jupiter'
-    api 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.1'
+    api 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.2'
     api 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.16.1'
     api 'com.diffplug.gradle.spotless:spotless:2.4.1'
 }
