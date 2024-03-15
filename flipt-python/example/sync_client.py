@@ -1,17 +1,17 @@
 from flipt import FliptClient
 from flipt.evaluation import BatchEvaluationRequest, EvaluationRequest
 
-fliptClient = FliptClient()
+flipt_client = FliptClient()
 
-v = fliptClient.evaluation.variant(
+variant_flag = flipt_client.evaluation.variant(
     EvaluationRequest(
         namespace_key="default",
-        flag_key="flagll",
+        flag_key="flag_variant",
         entity_id="entity",
         context={"fizz": "buzz"},
     )
 )
-b = fliptClient.evaluation.boolean(
+boolean_flag = flipt_client.evaluation.boolean(
     EvaluationRequest(
         namespace_key="default",
         flag_key="flag_boolean",
@@ -19,12 +19,12 @@ b = fliptClient.evaluation.boolean(
         context={"fizz": "buzz"},
     )
 )
-ba = fliptClient.evaluation.batch(
+batch = flipt_client.evaluation.batch(
     BatchEvaluationRequest(
         requests=[
             EvaluationRequest(
                 namespace_key="default",
-                flag_key="flag1",
+                flag_key="flag_variant",
                 entity_id="entity",
                 context={"fizz": "buzz"},
             ),
@@ -38,6 +38,6 @@ ba = fliptClient.evaluation.batch(
     )
 )
 
-print(v)
-print(b)
-print(ba)
+print(variant_flag)
+print(boolean_flag)
+print(batch)

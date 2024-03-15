@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "flipt"
-version = "1.0.0"
+version = "1.2.0"
 description = "Flipt Server SDK"
 authors = ["Flipt Devs <dev@flipt.io>"]
 license = "MIT"
@@ -9,11 +9,18 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.11"
 pydantic = "^2.5.3"
-httpx = "^0.26.0"
-
+httpx = "^0.27.0"
 
 [tool.poetry.group.dev.dependencies]
 black = ">=23.12.1,<25.0.0"
+mypy = "^1.8.0"
+pytest = "^8.0.1"
+pytest-asyncio = "^0.23.5"
+pytest-cov = "^4.1.0"
+pytest-deadfixtures = "^2.2.1"
+pytest-httpx = "^0.30.0"
+pytest-mock = "^3.12.0"
+ruff = ">=0.2.2,<0.4.0"
 
 [build-system]
 requires = ["poetry-core"]
@@ -21,3 +28,61 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 test = 'scripts:test'
+
+[tool.mypy]
+disallow_untyped_defs = true
+disallow_untyped_decorators = true
+plugins = ["pydantic.mypy"]
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+
+[tool.black]
+line-length = 120
+skip-string-normalization = true
+
+[tool.coverage.report]
+precision = 1
+fail_under = 95
+exclude_also = [
+    "raise NotImplementedError",
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "def __repr__",
+]
+show_missing = true
+skip_covered = true
+
+[tool.coverage.run]
+source = ["flipt"]
+branch = true
+
+[tool.ruff.lint]
+exclude = [".git", ".venv"]
+select = [
+    "ARG",
+    "B",
+    "C",
+    "C4",
+    "E",
+    "F",
+    "I",
+    "PL",
+    "PT",
+    "T",
+    "W",
+]
+ignore = ["E501", "PLR2004"]
+
+[tool.ruff.lint.pylint]
+max-args = 5
+max-returns = 5
+
+[tool.ruff.lint.mccabe]
+max-complexity = 10

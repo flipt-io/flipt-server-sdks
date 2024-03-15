@@ -124,7 +124,7 @@ func pythonTests(ctx context.Context, client *dagger.Client, flipt *dagger.Conta
 		WithServiceBinding("flipt", flipt.WithExec(nil).AsService()).
 		WithEnvVariable("FLIPT_URL", "http://flipt:8080").
 		WithEnvVariable("FLIPT_AUTH_TOKEN", "secret").
-		WithExec([]string{"poetry", "install", "--without=dev"}).
+		WithExec([]string{"poetry", "install"}).
 		WithExec([]string{"poetry", "run", "test"}).
 		Sync(ctx)
 
