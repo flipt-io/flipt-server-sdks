@@ -1,6 +1,10 @@
 import pytest
 
-from flipt.evaluation import EvaluationRequest, BooleanEvaluationResponse, VariantEvaluationResponse
+from flipt.evaluation import (
+    BooleanEvaluationResponse,
+    EvaluationRequest,
+    VariantEvaluationResponse,
+)
 from flipt.exceptions import FliptApiError
 
 

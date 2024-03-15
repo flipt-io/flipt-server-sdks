@@ -1,5 +1,6 @@
-import os
 import json
+import os
+
 import pytest
 
 from flipt import AsyncFliptClient, FliptClient
