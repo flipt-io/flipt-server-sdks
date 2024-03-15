@@ -96,7 +96,7 @@ func run() error {
 	return g.Wait()
 }
 
-func getTestDependencies(ctx context.Context, client *dagger.Client, dir *dagger.Directory) *dagger.Container {
+func getTestDependencies(_ context.Context, client *dagger.Client, dir *dagger.Directory) *dagger.Container {
 	// Flipt
 	flipt := client.Container().From("flipt/flipt:nightly").
 		WithUser("root").
