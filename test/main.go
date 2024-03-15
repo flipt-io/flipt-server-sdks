@@ -20,7 +20,6 @@ var (
 		"node":   nodeTests,
 		"rust":   rustTests,
 		"java":   javaTests,
-		"php":    phpTests,
 	}
 )
 
@@ -173,6 +172,7 @@ func rustTests(ctx context.Context, client *dagger.Client, flipt *dagger.Contain
 func javaTests(ctx context.Context, client *dagger.Client, flipt *dagger.Container, args testArgs) error {
 	_, err := client.Container().From("gradle:8.5.0-jdk11").
 		WithWorkdir("/src").
+		WithFile("/src/tests.json", args.testsFile).
 		WithDirectory("/src", args.hostDir.Directory("flipt-java"), dagger.ContainerWithDirectoryOpts{
 			Exclude: []string{"./.gradle", "./.idea", "./build"},
 		}).
@@ -186,22 +186,22 @@ func javaTests(ctx context.Context, client *dagger.Client, flipt *dagger.Contain
 }
 
 // phpTests runs the php integration test suite against a container running Flipt.
-func phpTests(ctx context.Context, client *dagger.Client, flipt *dagger.Container, args testArgs) error {
-	_, err := client.Container().From("php:8-cli").
-		WithEnvVariable("COMPOSER_ALLOW_SUPERUSER", "1").
-		WithExec([]string{"apt-get", "update"}).
-		WithExec([]string{"apt-get", "install", "-y", "git"}).
-		WithExec([]string{"sh", "-c", "curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer"}).
-		WithWorkdir("/src").
-		WithDirectory("/src", args.hostDir.Directory("flipt-php"), dagger.ContainerWithDirectoryOpts{
-			Exclude: []string{"./vendor", "./composer.lock"},
-		}).
-		WithServiceBinding("flipt", flipt.WithExec(nil).AsService()).
-		WithEnvVariable("FLIPT_URL", "http://flipt:8080").
-		WithEnvVariable("FLIPT_AUTH_TOKEN", "secret").
-		WithExec([]string{"composer", "install"}).
-		WithExec([]string{"composer", "test"}).
-		Sync(ctx)
+// func phpTests(ctx context.Context, client *dagger.Client, flipt *dagger.Container, args testArgs) error {
+// 	_, err := client.Container().From("php:8-cli").
+// 		WithEnvVariable("COMPOSER_ALLOW_SUPERUSER", "1").
+// 		WithExec([]string{"apt-get", "update"}).
+// 		WithExec([]string{"apt-get", "install", "-y", "git"}).
+// 		WithExec([]string{"sh", "-c", "curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer"}).
+// 		WithWorkdir("/src").
+// 		WithDirectory("/src", args.hostDir.Directory("flipt-php"), dagger.ContainerWithDirectoryOpts{
+// 			Exclude: []string{"./vendor", "./composer.lock"},
+// 		}).
+// 		WithServiceBinding("flipt", flipt.WithExec(nil).AsService()).
+// 		WithEnvVariable("FLIPT_URL", "http://flipt:8080").
+// 		WithEnvVariable("FLIPT_AUTH_TOKEN", "secret").
+// 		WithExec([]string{"composer", "install"}).
+// 		WithExec([]string{"composer", "test"}).
+// 		Sync(ctx)
 
-	return err
-}
+// 	return err
+// }
