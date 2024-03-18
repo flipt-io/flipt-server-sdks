@@ -6,7 +6,7 @@ flipt_client = FliptClient()
 variant_flag = flipt_client.evaluation.variant(
     EvaluationRequest(
         namespace_key="default",
-        flag_key="flag1",
+        flag_key="flag_variant",
         entity_id="entity",
         context={"fizz": "buzz"},
     )
@@ -24,7 +24,7 @@ batch = flipt_client.evaluation.batch(
         requests=[
             EvaluationRequest(
                 namespace_key="default",
-                flag_key="flag1",
+                flag_key="flag_variant",
                 entity_id="entity",
                 context={"fizz": "buzz"},
             ),

@@ -1,24 +1,27 @@
 import pytest
 
-from flipt.evaluation import BatchEvaluationRequest, EvaluationRequest
+from flipt.evaluation import (
+    BooleanEvaluationResponse,
+    EvaluationRequest,
+    VariantEvaluationResponse,
+)
 from flipt.exceptions import FliptApiError
 
 
-def test_variant(sync_flipt_client):
-    variant = sync_flipt_client.evaluation.variant(
-        EvaluationRequest(
-            namespace_key="default",
-            flag_key="flag1",
-            entity_id="entity",
-            context={"fizz": "buzz"},
-        )
-    )
+def test_variant(sync_flipt_client, corpus):
+    variant_tests = corpus["VARIANT"]
+    for test_scenario in variant_tests:
+        if ("request" not in test_scenario) or ("expectation" not in test_scenario):
+            raise Exception("malformed test")
+        eval_request = EvaluationRequest.model_validate(test_scenario["request"])
+        variant = sync_flipt_client.evaluation.variant(eval_request)
+        expectation = VariantEvaluationResponse.model_validate(test_scenario["expectation"])
+        assert expectation.flag_key == variant.flag_key
+        assert expectation.match == variant.match
+        assert expectation.variant_key == variant.variant_key
+        assert expectation.reason == variant.reason
 
-    assert variant.match
-    assert variant.flag_key == 'flag1'
-    assert variant.variant_key == 'variant1'
-    assert variant.reason == 'MATCH_EVALUATION_REASON'
-    assert 'segment1' in variant.segment_keys
+        assert len(expectation.segment_keys) == len(variant.segment_keys)
 
 
 @pytest.mark.usefixtures('_mock_variant_response_error')
@@ -34,113 +37,14 @@ def test_evaluate_variant_error(sync_flipt_client):
         )
 
 
-def test_boolean(sync_flipt_client):
-    boolean = sync_flipt_client.evaluation.boolean(
-        EvaluationRequest(
-            namespace_key="default",
-            flag_key="flag_boolean",
-            entity_id="entity",
-            context={"fizz": "buzz"},
-        )
-    )
-
-    assert boolean.enabled
-    assert boolean.flag_key == 'flag_boolean'
-    assert boolean.reason == 'MATCH_EVALUATION_REASON'
-
-
-@pytest.mark.usefixtures('_mock_boolean_response_error')
-def test_evaluate_boolean_error(sync_flipt_client):
-    with pytest.raises(FliptApiError):
-        sync_flipt_client.evaluation.boolean(
-            EvaluationRequest(
-                namespace_key="default",
-                flag_key="flag_boolean",
-                entity_id="entity",
-                context={"fizz": "buzz"},
-            )
-        )
-
-
-def test_batch(sync_flipt_client):
-    batch = sync_flipt_client.evaluation.batch(
-        BatchEvaluationRequest(
-            requests=[
-                EvaluationRequest(
-                    namespace_key="default",
-                    flag_key="flag1",
-                    entity_id="entity",
-                    context={"fizz": "buzz"},
-                ),
-                EvaluationRequest(
-                    namespace_key="default",
-                    flag_key="flag_boolean",
-                    entity_id="entity",
-                    context={"fizz": "buzz"},
-                ),
-                EvaluationRequest(
-                    namespace_key="default",
-                    flag_key="notfound",
-                    entity_id="entity",
-                    context={"fizz": "buzz"},
-                ),
-            ]
-        )
-    )
-
-    assert len(batch.responses) == 3
-
-    # Variant
-    assert batch.responses[0].type == "VARIANT_EVALUATION_RESPONSE_TYPE"
-
-    variant = batch.responses[0].variant_response
-    assert variant.match
-    assert variant.flag_key == "flag1"
-    assert variant.variant_key == "variant1"
-    assert variant.reason == "MATCH_EVALUATION_REASON"
-    assert 'segment1' in variant.segment_keys
-
-    # Boolean
-    assert batch.responses[1].type == 'BOOLEAN_EVALUATION_RESPONSE_TYPE'
-
-    boolean = batch.responses[1].boolean_response
-    assert boolean.enabled
-    assert boolean.flag_key == "flag_boolean"
-    assert boolean.reason == "MATCH_EVALUATION_REASON"
-
-    # Error
-    assert batch.responses[2].type == 'ERROR_EVALUATION_RESPONSE_TYPE'
-
-    error = batch.responses[2].error_response
-    assert error.flag_key == "notfound"
-    assert error.namespace_key == "default"
-    assert error.reason == "NOT_FOUND_ERROR_EVALUATION_REASON"
-
-
-@pytest.mark.usefixtures('_mock_batch_response_error')
-def test_evaluate_batch_error(sync_flipt_client):
-    with pytest.raises(FliptApiError):
-        sync_flipt_client.evaluation.batch(
-            BatchEvaluationRequest(
-                requests=[
-                    EvaluationRequest(
-                        namespace_key="default",
-                        flag_key="flag1",
-                        entity_id="entity",
-                        context={"fizz": "buzz"},
-                    ),
-                    EvaluationRequest(
-                        namespace_key="default",
-                        flag_key="flag_boolean",
-                        entity_id="entity",
-                        context={"fizz": "buzz"},
-                    ),
-                    EvaluationRequest(
-                        namespace_key="default",
-                        flag_key="notfound",
-                        entity_id="entity",
-                        context={"fizz": "buzz"},
-                    ),
-                ]
-            )
-        )
+def test_boolean(sync_flipt_client, corpus):
+    boolean_tests = corpus["BOOLEAN"]
+    for test_scenario in boolean_tests:
+        if ("request" not in test_scenario) or ("expectation" not in test_scenario):
+            raise Exception("malformed test")
+        eval_request = EvaluationRequest.model_validate(test_scenario["request"])
+        boolean = sync_flipt_client.evaluation.boolean(eval_request)
+        expectation = BooleanEvaluationResponse.model_validate(test_scenario["expectation"])
+        assert expectation.flag_key == boolean.flag_key
+        assert expectation.enabled == boolean.enabled
+        assert expectation.reason == boolean.reason

@@ -8,8 +8,7 @@ pub struct BatchEvaluationRequest {
     pub reference: Option<String>,
 }
 
-#[derive(Serialize)]
-#[serde(rename_all = "camelCase")]
+#[derive(Deserialize, Serialize)]
 pub struct EvaluationRequest {
     pub namespace_key: String,
     pub flag_key: String,

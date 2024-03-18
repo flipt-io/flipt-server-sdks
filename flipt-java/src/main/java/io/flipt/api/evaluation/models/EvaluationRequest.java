@@ -1,5 +1,6 @@
 package io.flipt.api.evaluation.models;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
@@ -13,12 +14,13 @@ public class EvaluationRequest {
   private final Map<String, String> context;
   private final Optional<String> reference;
 
+  @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
   public EvaluationRequest(
-      String namespaceKey,
-      String flagKey,
-      String entityId,
-      Map<String, String> context,
-      Optional<String> reference) {
+      @JsonProperty("namespace_key") String namespaceKey,
+      @JsonProperty("flag_key") String flagKey,
+      @JsonProperty("entity_id") String entityId,
+      @JsonProperty("context") Map<String, String> context,
+      @JsonProperty("reference") Optional<String> reference) {
     this.namespaceKey = namespaceKey;
     this.flagKey = flagKey;
     this.entityId = entityId;

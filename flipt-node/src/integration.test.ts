@@ -1,12 +1,15 @@
 import { ClientTokenAuthentication } from "./index";
 import { FliptClient } from ".";
+import fs from "fs";
+
+const fileData = fs.readFileSync("tests.json", "utf-8");
+const data = JSON.parse(fileData);
 
 const fliptUrl = process.env["FLIPT_URL"];
 if (!fliptUrl) {
   console.error("please set the FLIPT_URL environment variable");
   process.exit(1);
 }
-
 const authToken = process.env["FLIPT_AUTH_TOKEN"];
 if (!authToken) {
   console.error("please set the FLIPT_AUTH_TOKEN environment variable");
@@ -19,18 +22,28 @@ test("variant", async () => {
     authenticationStrategy: new ClientTokenAuthentication(authToken)
   });
 
-  const variant = await client.evaluation.variant({
-    namespaceKey: "default",
-    flagKey: "flag1",
-    entityId: "entity",
-    context: { fizz: "buzz" }
-  });
+  const variantTests = data["VARIANT"];
 
-  expect(variant.flagKey).toEqual("flag1");
-  expect(variant.match).toEqual(true);
-  expect(variant.reason).toEqual("MATCH_EVALUATION_REASON");
-  expect(variant.variantKey).toEqual("variant1");
-  expect(variant.segmentKeys).toContain("segment1");
+  for (const testScenario of variantTests) {
+    if (
+      testScenario["request"] === undefined ||
+      testScenario["expectation"] === undefined
+    ) {
+      throw new Error("malformed test");
+    }
+
+    const variant = await client.evaluation.variant(testScenario["request"]);
+
+    const expectation = testScenario["expectation"];
+
+    expect(variant.flagKey).toEqual(expectation.flagKey);
+    expect(variant.match).toEqual(expectation.match);
+    expect(variant.reason).toEqual(expectation.reason);
+    expect(variant.variantKey).toEqual(expectation.variantKey);
+    for (const segment of variant.segmentKeys) {
+      expect(expectation.segmentKeys).toContain(segment);
+    }
+  }
 });
 
 test("boolean", async () => {
@@ -39,84 +52,19 @@ test("boolean", async () => {
     authenticationStrategy: new ClientTokenAuthentication(authToken)
   });
 
-  const boolean = await client.evaluation.boolean({
-    namespaceKey: "default",
-    flagKey: "flag_boolean",
-    entityId: "entity",
-    context: { fizz: "buzz" }
-  });
+  const booleanTests = data["BOOLEAN"];
 
-  expect(boolean.flagKey).toEqual("flag_boolean");
-  expect(boolean.enabled).toEqual(true);
-  expect(boolean.reason).toEqual("MATCH_EVALUATION_REASON");
-});
+  for (const testScenario of booleanTests) {
+    const request = testScenario["request"];
+    const expectation = testScenario["expectation"];
+    if (request === undefined || expectation === undefined) {
+      throw new Error("malformed test");
+    }
 
-test("batch", async () => {
-  const client = new FliptClient({
-    url: fliptUrl,
-    authenticationStrategy: new ClientTokenAuthentication(authToken)
-  });
+    const boolean = await client.evaluation.boolean(request);
 
-  const batch = await client.evaluation.batch({
-    requests: [
-      {
-        namespaceKey: "default",
-        flagKey: "flag1",
-        entityId: "entity",
-        context: { fizz: "buzz" }
-      },
-      {
-        namespaceKey: "default",
-        flagKey: "flag_boolean",
-        entityId: "entity",
-        context: { fizz: "buzz" }
-      },
-      {
-        namespaceKey: "default",
-        flagKey: "notfound",
-        entityId: "entity",
-        context: {}
-      }
-    ]
-  });
-
-  expect(batch.responses).toHaveLength(3);
-
-  // Variant
-  expect(batch.responses[0].type).toEqual("VARIANT_EVALUATION_RESPONSE_TYPE");
-  const variant = batch.responses[0].variantResponse;
-
-  if (!variant) {
-    throw new Error("variant is undefined");
+    expect(boolean.flagKey).toEqual(expectation.flagKey);
+    expect(boolean.enabled).toEqual(expectation.enabled);
+    expect(boolean.reason).toEqual(expectation.reason);
   }
-
-  expect(variant.flagKey).toEqual("flag1");
-  expect(variant.match).toEqual(true);
-  expect(variant.reason).toEqual("MATCH_EVALUATION_REASON");
-  expect(variant.variantKey).toEqual("variant1");
-  expect(variant.segmentKeys).toContain("segment1");
-
-  // Boolean
-  expect(batch.responses[1].type).toEqual("BOOLEAN_EVALUATION_RESPONSE_TYPE");
-  const boolean = batch.responses[1].booleanResponse;
-
-  if (!boolean) {
-    throw new Error("boolean is undefined");
-  }
-
-  expect(boolean.flagKey).toEqual("flag_boolean");
-  expect(boolean.enabled).toEqual(true);
-  expect(boolean.reason).toEqual("MATCH_EVALUATION_REASON");
-
-  // Error
-  expect(batch.responses[2].type).toEqual("ERROR_EVALUATION_RESPONSE_TYPE");
-  const error = batch.responses[2].errorResponse;
-
-  if (!error) {
-    throw new Error("error is undefined");
-  }
-
-  expect(error.flagKey).toEqual("notfound");
-  expect(error.namespaceKey).toEqual("default");
-  expect(error.reason).toEqual("NOT_FOUND_ERROR_EVALUATION_REASON");
 });

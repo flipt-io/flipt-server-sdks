@@ -1,3 +1,4 @@
+import json
 import os
 
 import pytest
@@ -21,6 +22,14 @@ def flipt_auth_token() -> str:
         raise Exception("FLIPT_AUTH_TOKEN not set")
 
     return auth_token
+
+
+@pytest.fixture()
+def corpus() -> dict:
+    f = open("tests.json")
+    data = json.load(f)
+    f.close()
+    return data
 
 
 @pytest.fixture(scope="session")

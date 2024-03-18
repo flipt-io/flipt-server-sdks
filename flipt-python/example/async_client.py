@@ -10,7 +10,7 @@ async def main():
     variant_flag = await flipt_client.evaluation.variant(
         EvaluationRequest(
             namespace_key="default",
-            flag_key="flag1",
+            flag_key="flag_variant",
             entity_id="entity",
             context={"fizz": "buzz"},
         )
@@ -28,7 +28,7 @@ async def main():
             requests=[
                 EvaluationRequest(
                     namespace_key="default",
-                    flag_key="flag1",
+                    flag_key="flag_variant",
                     entity_id="entity",
                     context={"fizz": "buzz"},
                 ),
