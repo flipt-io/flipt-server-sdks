@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-python-v1.2.0...flipt-python-v1.3.0) (2024-03-22)
+
+
+### Features
+
+* **python:** add get_flag method ([#148](https://github.com/flipt-io/flipt-server-sdks/issues/148)) ([f31c6c9](https://github.com/flipt-io/flipt-server-sdks/commit/f31c6c97f81d839ffa8f004ec51838d12ac6d2c7))
+
 ## [1.2.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-python-v1.1.0...flipt-python-v1.2.0) (2024-03-08)
 
 
