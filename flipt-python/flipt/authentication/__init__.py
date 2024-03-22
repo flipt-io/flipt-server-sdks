@@ -1,6 +1,6 @@
 class AuthenticationStrategy:
     def authenticate(self, headers: dict[str, str]) -> None:
-        raise NotImplementedError()
+        raise NotImplementedError
 
 
 class ClientTokenAuthentication(AuthenticationStrategy):

@@ -63,22 +63,65 @@ skip_covered = true
 source = ["flipt"]
 branch = true
 
+[tool.ruff]
+line-length = 120
+
 [tool.ruff.lint]
 exclude = [".git", ".venv"]
 select = [
+    "A",
     "ARG",
     "B",
+    "BLE",
     "C",
     "C4",
+    "C90",
+    "COM",
+    "D",
+    "DTZ",
     "E",
+    "ERA",
+    "EXE",
     "F",
+    "G",
     "I",
+    "ICN",
+    "INP",
+    "ISC",
+    "N",
+    "PD",
+    "PIE",
     "PL",
     "PT",
     "T",
+    "PTH",
+    "Q",
+    "RET",
+    "RSE",
+    "RUF",
+    "S",
+    "SIM",
+    "T10",
+    "T20",
+    "TCH",
+    "TID",
     "W",
+    "YTT",
 ]
-ignore = ["E501", "PLR2004"]
+ignore = [
+    "D100",
+    "D101",
+    "D102",
+    "D103",
+    "D104",
+    "D105",
+    "D106",
+    "D107",
+    "D203",
+    "D213",
+    "S101",
+    "PLR2004",
+]
 
 [tool.ruff.lint.pylint]
 max-args = 5

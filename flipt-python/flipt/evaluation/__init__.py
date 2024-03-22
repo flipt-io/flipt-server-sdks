@@ -14,16 +14,16 @@ from .models import (
 from .sync_evaluation_client import Evaluation
 
 __all__ = [
-    'Evaluation',
-    'AsyncEvaluation',
-    'EvaluationResponseType',
-    'EvaluationReason',
-    'ErrorEvaluationReason',
-    'EvaluationRequest',
-    'BatchEvaluationRequest',
-    'VariantEvaluationResponse',
-    'BooleanEvaluationResponse',
-    'ErrorEvaluationResponse',
-    'EvaluationResponse',
-    'BatchEvaluationResponse',
+    "Evaluation",
+    "AsyncEvaluation",
+    "EvaluationResponseType",
+    "EvaluationReason",
+    "ErrorEvaluationReason",
+    "EvaluationRequest",
+    "BatchEvaluationRequest",
+    "VariantEvaluationResponse",
+    "BooleanEvaluationResponse",
+    "ErrorEvaluationResponse",
+    "EvaluationResponse",
+    "BatchEvaluationResponse",
 ]
