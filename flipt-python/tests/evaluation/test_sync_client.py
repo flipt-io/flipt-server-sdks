@@ -11,17 +11,17 @@ def test_variant(sync_flipt_client):
             flag_key="flag1",
             entity_id="entity",
             context={"fizz": "buzz"},
-        )
+        ),
     )
 
     assert variant.match
-    assert variant.flag_key == 'flag1'
-    assert variant.variant_key == 'variant1'
-    assert variant.reason == 'MATCH_EVALUATION_REASON'
-    assert 'segment1' in variant.segment_keys
+    assert variant.flag_key == "flag1"
+    assert variant.variant_key == "variant1"
+    assert variant.reason == "MATCH_EVALUATION_REASON"
+    assert "segment1" in variant.segment_keys
 
 
-@pytest.mark.usefixtures('_mock_variant_response_error')
+@pytest.mark.usefixtures("_mock_variant_response_error")
 def test_evaluate_variant_error(sync_flipt_client):
     with pytest.raises(FliptApiError):
         sync_flipt_client.evaluation.variant(
@@ -30,7 +30,7 @@ def test_evaluate_variant_error(sync_flipt_client):
                 flag_key="flag1",
                 entity_id="entity",
                 context={"fizz": "buzz"},
-            )
+            ),
         )
 
 
@@ -41,15 +41,15 @@ def test_boolean(sync_flipt_client):
             flag_key="flag_boolean",
             entity_id="entity",
             context={"fizz": "buzz"},
-        )
+        ),
     )
 
     assert boolean.enabled
-    assert boolean.flag_key == 'flag_boolean'
-    assert boolean.reason == 'MATCH_EVALUATION_REASON'
+    assert boolean.flag_key == "flag_boolean"
+    assert boolean.reason == "MATCH_EVALUATION_REASON"
 
 
-@pytest.mark.usefixtures('_mock_boolean_response_error')
+@pytest.mark.usefixtures("_mock_boolean_response_error")
 def test_evaluate_boolean_error(sync_flipt_client):
     with pytest.raises(FliptApiError):
         sync_flipt_client.evaluation.boolean(
@@ -58,7 +58,7 @@ def test_evaluate_boolean_error(sync_flipt_client):
                 flag_key="flag_boolean",
                 entity_id="entity",
                 context={"fizz": "buzz"},
-            )
+            ),
         )
 
 
@@ -84,8 +84,8 @@ def test_batch(sync_flipt_client):
                     entity_id="entity",
                     context={"fizz": "buzz"},
                 ),
-            ]
-        )
+            ],
+        ),
     )
 
     assert len(batch.responses) == 3
@@ -98,10 +98,10 @@ def test_batch(sync_flipt_client):
     assert variant.flag_key == "flag1"
     assert variant.variant_key == "variant1"
     assert variant.reason == "MATCH_EVALUATION_REASON"
-    assert 'segment1' in variant.segment_keys
+    assert "segment1" in variant.segment_keys
 
     # Boolean
-    assert batch.responses[1].type == 'BOOLEAN_EVALUATION_RESPONSE_TYPE'
+    assert batch.responses[1].type == "BOOLEAN_EVALUATION_RESPONSE_TYPE"
 
     boolean = batch.responses[1].boolean_response
     assert boolean.enabled
@@ -109,7 +109,7 @@ def test_batch(sync_flipt_client):
     assert boolean.reason == "MATCH_EVALUATION_REASON"
 
     # Error
-    assert batch.responses[2].type == 'ERROR_EVALUATION_RESPONSE_TYPE'
+    assert batch.responses[2].type == "ERROR_EVALUATION_RESPONSE_TYPE"
 
     error = batch.responses[2].error_response
     assert error.flag_key == "notfound"
@@ -117,7 +117,7 @@ def test_batch(sync_flipt_client):
     assert error.reason == "NOT_FOUND_ERROR_EVALUATION_REASON"
 
 
-@pytest.mark.usefixtures('_mock_batch_response_error')
+@pytest.mark.usefixtures("_mock_batch_response_error")
 def test_evaluate_batch_error(sync_flipt_client):
     with pytest.raises(FliptApiError):
         sync_flipt_client.evaluation.batch(
@@ -141,6 +141,6 @@ def test_evaluate_batch_error(sync_flipt_client):
                         entity_id="entity",
                         context={"fizz": "buzz"},
                     ),
-                ]
-            )
+                ],
+            ),
         )

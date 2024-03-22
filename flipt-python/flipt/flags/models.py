@@ -1,26 +1,37 @@
 from datetime import datetime
-from enum import Enum
-from typing import Any
+from enum import StrEnum
 
 from flipt.models import CamelAliasModel, PaginatedResponse
 
 
-class FlagType(str, Enum):
+class FlagType(StrEnum):
     variant = "VARIANT_FLAG_TYPE"
     boolean = "BOOLEAN_FLAG_TYPE"
 
 
-class Flag(CamelAliasModel):
-    created_at: datetime
+class Variant(CamelAliasModel):
+    attachment: str
     description: str
-    enabled: bool
+    flag_key: str
+    id: str
     key: str
     name: str
-    namespacekey: str | None = None
+    namespace_key: str
+    created_at: datetime
+    updated_at: datetime
+
+
+class Flag(CamelAliasModel):
+    key: str
+    name: str
+    description: str
+    enabled: bool
+    namespace_key: str
     type: FlagType
-    updatedAt: datetime
-    variants: list[Any]
+    created_at: datetime
+    updated_at: datetime
+    variants: list[Variant]
 
 
-class ListFlagsResponse(CamelAliasModel, PaginatedResponse):
+class ListFlagsResponse(PaginatedResponse):
     flags: list[Flag]

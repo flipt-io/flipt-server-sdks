@@ -2,8 +2,9 @@ from http import HTTPStatus
 
 import httpx
 
-from ..authentication import AuthenticationStrategy
-from ..exceptions import FliptApiError
+from flipt.authentication import AuthenticationStrategy
+from flipt.exceptions import FliptApiError
+
 from .models import (
     BatchEvaluationRequest,
     BatchEvaluationResponse,
@@ -31,6 +32,12 @@ class Evaluation:
     def close(self) -> None:
         self._client.close()
 
+    def _raise_on_error(self, response: httpx.Response) -> None:
+        if response.status_code != 200:
+            body = response.json()
+            message = body.get("message", HTTPStatus(response.status_code).description)
+            raise FliptApiError(message, response.status_code)
+
     def variant(self, request: EvaluationRequest) -> VariantEvaluationResponse:
         response = self._client.post(
             f"{self.url}/evaluate/v1/variant",
@@ -38,11 +45,7 @@ class Evaluation:
             json=request.model_dump(),
         )
 
-        if response.status_code != 200:
-            body = response.json()
-            message = body.get("message", HTTPStatus(response.status_code).description)
-            raise FliptApiError(message, response.status_code)
-
+        self._raise_on_error(response)
         return VariantEvaluationResponse.model_validate_json(response.text)
 
     def boolean(self, request: EvaluationRequest) -> BooleanEvaluationResponse:
@@ -52,11 +55,7 @@ class Evaluation:
             json=request.model_dump(),
         )
 
-        if response.status_code != 200:
-            body = response.json()
-            message = body.get("message", HTTPStatus(response.status_code).description)
-            raise FliptApiError(message, response.status_code)
-
+        self._raise_on_error(response)
         return BooleanEvaluationResponse.model_validate_json(response.text)
 
     def batch(self, request: BatchEvaluationRequest) -> BatchEvaluationResponse:
@@ -66,9 +65,5 @@ class Evaluation:
             json=request.model_dump(),
         )
 
-        if response.status_code != 200:
-            body = response.json()
-            message = body.get("message", HTTPStatus(response.status_code).description)
-            raise FliptApiError(message, response.status_code)
-
+        self._raise_on_error(response)
         return BatchEvaluationResponse.model_validate_json(response.text)
