@@ -102,14 +102,14 @@ func getTestDependencies(ctx context.Context, client *dagger.Client, dir *dagger
 // pythonTests runs the python integration test suite against a container running Flipt.
 func pythonTests(ctx context.Context, client *dagger.Client, flipt *dagger.Container, hostDirectory *dagger.Directory) error {
 	_, err := client.Container().From("python:3.11-bookworm").
-		WithExec([]string{"pip", "install", "poetry==1.7.0"}).
+		WithExec([]string{"pip", "install", "poetry==1.7.1"}).
 		WithWorkdir("/src").
 		WithDirectory("/src", hostDirectory.Directory("flipt-python")).
 		WithServiceBinding("flipt", flipt.WithExec(nil).AsService()).
 		WithEnvVariable("FLIPT_URL", "http://flipt:8080").
 		WithEnvVariable("FLIPT_AUTH_TOKEN", "secret").
 		WithExec([]string{"poetry", "install"}).
-		WithExec([]string{"poetry", "run", "test"}).
+		WithExec([]string{"make", "test"}).
 		Sync(ctx)
 
 	return err
