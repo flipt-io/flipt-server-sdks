@@ -9,13 +9,16 @@ class CamelAliasModel(BaseModel):
     )
 
 
-class ListParameters(BaseModel):
-    limit: int | None = None
-    offset: int | None = None
-    pageToken: str | None = None
+class CommonParameters(CamelAliasModel):
     reference: str | None = None
 
 
-class PaginatedResponse(BaseModel):
-    nextPageToken: str
-    totalCount: int
+class ListParameters(CommonParameters):
+    limit: int | None = None
+    offset: int | None = None
+    page_token: str | None = None
+
+
+class PaginatedResponse(CamelAliasModel):
+    next_page_token: str
+    total_count: int
