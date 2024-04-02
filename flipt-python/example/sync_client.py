@@ -38,6 +38,12 @@ batch = flipt_client.evaluation.batch(
     )
 )
 
+# Connecting to a remote server
+from flipt.authentication import BasicAuthentication
+flipt_client = FliptClient(
+    url = "https://remote-flipt-server.com",
+    authentication=BasicAuthentication(username="admin", password="admin"))
+
 print(variant_flag)
 print(boolean_flag)
 print(batch)

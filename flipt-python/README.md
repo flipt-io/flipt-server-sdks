@@ -36,7 +36,7 @@ variant_flag = flipt_client.evaluation.variant(
 print(variant_flag)
 ```
 
-There is a more detailed example in the [examples](./examples) directory.
+There is a more detailed example in the [example](./example) directory.
 
 
 ## For developers
