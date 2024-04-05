@@ -38,7 +38,6 @@ final class FliptClient
     }
 
 
-
     /**
      * Returns the variant evaluation result
      */
