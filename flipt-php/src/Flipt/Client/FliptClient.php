@@ -90,7 +90,7 @@ final class FliptClient
             'entityId' => isset($entityId) ? $entityId : $this->entityId,
             'flagKey' => $name,
             'namespaceKey' => $this->namespace,
-            'reference' => $this->reference,
+            'reference' => $reference,
         ];
     }
 
