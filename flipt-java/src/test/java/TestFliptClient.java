@@ -7,124 +7,133 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class TestFliptClient {
-  @Test
-  void testVariantEvaluation() {
-    String fliptURL = System.getenv().get("FLIPT_URL");
-    String authToken = System.getenv().get("FLIPT_AUTH_TOKEN");
+    @Test
+    void testVariantEvaluation() {
+        String fliptURL = System.getenv().get("FLIPT_URL");
+        String authToken = System.getenv().get("FLIPT_AUTH_TOKEN");
 
-    assert fliptURL != null && !fliptURL.isEmpty();
-    assert authToken != null && !authToken.isEmpty();
+        assert fliptURL != null && !fliptURL.isEmpty();
+        assert authToken != null && !authToken.isEmpty();
 
-    AuthenticationStrategy authenticationStrategy =
-        new ClientTokenAuthenticationStrategy(authToken);
+        AuthenticationStrategy authenticationStrategy = new ClientTokenAuthenticationStrategy(authToken);
 
-    FliptClient fc =
-        FliptClient.builder().url(fliptURL).authentication(authenticationStrategy).build();
+        Map<String, String> headers = Map.of("Accept", "application/json");
 
-    Map<String, String> context = new HashMap<>();
-    context.put("fizz", "buzz");
-    VariantEvaluationResponse variant =
-        fc.evaluation()
-            .evaluateVariant(
-                new EvaluationRequest("default", "flag1", "entity", context, Optional.empty()));
+        FliptClient fc = FliptClient.builder()
+                .url(fliptURL)
+                .authentication(authenticationStrategy)
+                .headers(headers)
+                .build();
 
-    Assertions.assertTrue(variant.isMatch());
-    Assertions.assertEquals("flag1", variant.getFlagKey());
-    Assertions.assertEquals("MATCH_EVALUATION_REASON", variant.getReason().toString());
-    Assertions.assertEquals("variant1", variant.getVariantKey());
-    Assertions.assertEquals("segment1", variant.getSegmentKeys().get(0));
-  }
+        Map<String, String> context = new HashMap<>();
+        context.put("fizz", "buzz");
+        VariantEvaluationResponse variant = fc.evaluation()
+                .evaluateVariant(
+                        new EvaluationRequest("default", "flag1", "entity", context, Optional.empty()));
 
-  @Test
-  void testBooleanEvaluation() {
-    String fliptURL = System.getenv().get("FLIPT_URL");
-    String authToken = System.getenv().get("FLIPT_AUTH_TOKEN");
+        Assertions.assertTrue(variant.isMatch());
+        Assertions.assertEquals("flag1", variant.getFlagKey());
+        Assertions.assertEquals("MATCH_EVALUATION_REASON", variant.getReason().toString());
+        Assertions.assertEquals("variant1", variant.getVariantKey());
+        Assertions.assertEquals("segment1", variant.getSegmentKeys().get(0));
+    }
 
-    assert fliptURL != null && !fliptURL.isEmpty();
-    assert authToken != null && !authToken.isEmpty();
+    @Test
+    void testBooleanEvaluation() {
+        String fliptURL = System.getenv().get("FLIPT_URL");
+        String authToken = System.getenv().get("FLIPT_AUTH_TOKEN");
 
-    AuthenticationStrategy authenticationStrategy =
-        new ClientTokenAuthenticationStrategy(authToken);
+        assert fliptURL != null && !fliptURL.isEmpty();
+        assert authToken != null && !authToken.isEmpty();
 
-    FliptClient fc =
-        FliptClient.builder().url(fliptURL).authentication(authenticationStrategy).build();
+        AuthenticationStrategy authenticationStrategy = new ClientTokenAuthenticationStrategy(authToken);
 
-    Map<String, String> context = new HashMap<>();
-    context.put("fizz", "buzz");
+        Map<String, String> headers = Map.of("Accept", "application/json");
 
-    BooleanEvaluationResponse booleanEvaluation =
-        fc.evaluation()
-            .evaluateBoolean(
-                new EvaluationRequest(
-                    "default", "flag_boolean", "entity", context, Optional.empty()));
+        FliptClient fc = FliptClient.builder()
+                .url(fliptURL)
+                .authentication(authenticationStrategy)
+                .headers(headers)
+                .build();
 
-    Assertions.assertTrue(booleanEvaluation.isEnabled());
-    Assertions.assertEquals("flag_boolean", booleanEvaluation.getFlagKey());
-    Assertions.assertEquals("MATCH_EVALUATION_REASON", booleanEvaluation.getReason().toString());
-  }
+        Map<String, String> context = new HashMap<>();
+        context.put("fizz", "buzz");
 
-  @Test
-  void testBatchEvaluation() {
-    String fliptURL = System.getenv().get("FLIPT_URL");
-    String authToken = System.getenv().get("FLIPT_AUTH_TOKEN");
+        BooleanEvaluationResponse booleanEvaluation = fc.evaluation()
+                .evaluateBoolean(
+                        new EvaluationRequest(
+                                "default", "flag_boolean", "entity", context, Optional.empty()));
 
-    assert fliptURL != null && !fliptURL.isEmpty();
-    assert authToken != null && !authToken.isEmpty();
+        Assertions.assertTrue(booleanEvaluation.isEnabled());
+        Assertions.assertEquals("flag_boolean", booleanEvaluation.getFlagKey());
+        Assertions.assertEquals("MATCH_EVALUATION_REASON", booleanEvaluation.getReason().toString());
+    }
 
-    AuthenticationStrategy authenticationStrategy =
-        new ClientTokenAuthenticationStrategy(authToken);
+    @Test
+    void testBatchEvaluation() {
+        String fliptURL = System.getenv().get("FLIPT_URL");
+        String authToken = System.getenv().get("FLIPT_AUTH_TOKEN");
 
-    FliptClient fc =
-        FliptClient.builder().url(fliptURL).authentication(authenticationStrategy).build();
+        assert fliptURL != null && !fliptURL.isEmpty();
+        assert authToken != null && !authToken.isEmpty();
 
-    Map<String, String> context = new HashMap<>();
-    context.put("fizz", "buzz");
+        AuthenticationStrategy authenticationStrategy = new ClientTokenAuthenticationStrategy(authToken);
 
-    EvaluationRequest variantEvaluationRequest =
-        new EvaluationRequest("default", "flag1", "entity", context, Optional.empty());
-    EvaluationRequest booleanEvaluationRequest =
-        new EvaluationRequest("default", "flag_boolean", "entity", context, Optional.empty());
-    EvaluationRequest errorEvaluationRequest =
-        new EvaluationRequest("default", "flag1234", "entity", new HashMap<>(), Optional.empty());
+        Map<String, String> headers = Map.of("Accept", "application/json");
 
-    List<EvaluationRequest> evaluationRequests = new ArrayList<>();
-    evaluationRequests.add(variantEvaluationRequest);
-    evaluationRequests.add(booleanEvaluationRequest);
-    evaluationRequests.add(errorEvaluationRequest);
+        FliptClient fc = FliptClient.builder()
+                .url(fliptURL)
+                .authentication(authenticationStrategy)
+                .headers(headers)
+                .build();
 
-    BatchEvaluationResponse batch =
-        fc.evaluation()
-            .evaluateBatch(
-                new BatchEvaluationRequest(Optional.of(""), evaluationRequests, Optional.empty()));
+        Map<String, String> context = new HashMap<>();
+        context.put("fizz", "buzz");
 
-    // Variant
-    EvaluationResponse first = batch.getResponses().get(0);
-    Assertions.assertEquals("VARIANT_EVALUATION_RESPONSE_TYPE", first.getType().toString());
+        EvaluationRequest variantEvaluationRequest = new EvaluationRequest("default", "flag1", "entity", context,
+                Optional.empty());
+        EvaluationRequest booleanEvaluationRequest = new EvaluationRequest("default", "flag_boolean", "entity", context,
+                Optional.empty());
+        EvaluationRequest errorEvaluationRequest = new EvaluationRequest("default", "flag1234", "entity",
+                new HashMap<>(), Optional.empty());
 
-    VariantEvaluationResponse variant = first.getVariantResponse().get();
-    Assertions.assertTrue(variant.isMatch());
-    Assertions.assertEquals("flag1", variant.getFlagKey());
-    Assertions.assertEquals("MATCH_EVALUATION_REASON", variant.getReason().toString());
-    Assertions.assertEquals("variant1", variant.getVariantKey());
-    Assertions.assertEquals("segment1", variant.getSegmentKeys().get(0));
+        List<EvaluationRequest> evaluationRequests = new ArrayList<>();
+        evaluationRequests.add(variantEvaluationRequest);
+        evaluationRequests.add(booleanEvaluationRequest);
+        evaluationRequests.add(errorEvaluationRequest);
 
-    // Boolean
-    EvaluationResponse second = batch.getResponses().get(1);
-    Assertions.assertEquals("BOOLEAN_EVALUATION_RESPONSE_TYPE", second.getType().toString());
+        BatchEvaluationResponse batch = fc.evaluation()
+                .evaluateBatch(
+                        new BatchEvaluationRequest(Optional.of(""), evaluationRequests, Optional.empty()));
 
-    BooleanEvaluationResponse booleanEvaluation = second.getBooleanResponse().get();
-    Assertions.assertTrue(booleanEvaluation.isEnabled());
-    Assertions.assertEquals("flag_boolean", booleanEvaluation.getFlagKey());
-    Assertions.assertEquals("MATCH_EVALUATION_REASON", booleanEvaluation.getReason().toString());
+        // Variant
+        EvaluationResponse first = batch.getResponses().get(0);
+        Assertions.assertEquals("VARIANT_EVALUATION_RESPONSE_TYPE", first.getType().toString());
 
-    // Error
-    EvaluationResponse third = batch.getResponses().get(2);
-    Assertions.assertEquals("ERROR_EVALUATION_RESPONSE_TYPE", third.getType().toString());
+        VariantEvaluationResponse variant = first.getVariantResponse().get();
+        Assertions.assertTrue(variant.isMatch());
+        Assertions.assertEquals("flag1", variant.getFlagKey());
+        Assertions.assertEquals("MATCH_EVALUATION_REASON", variant.getReason().toString());
+        Assertions.assertEquals("variant1", variant.getVariantKey());
+        Assertions.assertEquals("segment1", variant.getSegmentKeys().get(0));
 
-    ErrorEvaluationResponse errorEvaluation = third.getErrorResponse().get();
-    Assertions.assertEquals("flag1234", errorEvaluation.getFlagKey());
-    Assertions.assertEquals("default", errorEvaluation.getNamespaceKey());
-    Assertions.assertEquals(
-        "NOT_FOUND_ERROR_EVALUATION_REASON", errorEvaluation.getReason().toString());
-  }
+        // Boolean
+        EvaluationResponse second = batch.getResponses().get(1);
+        Assertions.assertEquals("BOOLEAN_EVALUATION_RESPONSE_TYPE", second.getType().toString());
+
+        BooleanEvaluationResponse booleanEvaluation = second.getBooleanResponse().get();
+        Assertions.assertTrue(booleanEvaluation.isEnabled());
+        Assertions.assertEquals("flag_boolean", booleanEvaluation.getFlagKey());
+        Assertions.assertEquals("MATCH_EVALUATION_REASON", booleanEvaluation.getReason().toString());
+
+        // Error
+        EvaluationResponse third = batch.getResponses().get(2);
+        Assertions.assertEquals("ERROR_EVALUATION_RESPONSE_TYPE", third.getType().toString());
+
+        ErrorEvaluationResponse errorEvaluation = third.getErrorResponse().get();
+        Assertions.assertEquals("flag1234", errorEvaluation.getFlagKey());
+        Assertions.assertEquals("default", errorEvaluation.getNamespaceKey());
+        Assertions.assertEquals(
+                "NOT_FOUND_ERROR_EVALUATION_REASON", errorEvaluation.getReason().toString());
+    }
 }

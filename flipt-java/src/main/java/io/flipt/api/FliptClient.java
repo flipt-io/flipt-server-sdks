@@ -3,15 +3,18 @@ package io.flipt.api;
 import io.flipt.api.authentication.AuthenticationStrategy;
 import io.flipt.api.evaluation.Evaluation;
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
+
 import okhttp3.OkHttpClient;
 
 public class FliptClient {
   private final Evaluation evaluation;
 
-  private FliptClient(String url, int timeout, AuthenticationStrategy authenticationStrategy) {
-    OkHttpClient httpClient =
-        new OkHttpClient.Builder().callTimeout(Duration.ofSeconds(timeout)).build();
-    this.evaluation = new Evaluation(httpClient, url, authenticationStrategy);
+  private FliptClient(String url, Duration timeout, AuthenticationStrategy authenticationStrategy,
+      Map<String, String> headers) {
+    OkHttpClient httpClient = new OkHttpClient.Builder().callTimeout(timeout).build();
+    this.evaluation = new Evaluation(httpClient, url, authenticationStrategy, headers);
   }
 
   public Evaluation evaluation() {
@@ -27,9 +30,12 @@ public class FliptClient {
 
     private AuthenticationStrategy authenticationStrategy;
 
-    private int timeout = 60;
+    private Map<String, String> headers = new HashMap<>();
 
-    public FliptClientBuilder() {}
+    private Duration timeout = Duration.ofSeconds(60);
+
+    public FliptClientBuilder() {
+    }
 
     public FliptClientBuilder url(String url) {
       this.baseURL = url;
@@ -41,13 +47,23 @@ public class FliptClient {
       return this;
     }
 
-    public FliptClientBuilder timeout(int timeout) {
+    public FliptClientBuilder headers(Map<String, String> headers) {
+      this.headers = headers;
+      return this;
+    }
+
+    public FliptClientBuilder timeout(Duration timeout) {
       this.timeout = timeout;
       return this;
     }
 
+    public FliptClientBuilder timeout(int timeout) {
+      this.timeout = Duration.ofSeconds(timeout);
+      return this;
+    }
+
     public FliptClient build() {
-      return new FliptClient(baseURL, timeout, authenticationStrategy);
+      return new FliptClient(baseURL, timeout, authenticationStrategy, headers);
     }
   }
 }

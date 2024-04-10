@@ -14,8 +14,8 @@ import (
 )
 
 var (
-	languages    string
-	languageToFn = map[string]integrationTestFn{
+	sdks    string
+	sdkToFn = map[string]integrationTestFn{
 		"python": pythonTests,
 		"node":   nodeTests,
 		"rust":   rustTests,
@@ -27,7 +27,7 @@ var (
 type integrationTestFn func(context.Context, *dagger.Client, *dagger.Container, *dagger.Directory) error
 
 func init() {
-	flag.StringVar(&languages, "languages", "", "comma separated list of which language(s) to run integration tests for")
+	flag.StringVar(&sdks, "sdks", "", "comma separated list of which sdk(s) to run integration tests for")
 }
 
 func main() {
@@ -39,19 +39,19 @@ func main() {
 }
 
 func run() error {
-	var tests = make(map[string]integrationTestFn, len(languageToFn))
+	var tests = make(map[string]integrationTestFn, len(sdkToFn))
 
-	maps.Copy(tests, languageToFn)
+	maps.Copy(tests, sdkToFn)
 
-	if languages != "" {
-		l := strings.Split(languages, ",")
+	if sdks != "" {
+		l := strings.Split(sdks, ",")
 		subset := make(map[string]integrationTestFn, len(l))
-		for _, language := range l {
-			testFn, ok := languageToFn[language]
+		for _, sdk := range l {
+			testFn, ok := sdkToFn[sdk]
 			if !ok {
-				return fmt.Errorf("language %s is not supported", language)
+				return fmt.Errorf("sdk %s is not supported", sdk)
 			}
-			subset[language] = testFn
+			subset[sdk] = testFn
 		}
 
 		tests = subset
@@ -81,7 +81,7 @@ func run() error {
 	return g.Wait()
 }
 
-func getTestDependencies(ctx context.Context, client *dagger.Client, dir *dagger.Directory) (*dagger.Container, *dagger.Directory) {
+func getTestDependencies(_ context.Context, client *dagger.Client, dir *dagger.Directory) (*dagger.Container, *dagger.Directory) {
 	// Flipt
 	flipt := client.Container().From("flipt/flipt:latest").
 		WithUser("root").
@@ -122,7 +122,7 @@ func nodeTests(ctx context.Context, client *dagger.Client, flipt *dagger.Contain
 		// The node_modules should never be version controlled, but we will exclude it here
 		// just to be safe.
 		WithDirectory("/src", hostDirectory.Directory("flipt-node"), dagger.ContainerWithDirectoryOpts{
-			Exclude: []string{"./node_modules/"},
+			Exclude: []string{".node_modules/"},
 		}).
 		WithServiceBinding("flipt", flipt.WithExec(nil).AsService()).
 		WithEnvVariable("FLIPT_URL", "http://flipt:8080").
