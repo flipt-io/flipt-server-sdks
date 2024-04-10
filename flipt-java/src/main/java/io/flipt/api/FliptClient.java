@@ -10,13 +10,15 @@ import okhttp3.OkHttpClient;
 public class FliptClient {
   private final Evaluation evaluation;
 
-  private FliptClient(
-      String url,
-      Duration timeout,
-      AuthenticationStrategy authenticationStrategy,
-      Map<String, String> headers) {
-    OkHttpClient httpClient = new OkHttpClient.Builder().callTimeout(timeout).build();
-    this.evaluation = new Evaluation(httpClient, url, authenticationStrategy, headers);
+  private FliptClient(FliptClientBuilder builder) {
+    final OkHttpClient httpClient = new OkHttpClient.Builder().callTimeout(builder.timeout).build();
+    this.evaluation =
+        Evaluation.builder()
+            .httpClient(httpClient)
+            .baseURL(builder.baseURL)
+            .authenticationStrategy(builder.authenticationStrategy)
+            .headers(builder.headers)
+            .build();
   }
 
   public Evaluation evaluation() {
@@ -36,7 +38,7 @@ public class FliptClient {
 
     private Duration timeout = Duration.ofSeconds(60);
 
-    public FliptClientBuilder() {}
+    private FliptClientBuilder() {}
 
     public FliptClientBuilder url(String url) {
       this.baseURL = url;
@@ -64,7 +66,7 @@ public class FliptClient {
     }
 
     public FliptClient build() {
-      return new FliptClient(baseURL, timeout, authenticationStrategy, headers);
+      return new FliptClient(this);
     }
   }
 }

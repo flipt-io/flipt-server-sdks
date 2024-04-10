@@ -20,20 +20,53 @@ public class Evaluation {
   private final Map<String, String> headers;
   private final ObjectMapper objectMapper;
 
-  public Evaluation(
-      OkHttpClient httpClient,
-      String baseURL,
-      AuthenticationStrategy authenticationStrategy,
-      Map<String, String> headers) {
-    this.httpClient = httpClient;
-    this.baseURL = baseURL;
-    this.authenticationStrategy = authenticationStrategy;
-    this.headers = headers;
+  private Evaluation(EvaluationBuilder builder) {
+    this.httpClient = builder.httpClient;
+    this.baseURL = builder.baseURL;
+    this.authenticationStrategy = builder.authenticationStrategy;
+    this.headers = builder.headers;
     this.objectMapper =
         JsonMapper.builder()
             .addModule(new Jdk8Module())
             .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
             .build();
+  }
+
+  public static EvaluationBuilder builder() {
+    return new EvaluationBuilder();
+  }
+
+  public static class EvaluationBuilder {
+    private OkHttpClient httpClient;
+    private String baseURL;
+    private AuthenticationStrategy authenticationStrategy;
+    private Map<String, String> headers;
+
+    private EvaluationBuilder() {}
+
+    public EvaluationBuilder httpClient(OkHttpClient httpClient) {
+      this.httpClient = httpClient;
+      return this;
+    }
+
+    public EvaluationBuilder baseURL(String baseURL) {
+      this.baseURL = baseURL;
+      return this;
+    }
+
+    public EvaluationBuilder authenticationStrategy(AuthenticationStrategy authenticationStrategy) {
+      this.authenticationStrategy = authenticationStrategy;
+      return this;
+    }
+
+    public EvaluationBuilder headers(Map<String, String> headers) {
+      this.headers = headers;
+      return this;
+    }
+
+    public Evaluation build() {
+      return new Evaluation(this);
+    }
   }
 
   @SuppressWarnings("resource")
