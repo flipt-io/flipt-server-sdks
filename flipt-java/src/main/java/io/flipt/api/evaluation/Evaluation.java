@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
-
 import okhttp3.*;
 
 public class Evaluation {
@@ -22,16 +21,19 @@ public class Evaluation {
   private final ObjectMapper objectMapper;
 
   public Evaluation(
-      OkHttpClient httpClient, String baseURL, AuthenticationStrategy authenticationStrategy,
+      OkHttpClient httpClient,
+      String baseURL,
+      AuthenticationStrategy authenticationStrategy,
       Map<String, String> headers) {
     this.httpClient = httpClient;
     this.baseURL = baseURL;
     this.authenticationStrategy = authenticationStrategy;
     this.headers = headers;
-    this.objectMapper = JsonMapper.builder()
-        .addModule(new Jdk8Module())
-        .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-        .build();
+    this.objectMapper =
+        JsonMapper.builder()
+            .addModule(new Jdk8Module())
+            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            .build();
   }
 
   @SuppressWarnings("resource")
@@ -102,8 +104,9 @@ public class Evaluation {
     RequestBody body;
 
     try {
-      body = RequestBody.create(
-          this.objectMapper.writeValueAsString(request), MediaType.parse("application/json"));
+      body =
+          RequestBody.create(
+              this.objectMapper.writeValueAsString(request), MediaType.parse("application/json"));
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -149,8 +152,9 @@ public class Evaluation {
     RequestBody body;
 
     try {
-      body = RequestBody.create(
-          this.objectMapper.writeValueAsString(request), MediaType.parse("application/json"));
+      body =
+          RequestBody.create(
+              this.objectMapper.writeValueAsString(request), MediaType.parse("application/json"));
     } catch (Exception e) {
       throw new RuntimeException(e);
     }

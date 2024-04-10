@@ -5,13 +5,15 @@ import io.flipt.api.evaluation.Evaluation;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
-
 import okhttp3.OkHttpClient;
 
 public class FliptClient {
   private final Evaluation evaluation;
 
-  private FliptClient(String url, Duration timeout, AuthenticationStrategy authenticationStrategy,
+  private FliptClient(
+      String url,
+      Duration timeout,
+      AuthenticationStrategy authenticationStrategy,
       Map<String, String> headers) {
     OkHttpClient httpClient = new OkHttpClient.Builder().callTimeout(timeout).build();
     this.evaluation = new Evaluation(httpClient, url, authenticationStrategy, headers);
@@ -34,8 +36,7 @@ public class FliptClient {
 
     private Duration timeout = Duration.ofSeconds(60);
 
-    public FliptClientBuilder() {
-    }
+    public FliptClientBuilder() {}
 
     public FliptClientBuilder url(String url) {
       this.baseURL = url;
