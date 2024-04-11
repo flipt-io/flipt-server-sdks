@@ -1,11 +1,23 @@
 import asyncio
+import base64
+import os
 
 from flipt import AsyncFliptClient
 from flipt.evaluation import BatchEvaluationRequest, EvaluationRequest
 
 
 async def main():
-    flipt_client = AsyncFliptClient()
+    # Set up the headers with the basic auth credentials
+    # for example if Flipt is behind a reverse proxy
+
+    headers = {}
+    username = os.getenv("FLIPT_USERNAME") or "admin"
+    password = os.getenv("FLIPT_PASSWORD") or "admin"
+
+    b64_creds = base64.b64encode(f"{username}:{password}".encode("utf-8")).decode("utf-8")
+    headers["Authorization"] = f"Basic {b64_creds}')"
+
+    flipt_client = AsyncFliptClient(headers=headers)
 
     variant_flag = await flipt_client.evaluation.variant(
         EvaluationRequest(

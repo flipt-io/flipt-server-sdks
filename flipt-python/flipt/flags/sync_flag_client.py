@@ -13,11 +13,12 @@ class SyncFlag:
     def __init__(
         self,
         url: str,
+        headers: dict[str, str] = {},
         authentication: AuthenticationStrategy | None = None,
         httpx_client: httpx.Client | None = None,
     ):
         self.url = url
-        self.headers: dict[str, str] = {}
+        self.headers = headers
 
         self._client = httpx_client or httpx.Client()
 
