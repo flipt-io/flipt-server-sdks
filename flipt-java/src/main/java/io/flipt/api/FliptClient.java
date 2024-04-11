@@ -5,7 +5,6 @@ import io.flipt.api.evaluation.Evaluation;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import okhttp3.OkHttpClient;
 
 public class FliptClient {
@@ -19,7 +18,6 @@ public class FliptClient {
             .baseURL(builder.baseURL)
             .authenticationStrategy(builder.authenticationStrategy)
             .headers(builder.headers)
-            .reference(builder.reference)
             .build();
   }
 
@@ -37,7 +35,6 @@ public class FliptClient {
     private AuthenticationStrategy authenticationStrategy;
     private Map<String, String> headers = new HashMap<>();
     private Duration timeout = Duration.ofSeconds(60);
-    private Optional<String> reference = Optional.empty();
 
     private FliptClientBuilder() {}
 
@@ -63,11 +60,6 @@ public class FliptClient {
 
     public FliptClientBuilder timeout(int timeout) {
       this.timeout = Duration.ofSeconds(timeout);
-      return this;
-    }
-
-    public FliptClientBuilder reference(String reference) {
-      this.reference = Optional.of(reference);
       return this;
     }
 

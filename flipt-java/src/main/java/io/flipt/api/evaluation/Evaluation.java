@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
-import java.util.Optional;
 import okhttp3.*;
 
 public class Evaluation {
@@ -20,14 +19,12 @@ public class Evaluation {
   private final AuthenticationStrategy authenticationStrategy;
   private final Map<String, String> headers;
   private final ObjectMapper objectMapper;
-  private final Optional<String> reference;
 
   private Evaluation(EvaluationBuilder builder) {
     this.httpClient = builder.httpClient;
     this.baseURL = builder.baseURL;
     this.authenticationStrategy = builder.authenticationStrategy;
     this.headers = builder.headers;
-    this.reference = builder.reference;
     this.objectMapper =
         JsonMapper.builder()
             .addModule(new Jdk8Module())
@@ -44,7 +41,6 @@ public class Evaluation {
     private String baseURL;
     private AuthenticationStrategy authenticationStrategy;
     private Map<String, String> headers;
-    private Optional<String> reference = Optional.empty();
 
     private EvaluationBuilder() {}
 
@@ -68,11 +64,6 @@ public class Evaluation {
       return this;
     }
 
-    public EvaluationBuilder reference(Optional<String> reference) {
-      this.reference = reference;
-      return this;
-    }
-
     public Evaluation build() {
       return new Evaluation(this);
     }
@@ -82,10 +73,7 @@ public class Evaluation {
   public VariantEvaluationResponse evaluateVariant(EvaluationRequest request) {
     URL url;
 
-    String path = "/evaluate/v1/variant";
-    if (this.reference.isPresent()) {
-      path = String.format("%s?reference=%s", path, this.reference.get());
-    }
+    final String path = "/evaluate/v1/variant";
 
     try {
       url = new URL(String.format("%s%s", this.baseURL, path));
@@ -119,10 +107,7 @@ public class Evaluation {
   public BooleanEvaluationResponse evaluateBoolean(EvaluationRequest request) {
     URL url;
 
-    String path = "/evaluate/v1/boolean";
-    if (this.reference.isPresent()) {
-      path = String.format("%s?reference=%s", path, this.reference.get());
-    }
+    final String path = "/evaluate/v1/boolean";
 
     try {
       url = new URL(String.format("%s%s", this.baseURL, path));
@@ -165,10 +150,7 @@ public class Evaluation {
 
     URL url;
 
-    String path = "/evaluate/v1/batch";
-    if (this.reference.isPresent()) {
-      path = String.format("%s?reference=%s", path, this.reference.get());
-    }
+    final String path = "/evaluate/v1/batch";
 
     try {
       url = new URL(String.format("%s%s", this.baseURL, path));
