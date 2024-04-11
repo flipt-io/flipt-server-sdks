@@ -3,7 +3,7 @@ use flipt::evaluation::models::{
     BatchEvaluationRequest, ErrorEvaluationReason, EvaluationReason, EvaluationRequest,
     EvaluationResponseType,
 };
-use flipt::{ClientTokenAuthentication, Config};
+use flipt::{ClientTokenAuthentication, ConfigBuilder};
 use std::{collections::HashMap, env};
 use url::Url;
 
@@ -12,12 +12,13 @@ async fn tests() {
     let url = env::var("FLIPT_URL").unwrap();
     let token = env::var("FLIPT_AUTH_TOKEN").unwrap();
 
-    let flipt_client = FliptClient::new(Config::new(
-        Url::parse(&url).unwrap(),
-        ClientTokenAuthentication::new(token),
-        60,
-    ))
-    .unwrap();
+    let config = ConfigBuilder::default()
+        .with_endpoint(Url::parse(&url).unwrap())
+        .with_auth_strategy(ClientTokenAuthentication::new(token))
+        .with_timeout(60)
+        .build();
+
+    let flipt_client = FliptClient::new(config).unwrap();
 
     let mut context: HashMap<String, String> = HashMap::new();
     context.insert("fizz".into(), "buzz".into());

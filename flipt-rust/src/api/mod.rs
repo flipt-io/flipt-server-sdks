@@ -1,6 +1,6 @@
 use crate::error::ClientError;
 use crate::evaluation::Evaluation;
-use crate::{AuthenticationStrategy, Config, NoneAuthentication};
+use crate::{AuthenticationStrategy, Config, ConfigBuilder, NoneAuthentication};
 use std::time::Duration;
 
 pub struct FliptClient {
@@ -12,7 +12,12 @@ impl FliptClient {
     where
         T: AuthenticationStrategy,
     {
-        let header_map = config.auth_strategy.authenticate();
+        let mut header_map = config.headers.unwrap_or_default();
+
+        if let Some(auth_strategy) = config.auth_strategy {
+            let auth_headers = auth_strategy.authenticate();
+            header_map.extend(auth_headers);
+        }
 
         let client = match reqwest::Client::builder()
             .timeout(Duration::from_secs(config.timeout))
@@ -26,13 +31,14 @@ impl FliptClient {
         };
 
         Ok(Self {
-            evaluation: Evaluation::new(client, config.endpoint),
+            evaluation: Evaluation::new(client, config.endpoint, config.reference),
         })
     }
 }
 
 impl Default for FliptClient {
     fn default() -> Self {
-        Self::new::<NoneAuthentication>(Config::default()).unwrap()
+        Self::new::<NoneAuthentication>(ConfigBuilder::<NoneAuthentication>::default().build())
+            .unwrap()
     }
 }

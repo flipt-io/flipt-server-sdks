@@ -12,29 +12,64 @@ where
     T: AuthenticationStrategy,
 {
     endpoint: Url,
-    auth_strategy: T,
     timeout: u64,
+    auth_strategy: Option<T>,
+    reference: Option<String>,
+    headers: Option<HeaderMap>,
 }
 
-impl Default for Config<NoneAuthentication> {
+#[derive(Debug, Clone)]
+pub struct ConfigBuilder<T>
+where
+    T: AuthenticationStrategy,
+{
+    endpoint: Option<Url>,
+    auth_strategy: Option<T>,
+    timeout: Option<u64>,
+    reference: Option<String>,
+    headers: Option<HeaderMap>,
+}
+
+impl<T: AuthenticationStrategy> Default for ConfigBuilder<T> {
     fn default() -> Self {
         Self {
-            endpoint: Url::parse("http://localhost:8080").unwrap(),
-            auth_strategy: NoneAuthentication::default(),
-            timeout: 60,
+            endpoint: Url::parse("http://localhost:8080").ok(),
+            auth_strategy: None,
+            timeout: Some(60), // Default timeout is 60 seconds
+            reference: None,
+            headers: None,
         }
     }
 }
 
-impl<T> Config<T>
-where
-    T: AuthenticationStrategy,
-{
-    pub fn new(endpoint: Url, auth_strategy: T, timeout: u64) -> Self {
-        Self {
-            endpoint,
-            auth_strategy,
-            timeout,
+impl<T: AuthenticationStrategy> ConfigBuilder<T> {
+    pub fn with_endpoint(mut self, endpoint: Url) -> Self {
+        self.endpoint = Some(endpoint);
+        self
+    }
+
+    pub fn with_auth_strategy(mut self, auth_strategy: T) -> Self {
+        self.auth_strategy = Some(auth_strategy);
+        self
+    }
+
+    pub fn with_timeout(mut self, timeout: u64) -> Self {
+        self.timeout = Some(timeout);
+        self
+    }
+
+    pub fn with_reference(mut self, reference: String) -> Self {
+        self.reference = Some(reference);
+        self
+    }
+
+    pub fn build(self) -> Config<T> {
+        Config {
+            endpoint: self.endpoint.unwrap(),
+            auth_strategy: self.auth_strategy,
+            timeout: self.timeout.unwrap(),
+            reference: self.reference,
+            headers: self.headers,
         }
     }
 }
