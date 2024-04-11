@@ -4,6 +4,7 @@ use flipt::evaluation::models::{
     EvaluationResponseType,
 };
 use flipt::{ClientTokenAuthentication, ConfigBuilder};
+use std::time::Duration;
 use std::{collections::HashMap, env};
 use url::Url;
 
@@ -15,7 +16,7 @@ async fn tests() {
     let config = ConfigBuilder::default()
         .with_endpoint(Url::parse(&url).unwrap())
         .with_auth_strategy(ClientTokenAuthentication::new(token))
-        .with_timeout(60)
+        .with_timeout(Duration::from_secs(60))
         .build();
 
     let flipt_client = FliptClient::new(config).unwrap();

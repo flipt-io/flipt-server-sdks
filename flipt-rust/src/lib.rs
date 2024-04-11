@@ -4,6 +4,7 @@ pub mod evaluation;
 pub mod util;
 
 use reqwest::header::HeaderMap;
+use std::time::Duration;
 use url::Url;
 
 #[derive(Debug, Clone)]
@@ -12,7 +13,7 @@ where
     T: AuthenticationStrategy,
 {
     endpoint: Url,
-    timeout: u64,
+    timeout: Duration,
     auth_strategy: Option<T>,
     headers: Option<HeaderMap>,
 }
@@ -24,7 +25,7 @@ where
 {
     endpoint: Option<Url>,
     auth_strategy: Option<T>,
-    timeout: Option<u64>,
+    timeout: Option<Duration>,
     headers: Option<HeaderMap>,
 }
 
@@ -33,7 +34,7 @@ impl<T: AuthenticationStrategy> Default for ConfigBuilder<T> {
         Self {
             endpoint: Url::parse("http://localhost:8080").ok(),
             auth_strategy: None,
-            timeout: Some(60), // Default timeout is 60 seconds
+            timeout: Some(Duration::from_secs(60)), // Default timeout is 60 seconds
             headers: None,
         }
     }
@@ -50,7 +51,7 @@ impl<T: AuthenticationStrategy> ConfigBuilder<T> {
         self
     }
 
-    pub fn with_timeout(mut self, timeout: u64) -> Self {
+    pub fn with_timeout(mut self, timeout: Duration) -> Self {
         self.timeout = Some(timeout);
         self
     }
