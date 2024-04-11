@@ -3,7 +3,7 @@ name = "flipt"
 description = "Flipt Server SDK"
 version = "1.0.0"
 edition = "2021"
-author = ["Flipt Devs <dev@flipt.io>"]
+authors = ["Flipt Devs <dev@flipt.io>"]
 license = "MIT"
 keywords = ["flipt"]
 
