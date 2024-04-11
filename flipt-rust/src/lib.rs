@@ -14,7 +14,6 @@ where
     endpoint: Url,
     timeout: u64,
     auth_strategy: Option<T>,
-    reference: Option<String>,
     headers: Option<HeaderMap>,
 }
 
@@ -26,7 +25,6 @@ where
     endpoint: Option<Url>,
     auth_strategy: Option<T>,
     timeout: Option<u64>,
-    reference: Option<String>,
     headers: Option<HeaderMap>,
 }
 
@@ -36,7 +34,6 @@ impl<T: AuthenticationStrategy> Default for ConfigBuilder<T> {
             endpoint: Url::parse("http://localhost:8080").ok(),
             auth_strategy: None,
             timeout: Some(60), // Default timeout is 60 seconds
-            reference: None,
             headers: None,
         }
     }
@@ -58,17 +55,11 @@ impl<T: AuthenticationStrategy> ConfigBuilder<T> {
         self
     }
 
-    pub fn with_reference(mut self, reference: String) -> Self {
-        self.reference = Some(reference);
-        self
-    }
-
     pub fn build(self) -> Config<T> {
         Config {
             endpoint: self.endpoint.unwrap(),
             auth_strategy: self.auth_strategy,
             timeout: self.timeout.unwrap(),
-            reference: self.reference,
             headers: self.headers,
         }
     }

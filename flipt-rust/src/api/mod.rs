@@ -31,7 +31,7 @@ impl FliptClient {
         };
 
         Ok(Self {
-            evaluation: Evaluation::new(client, config.endpoint, config.reference),
+            evaluation: Evaluation::new(client, config.endpoint),
         })
     }
 }
