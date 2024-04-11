@@ -10,19 +10,21 @@ import io.flipt.api.evaluation.models.*;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Map;
 import okhttp3.*;
 
 public class Evaluation {
   private final OkHttpClient httpClient;
   private final String baseURL;
   private final AuthenticationStrategy authenticationStrategy;
+  private final Map<String, String> headers;
   private final ObjectMapper objectMapper;
 
-  public Evaluation(
-      OkHttpClient httpClient, String baseURL, AuthenticationStrategy authenticationStrategy) {
-    this.httpClient = httpClient;
-    this.baseURL = baseURL;
-    this.authenticationStrategy = authenticationStrategy;
+  private Evaluation(EvaluationBuilder builder) {
+    this.httpClient = builder.httpClient;
+    this.baseURL = builder.baseURL;
+    this.authenticationStrategy = builder.authenticationStrategy;
+    this.headers = builder.headers;
     this.objectMapper =
         JsonMapper.builder()
             .addModule(new Jdk8Module())
@@ -30,12 +32,51 @@ public class Evaluation {
             .build();
   }
 
+  public static EvaluationBuilder builder() {
+    return new EvaluationBuilder();
+  }
+
+  public static class EvaluationBuilder {
+    private OkHttpClient httpClient;
+    private String baseURL;
+    private AuthenticationStrategy authenticationStrategy;
+    private Map<String, String> headers;
+
+    private EvaluationBuilder() {}
+
+    public EvaluationBuilder httpClient(OkHttpClient httpClient) {
+      this.httpClient = httpClient;
+      return this;
+    }
+
+    public EvaluationBuilder baseURL(String baseURL) {
+      this.baseURL = baseURL;
+      return this;
+    }
+
+    public EvaluationBuilder authenticationStrategy(AuthenticationStrategy authenticationStrategy) {
+      this.authenticationStrategy = authenticationStrategy;
+      return this;
+    }
+
+    public EvaluationBuilder headers(Map<String, String> headers) {
+      this.headers = headers;
+      return this;
+    }
+
+    public Evaluation build() {
+      return new Evaluation(this);
+    }
+  }
+
   @SuppressWarnings("resource")
   public VariantEvaluationResponse evaluateVariant(EvaluationRequest request) {
     URL url;
 
+    final String path = "/evaluate/v1/variant";
+
     try {
-      url = new URL(String.format("%s%s", this.baseURL, "/evaluate/v1/variant"));
+      url = new URL(String.format("%s%s", this.baseURL, path));
     } catch (MalformedURLException e) {
       throw new RuntimeException(e);
     }
@@ -66,8 +107,10 @@ public class Evaluation {
   public BooleanEvaluationResponse evaluateBoolean(EvaluationRequest request) {
     URL url;
 
+    final String path = "/evaluate/v1/boolean";
+
     try {
-      url = new URL(String.format("%s%s", this.baseURL, "/evaluate/v1/boolean"));
+      url = new URL(String.format("%s%s", this.baseURL, path));
     } catch (MalformedURLException e) {
       throw new RuntimeException(e);
     }
@@ -106,13 +149,20 @@ public class Evaluation {
     }
 
     URL url;
+
+    final String path = "/evaluate/v1/batch";
+
     try {
-      url = new URL(String.format("%s%s", this.baseURL, "/evaluate/v1/batch"));
+      url = new URL(String.format("%s%s", this.baseURL, path));
     } catch (MalformedURLException e) {
       throw new RuntimeException(e);
     }
 
     Request.Builder httpRequest = new Request.Builder().url(url).method("POST", body);
+
+    if (this.headers != null) {
+      this.headers.forEach(httpRequest::addHeader);
+    }
 
     if (this.authenticationStrategy != null) {
       httpRequest.addHeader("Authorization", this.authenticationStrategy.getAuthorizationHeader());
@@ -150,6 +200,10 @@ public class Evaluation {
     }
 
     Request.Builder httpRequest = new Request.Builder().url(url).method("POST", body);
+
+    if (this.headers != null) {
+      this.headers.forEach(httpRequest::addHeader);
+    }
 
     if (this.authenticationStrategy != null) {
       httpRequest.addHeader("Authorization", this.authenticationStrategy.getAuthorizationHeader());

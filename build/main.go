@@ -16,10 +16,10 @@ import (
 )
 
 var (
-	languages    string
-	push         bool
-	tag          string
-	languageToFn = map[string]buildFn{
+	sdks    string
+	push    bool
+	tag     string
+	sdkToFn = map[string]buildFn{
 		"python": pythonBuild,
 		"rust":   rustBuild,
 		"node":   nodeBuild,
@@ -29,7 +29,7 @@ var (
 )
 
 func init() {
-	flag.StringVar(&languages, "languages", "", "comma separated list of which language(s) to run builds for")
+	flag.StringVar(&sdks, "sdks", "", "comma separated list of which sdk(s) to run builds for")
 	flag.BoolVar(&push, "push", false, "push built artifacts to registry")
 	flag.StringVar(&tag, "tag", "", "tag to use for release")
 }
@@ -45,19 +45,19 @@ func main() {
 type buildFn func(context.Context, *dagger.Client, *dagger.Directory) error
 
 func run() error {
-	var tests = make(map[string]buildFn, len(languageToFn))
+	var tests = make(map[string]buildFn, len(sdkToFn))
 
-	maps.Copy(tests, languageToFn)
+	maps.Copy(tests, sdkToFn)
 
-	if languages != "" {
-		l := strings.Split(languages, ",")
+	if sdks != "" {
+		l := strings.Split(sdks, ",")
 		subset := make(map[string]buildFn, len(l))
-		for _, language := range l {
-			testFn, ok := languageToFn[language]
+		for _, sdk := range l {
+			testFn, ok := sdkToFn[sdk]
 			if !ok {
-				return fmt.Errorf("language %s is not supported", language)
+				return fmt.Errorf("sdk %s is not supported", sdk)
 			}
-			subset[language] = testFn
+			subset[sdk] = testFn
 		}
 
 		tests = subset
@@ -147,7 +147,7 @@ func rustBuild(ctx context.Context, client *dagger.Client, hostDirectory *dagger
 func nodeBuild(ctx context.Context, client *dagger.Client, hostDirectory *dagger.Directory) error {
 	container := client.Container().From("node:21.2-bookworm").
 		WithDirectory("/src", hostDirectory.Directory("flipt-node"), dagger.ContainerWithDirectoryOpts{
-			Exclude: []string{"./node_modules/"},
+			Exclude: []string{".node_modules/"},
 		}).
 		WithWorkdir("/src").
 		WithExec([]string{"npm", "install"}).

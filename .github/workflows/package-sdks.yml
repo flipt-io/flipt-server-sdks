@@ -54,4 +54,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
         run: |
-          dagger run go run ./build --languages=${{ inputs.sdk }} --push=true --tag=${{ inputs.tag }}
+          dagger run go run ./build --sdks=${{ inputs.sdk }} --push=true --tag=${{ inputs.tag }}

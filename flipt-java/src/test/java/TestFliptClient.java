@@ -18,8 +18,14 @@ public class TestFliptClient {
     AuthenticationStrategy authenticationStrategy =
         new ClientTokenAuthenticationStrategy(authToken);
 
+    Map<String, String> headers = Map.of("Accept", "application/json");
+
     FliptClient fc =
-        FliptClient.builder().url(fliptURL).authentication(authenticationStrategy).build();
+        FliptClient.builder()
+            .url(fliptURL)
+            .authentication(authenticationStrategy)
+            .headers(headers)
+            .build();
 
     Map<String, String> context = new HashMap<>();
     context.put("fizz", "buzz");
@@ -46,8 +52,14 @@ public class TestFliptClient {
     AuthenticationStrategy authenticationStrategy =
         new ClientTokenAuthenticationStrategy(authToken);
 
+    Map<String, String> headers = Map.of("Accept", "application/json");
+
     FliptClient fc =
-        FliptClient.builder().url(fliptURL).authentication(authenticationStrategy).build();
+        FliptClient.builder()
+            .url(fliptURL)
+            .authentication(authenticationStrategy)
+            .headers(headers)
+            .build();
 
     Map<String, String> context = new HashMap<>();
     context.put("fizz", "buzz");
@@ -74,8 +86,14 @@ public class TestFliptClient {
     AuthenticationStrategy authenticationStrategy =
         new ClientTokenAuthenticationStrategy(authToken);
 
+    Map<String, String> headers = Map.of("Accept", "application/json");
+
     FliptClient fc =
-        FliptClient.builder().url(fliptURL).authentication(authenticationStrategy).build();
+        FliptClient.builder()
+            .url(fliptURL)
+            .authentication(authenticationStrategy)
+            .headers(headers)
+            .build();
 
     Map<String, String> context = new HashMap<>();
     context.put("fizz", "buzz");
