@@ -38,10 +38,9 @@ print(variant_flag)
 
 There is a more detailed example in the [examples](./examples) directory.
 
-
 ## For developers
 
 After adding new code, please don't forget to add unit tests for new features.
-To format the code, check it with linters and run tests, use the `make check` command. 
+To format the code, check it with linters and run tests, use the `make check` command.
 
 Please keep the Python [PEP8](https://peps.python.org/pep-0008/) in mind while adding new code.

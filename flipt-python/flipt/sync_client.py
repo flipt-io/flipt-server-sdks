@@ -9,13 +9,14 @@ class FliptClient:
     def __init__(
         self,
         url: str = "http://localhost:8080",
+        headers: dict[str, str] | None = None,
         timeout: int = 60,
         authentication: AuthenticationStrategy | None = None,
     ):
         self.httpx_client = httpx.Client(timeout=timeout)
 
-        self.evaluation = Evaluation(url, authentication, self.httpx_client)
-        self.flag = SyncFlag(url, authentication, self.httpx_client)
+        self.evaluation = Evaluation(url, headers, authentication, self.httpx_client)
+        self.flag = SyncFlag(url, headers, authentication, self.httpx_client)
 
     def close(self) -> None:
         self.httpx_client.close()

@@ -1,4 +1,4 @@
-package example;
+package examples;
 
 import io.flipt.api.FliptClient;
 import io.flipt.api.evaluation.models.*;

@@ -7,8 +7,8 @@
   "author": "Flipt Devs <dev@flipt.io>",
   "license": "MIT",
   "scripts": {
-    "fmt": "prettier --config .prettierrc 'src/**/*.ts' 'example/index.ts' --write",
-    "lint": "prettier --check src/**/*.ts example/index.ts",
+    "fmt": "prettier --config .prettierrc 'src/**/*.ts' 'examples/index.ts' --write",
+    "lint": "prettier --check src/**/*.ts examples/index.ts",
     "test": "jest",
     "build": "tsc"
   },
