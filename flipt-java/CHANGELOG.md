@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-java-v1.0.2...flipt-java-v1.1.0) (2024-04-11)
+
+
+### Features
+
+* **java:** allow setting arbitrary headers ([#167](https://github.com/flipt-io/flipt-server-sdks/issues/167)) ([abe7d27](https://github.com/flipt-io/flipt-server-sdks/commit/abe7d27185bcdbc495903efcfdb9d633c3dc738f))
+
 ## [1.0.2](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-java-v1.0.1...flipt-java-v1.0.2) (2024-02-19)
 
 
