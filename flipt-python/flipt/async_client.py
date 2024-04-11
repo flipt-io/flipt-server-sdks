@@ -9,7 +9,7 @@ class AsyncFliptClient:
     def __init__(
         self,
         url: str = "http://localhost:8080",
-        headers: dict[str, str] = {},
+        headers: dict[str, str] | None = None,
         timeout: int = 60,
         authentication: AuthenticationStrategy | None = None,
     ):
