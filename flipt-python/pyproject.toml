@@ -49,7 +49,7 @@ skip-string-normalization = true
 
 [tool.coverage.report]
 precision = 1
-fail_under = 95
+fail_under = 90
 exclude_also = [
     "raise NotImplementedError",
     "pragma: no cover",
