@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-rust-v1.0.0...flipt-rust-v1.1.0) (2024-04-11)
+
+
+### Features
+
+* **rust:** Rust set headers ([#172](https://github.com/flipt-io/flipt-server-sdks/issues/172)) ([d87028c](https://github.com/flipt-io/flipt-server-sdks/commit/d87028c547bc57c02f8587cd514fa3a1ee28c3a3))
+
 ## [1.0.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-rust-v1.0.0-rc.2...flipt-rust-v1.0.0) (2024-01-16)
 
 
