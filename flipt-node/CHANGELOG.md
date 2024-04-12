@@ -1,12 +1,5 @@
 # Changelog
 
-## [1.1.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-node-v1.0.0...flipt-node-v1.1.0) (2024-04-12)
-
-
-### Features
-
-* **python:** allow setting arbitrary headers ([#175](https://github.com/flipt-io/flipt-server-sdks/issues/175)) ([a1eb181](https://github.com/flipt-io/flipt-server-sdks/commit/a1eb181f4fce7da2f6d82e8cb7688c45b305c630))
-
 ## [1.0.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-node-v1.0.0-rc.2...flipt-node-v1.0.0) (2024-01-16)
 
 
