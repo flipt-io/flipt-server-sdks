@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.4.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-python-v1.3.0...flipt-python-v1.4.0) (2024-04-12)
+
+
+### Features
+
+* **python:** allow setting arbitrary headers ([#175](https://github.com/flipt-io/flipt-server-sdks/issues/175)) ([a1eb181](https://github.com/flipt-io/flipt-server-sdks/commit/a1eb181f4fce7da2f6d82e8cb7688c45b305c630))
+
+
+### Miscellaneous Chores
+
+* release 1.4.0 ([1bd46c4](https://github.com/flipt-io/flipt-server-sdks/commit/1bd46c46118ea679772b48bb837136dd66ab5fdd))
+
 ## [1.3.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-python-v1.2.0...flipt-python-v1.3.0) (2024-03-22)
 
 
