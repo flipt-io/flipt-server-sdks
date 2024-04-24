@@ -5,7 +5,8 @@ pub mod util;
 
 use reqwest::header::HeaderMap;
 use std::time::Duration;
-use url::Url;
+// reexport
+pub use url::Url;
 
 #[derive(Debug, Clone)]
 pub struct Config<T>
