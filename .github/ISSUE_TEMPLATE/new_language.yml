@@ -46,7 +46,7 @@ body:
       value: |
         ## Contributing
 
-        Check out our [Contributing Guide](CONTRIBUTING.md) to learn more about how you can help contribute / implement this SDK request.
+        Check out our [Contributing Guide](https://github.com/flipt-io/flipt-server-sdks/blob/main/CONTRIBUTING.md) to learn more about how you can help contribute / implement this SDK request.
 
         ## Join the Flipt Community
 
