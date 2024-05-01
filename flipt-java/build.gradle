@@ -29,7 +29,6 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter'
     api 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.0'
     api 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.17.0'
-    api 'com.diffplug.gradle.spotless:spotless:2.4.1'
 }
 
 spotless {
