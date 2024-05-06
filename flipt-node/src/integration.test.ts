@@ -13,12 +13,19 @@ if (!authToken) {
   process.exit(1);
 }
 
-test("variant", async () => {
-  const client = new FliptClient({
-    url: fliptUrl,
-    authenticationStrategy: new ClientTokenAuthentication(authToken)
-  });
+let client: FliptClient;
 
+beforeEach(() => {
+  client = new FliptClient({
+    url: fliptUrl,
+    authenticationStrategy: new ClientTokenAuthentication(authToken),
+    headers: {
+      "x-custom-header": "custom-value"
+    }
+  });
+});
+
+test("variant", async () => {
   const variant = await client.evaluation.variant({
     namespaceKey: "default",
     flagKey: "flag1",
@@ -34,11 +41,6 @@ test("variant", async () => {
 });
 
 test("boolean", async () => {
-  const client = new FliptClient({
-    url: fliptUrl,
-    authenticationStrategy: new ClientTokenAuthentication(authToken)
-  });
-
   const boolean = await client.evaluation.boolean({
     namespaceKey: "default",
     flagKey: "flag_boolean",
@@ -52,11 +54,6 @@ test("boolean", async () => {
 });
 
 test("batch", async () => {
-  const client = new FliptClient({
-    url: fliptUrl,
-    authenticationStrategy: new ClientTokenAuthentication(authToken)
-  });
-
   const batch = await client.evaluation.batch({
     requests: [
       {
