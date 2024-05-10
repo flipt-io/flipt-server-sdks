@@ -2,6 +2,13 @@
 
 ## [1.1.1](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-java-v1.1.0...flipt-java-v1.1.1) (2024-05-10)
 
+
+### Miscellaneous Chores
+
+* release 1.1.1 ([feb4c8c](https://github.com/flipt-io/flipt-server-sdks/commit/feb4c8c4147c8e4b6adf07a02220e71193631d78))
+
+## [1.1.1](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-java-v1.1.0...flipt-java-v1.1.1) (2024-05-10)
+
 ### Bug Fixes
 
 * **java:** remove spotless dependency [#197](https://github.com/flipt-io/flipt-server-sdks/pull/197)
