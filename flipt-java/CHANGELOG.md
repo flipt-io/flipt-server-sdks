@@ -1,7 +1,12 @@
 # Changelog
 
-## [1.1.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-java-v1.0.2...flipt-java-v1.1.0) (2024-04-11)
+## [1.1.1](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-java-v1.1.0...flipt-java-v1.1.1) (2024-05-10)
 
+### Bug Fixes
+
+* **java:** remove spotless dependency [#197](https://github.com/flipt-io/flipt-server-sdks/pull/197)
+
+## [1.1.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-java-v1.0.2...flipt-java-v1.1.0) (2024-04-11)
 
 ### Features
 
@@ -9,13 +14,11 @@
 
 ## [1.0.2](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-java-v1.0.1...flipt-java-v1.0.2) (2024-02-19)
 
-
 ### Bug Fixes
 
 * close http response object in java SDK ([#110](https://github.com/flipt-io/flipt-server-sdks/issues/110)) ([9b23287](https://github.com/flipt-io/flipt-server-sdks/commit/9b2328781f4c9fdf41e78219baff807916a0c4df))
 
 ## [1.0.1](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-java-v1.0.0...flipt-java-v1.0.1) (2024-01-23)
-
 
 ### Bug Fixes
 
@@ -23,12 +26,10 @@
 
 ## [1.0.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-java-v1.0.0-rc.2...flipt-java-v1.0.0) (2024-01-16)
 
-
 ### Features
 
 * add builder pattern for eval requests for java sdk ([#78](https://github.com/flipt-io/flipt-server-sdks/issues/78)) ([f2f5c6c](https://github.com/flipt-io/flipt-server-sdks/commit/f2f5c6c237a9b112c3df36ab54601fc007c9e7eb))
 * **java:** Get release-please working with Java ([#80](https://github.com/flipt-io/flipt-server-sdks/issues/80)) ([a4cc0bd](https://github.com/flipt-io/flipt-server-sdks/commit/a4cc0bd68b7e9c9ff4075b323a9c96c02d7274dd))
-
 
 ### Miscellaneous Chores
 
