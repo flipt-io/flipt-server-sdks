@@ -9,20 +9,22 @@ import {
 
 export class Evaluation {
   private url: string;
-  private headers: object;
+  private headers: Record<string, string>;
   private timeout?: number;
 
   public constructor(
     url: string,
     timeout?: number,
-    authenticationStrategy?: AuthenticationStrategy
+    authenticationStrategy?: AuthenticationStrategy,
+    headers?: Record<string, string>
   ) {
     this.url = url;
-    this.headers = {};
+    this.headers = headers || {};
     if (!!authenticationStrategy) {
-      this.headers = Object.fromEntries(
-        authenticationStrategy.authenticate().entries()
-      );
+      this.headers = {
+        ...this.headers,
+        ...Object.fromEntries(authenticationStrategy.authenticate())
+      };
     }
     this.timeout = timeout;
   }

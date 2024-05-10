@@ -9,6 +9,7 @@ interface FliptClientOptions {
   url?: string;
   authenticationStrategy?: AuthenticationStrategy;
   timeout?: number;
+  headers?: Record<string, string>;
 }
 
 export interface AuthenticationStrategy {
@@ -65,10 +66,15 @@ export class FliptClient {
       clientOptions.authenticationStrategy = options.authenticationStrategy;
     }
 
+    if (options?.headers !== undefined) {
+      clientOptions.headers = options.headers;
+    }
+
     this.evaluation = new Evaluation(
       clientOptions.url || defaultURL,
       clientOptions.timeout,
-      clientOptions.authenticationStrategy
+      clientOptions.authenticationStrategy,
+      clientOptions.headers
     );
   }
 }
