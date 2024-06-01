@@ -58,4 +58,4 @@ public class Main {
     EvaluationResponse variantEvaluationResponse = fliptClient.evaluate(variantEvaluationRequest);
 ```
 
-There is a more detailed example in the [examples](./examples) directory.
+There is a more detailed example in the [examples](./src/main/java/examples) directory.
