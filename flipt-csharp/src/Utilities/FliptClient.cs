@@ -28,7 +28,7 @@ public class FliptClient
             .Build();
     }
 
-    public Evaluation Evaluation { get; }
+    public Evaluation? Evaluation { get; }
 
     /// <summary>
     /// This method returns a new instance of the FliptClientBuilder class.
@@ -44,7 +44,7 @@ public class FliptClient
     /// </summary>
     public class FliptClientBuilder
     {
-        public string BaseUrl { get; private set; } = "http://localhost:8080";
+        public string? BaseUrl { get; private set; } = "http://localhost:8080";
         public IAuthenticationStrategy? AuthenticationStrategy { get; private set; }
         public IDictionary<string, string>? Headers { get; private set; } = new Dictionary<string, string>();
         public TimeSpan Timeout { get; private set; } = TimeSpan.FromSeconds(60);
@@ -54,7 +54,7 @@ public class FliptClient
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        public FliptClientBuilder WithUrl(string url)
+        public FliptClientBuilder WithUrl(string? url)
         {
             BaseUrl = url;
             return this;

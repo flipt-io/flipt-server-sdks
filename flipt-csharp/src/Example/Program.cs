@@ -1,4 +1,5 @@
 ﻿using FliptCSharp.Authentication;
+using FliptCSharp.Clients;
 using FliptCSharp.DTOs;
 using FliptCSharp.Utilities;
 
