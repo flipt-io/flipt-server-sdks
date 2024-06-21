@@ -5,9 +5,9 @@
 /// </summary>
 public class ClientTokenAuthenticationStrategy : IAuthenticationStrategy
 {
-    private readonly string _clientToken;
+    private readonly string? _clientToken;
 
-    public ClientTokenAuthenticationStrategy(string clientToken)
+    public ClientTokenAuthenticationStrategy(string? clientToken)
     {
         _clientToken = clientToken;
     }

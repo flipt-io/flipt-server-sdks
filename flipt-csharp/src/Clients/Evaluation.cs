@@ -11,7 +11,7 @@ namespace FliptCSharp.Clients;
 public class Evaluation 
 {
         private readonly HttpClient _httpClient;
-        private readonly string _baseUrl;
+        private readonly string? _baseUrl;
         private readonly IAuthenticationStrategy? _authenticationStrategy;
         private readonly IDictionary<string, string>? _headers;
 
@@ -42,7 +42,7 @@ public class Evaluation
         public class EvaluationBuilder
         {
             public HttpClient HttpClient { get; private set; } = null!;
-            public string BaseUrl { get; private set; } = null!;
+            public string? BaseUrl { get; private set; } = null!;
             public IAuthenticationStrategy? AuthenticationStrategy { get; private set; }
             public IDictionary<string, string>? Headers { get; private set; }
 
@@ -52,7 +52,7 @@ public class Evaluation
                 return this;
             }
 
-            public EvaluationBuilder WithBaseUrl(string baseUrl)
+            public EvaluationBuilder WithBaseUrl(string? baseUrl)
             {
                 BaseUrl = baseUrl;
                 return this;
@@ -70,7 +70,7 @@ public class Evaluation
                 return this;
             }
 
-            public Evaluation Build()
+            public Evaluation? Build()
             {
                 if (HttpClient == null)
                 {
@@ -125,7 +125,7 @@ public class Evaluation
         /// <returns></returns>
         private async Task<T?> EvaluateAsync<T>(string path, object request)
         {
-            var url = new Uri(new Uri(_baseUrl), path);
+            var url = new Uri(new Uri(_baseUrl ?? throw new InvalidOperationException("Flipt Url is not set")), path);
 
             var jsonContent = JsonSerializer.Serialize(request);
             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
