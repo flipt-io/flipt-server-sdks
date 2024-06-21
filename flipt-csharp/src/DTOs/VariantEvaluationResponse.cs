@@ -23,7 +23,7 @@ public class VariantEvaluationResponse
     [Required]
     public DateTime Timestamp { get; set; }
     [Required]
-    public int RequestDurationMillis { get; set; }
+    public float RequestDurationMillis { get; set; }
     [Required]
     public Reason Reason { get; set; }
 }

@@ -15,7 +15,7 @@ public class BatchEvaluationResponse
     public required Response[] Responses { get; set; }
 
     [Required]
-    public int RequestDurationMillis { get; set; }
+    public float RequestDurationMillis { get; set; }
 }
 
 

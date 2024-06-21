@@ -5,5 +5,5 @@
 /// </summary>
 public interface IAuthenticationStrategy
 {
-    string GetAuthorizationHeader();
+    KeyValuePair<string, string> GetAuthorizationHeader();
 }
