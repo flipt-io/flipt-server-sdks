@@ -1,6 +1,7 @@
 ﻿using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using FliptCSharp.Authentication;
 using FliptCSharp.DTOs;
 
@@ -17,7 +18,11 @@ public class Evaluation
 
     private readonly JsonSerializerOptions jsonSerializeSettings = new()
     {
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        Converters =
+        {
+            new JsonStringEnumConverter(JsonNamingPolicy.SnakeCaseUpper)
+        }
     };
 
 
