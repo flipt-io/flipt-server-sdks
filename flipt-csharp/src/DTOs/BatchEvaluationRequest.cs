@@ -7,13 +7,13 @@ namespace FliptCSharp.DTOs;
 /// </summary>
 public class BatchEvaluationRequest
 {
-    public BatchEvaluationRequest(List<EvaluationRequest> evaluationRequests)
+    public BatchEvaluationRequest(List<EvaluationRequest> requests)
     {
-        EvaluationRequests = evaluationRequests;
+        Requests = requests;
     }
     public string? RequestId { get; set; }
 
     [Required]
-    public List<EvaluationRequest> EvaluationRequests { get; set; }
+    public List<EvaluationRequest> Requests { get; set; }
     public string? Reference { get; set; }
 }

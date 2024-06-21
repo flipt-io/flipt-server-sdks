@@ -115,7 +115,7 @@ namespace FliptCSharp.Tests.Clients
 
             var variantEvaluationRequest = new EvaluationRequest("default", "flag1", "entity", context);
             var booleanEvaluationRequest = new EvaluationRequest("default", "flag_boolean", "entity", context);
-            var errorEvaluationRequest = new EvaluationRequest("default", "flag1234", "entity", new Dictionary<string, string>());
+            var errorEvaluationRequest = new EvaluationRequest("default", "flag1234", "entity", []);
 
             var evaluationRequests = new List<EvaluationRequest>
             {
