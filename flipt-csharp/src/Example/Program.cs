@@ -1,9 +1,8 @@
-﻿using FliptCSharp.Authentication;
-using FliptCSharp.Clients;
-using FliptCSharp.DTOs;
-using FliptCSharp.Utilities;
+﻿using Flipt.Authentication;
+using Flipt.DTOs;
+using Flipt.Utilities;
 
-namespace FliptCSharp.Example;
+namespace Flipt.Example;
 
 public class Program
 {
@@ -19,20 +18,18 @@ public class Program
 
         var evaluation = fliptClient.Evaluation;
 
-        var variant = new EvaluationRequest("default", "flag1", "entity", context);
-        var variantEvaluationResponse = await evaluation.EvaluateVariantAsync(variant);
+        var variantEvaluation = new EvaluationRequest("default", "flag1", "entity", context);
+        var variantEvaluationResponse = await evaluation.EvaluateVariantAsync(variantEvaluation);
 
         var boolEvaluation = new EvaluationRequest("default", "bool_flag", "entity", context);
         var boolEvaluationResponse = await evaluation.EvaluateBooleanAsync(boolEvaluation);
 
         var list = new List<EvaluationRequest>
         {
-            variant,
+            variantEvaluation,
             boolEvaluation
         };
         var batchEvaluationRequest = new BatchEvaluationRequest(list);
         var batchEvaluationResponse = await evaluation.EvaluateBatchAsync(batchEvaluationRequest);
     }
-
-
 }

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FliptCSharp.DTOs;
+namespace Flipt.DTOs;
 
 /// <summary>
 /// Represents a batch evaluation request.

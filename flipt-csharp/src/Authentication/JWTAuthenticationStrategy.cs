@@ -1,4 +1,4 @@
-﻿namespace FliptCSharp.Authentication;
+﻿namespace Flipt.Authentication;
 
 /// <summary>
 /// This class is responsible for providing the JWT authentication strategy.

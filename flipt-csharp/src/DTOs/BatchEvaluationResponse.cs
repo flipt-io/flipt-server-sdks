@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using FliptCSharp.Models;
+using Flipt.Models;
 
-namespace FliptCSharp.DTOs;
+namespace Flipt.DTOs;
 
 /// <summary>
 /// Represents a batch evaluation response.

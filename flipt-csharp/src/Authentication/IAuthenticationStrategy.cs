@@ -1,4 +1,4 @@
-﻿namespace FliptCSharp.Authentication;
+﻿namespace Flipt.Authentication;
 
 /// <summary>
 /// This interface is responsible for providing the authentication strategy.

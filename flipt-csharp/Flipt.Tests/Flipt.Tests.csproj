@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\FliptCSharp.csproj" />
+    <ProjectReference Include="..\src\Flipt.csproj" />
   </ItemGroup>
 
 </Project>

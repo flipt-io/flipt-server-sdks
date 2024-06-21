@@ -1,7 +1,7 @@
 ﻿using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 
-namespace FliptCSharp.Models;
+namespace Flipt.Models;
 
 /// <summary>
 /// Represents the response type.

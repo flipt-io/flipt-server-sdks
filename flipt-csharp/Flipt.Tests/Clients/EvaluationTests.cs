@@ -1,12 +1,9 @@
-﻿using FliptCSharp.Clients;
-using System;
-using System.Threading.Tasks;
-using FliptCSharp.Authentication;
-using FliptCSharp.DTOs;
-using Xunit;
-using FliptCSharp.Models;
+﻿using Flipt.Clients;
+using Flipt.Authentication;
+using Flipt.DTOs;
+using Flipt.Models;
 
-namespace FliptCSharp.Tests.Clients
+namespace Flipt.Tests.Clients
 {
     public class EvaluationTests : IAsyncLifetime
     {

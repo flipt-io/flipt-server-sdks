@@ -2,10 +2,10 @@
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using FliptCSharp.Authentication;
-using FliptCSharp.DTOs;
+using Flipt.Authentication;
+using Flipt.DTOs;
 
-namespace FliptCSharp.Clients;
+namespace Flipt.Clients;
 /// <summary>
 /// This class is responsible for making requests to the Flipt server to evaluate flags.
 /// </summary>
