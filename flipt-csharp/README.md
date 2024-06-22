@@ -1,4 +1,4 @@
-# Flipt .NET
+# Flipt C\#
 
 [![Nuget](https://img.shields.io/nuget/v/flipt)](https://www.nuget.org/packages/Flipt/)
 ![beta](https://img.shields.io/badge/status-beta-yellow)
