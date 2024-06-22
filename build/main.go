@@ -25,6 +25,7 @@ var (
 		"node":   nodeBuild,
 		"java":   javaBuild,
 		"php":    phpBuild,
+		"csharp": csharpBuild,
 	}
 )
 
@@ -111,6 +112,32 @@ func pythonBuild(ctx context.Context, client *dagger.Client, hostDirectory *dagg
 
 	_, err = container.WithSecretVariable("POETRY_PYPI_TOKEN_PYPI", pypiAPIKeySecret).
 		WithExec([]string{"poetry", "publish", "-v"}).
+		Sync(ctx)
+
+	return err
+}
+
+func csharpBuild(ctx context.Context, client *dagger.Client, hostDirectory *dagger.Directory) error {
+	container := client.Container().From("mcr.microsoft.com/dotnet/sdk:8.0").
+		WithDirectory("/src", hostDirectory.Directory("flipt-csharp")).
+		WithWorkdir("/src").
+		WithExec([]string{"dotnet", "build", "-c", "Release"})
+
+	var err error
+
+	if !push {
+		_, err = container.Sync(ctx)
+		return err
+	}
+
+	if os.Getenv("NUGET_API_KEY") == "" {
+		return fmt.Errorf("NUGET_API_KEY is not set")
+	}
+
+	nugetAPIKeySecret := client.SetSecret("nuget-api-key", os.Getenv("NUGET_API_KEY"))
+
+	_, err = container.WithSecretVariable("NUGET_API_KEY", nugetAPIKeySecret).
+		WithExec([]string{"dotnet", "nuget", "push", "bin/Release/*.nupkg", "--api-key", "$NUGET_API_KEY", "--source", "https://api.nuget.org/v3/index.json"}).
 		Sync(ctx)
 
 	return err

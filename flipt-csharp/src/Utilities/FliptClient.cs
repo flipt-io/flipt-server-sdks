@@ -1,7 +1,7 @@
-﻿using FliptCSharp.Authentication;
-using FliptCSharp.Clients;
+﻿using Flipt.Authentication;
+using Flipt.Clients;
 
-namespace FliptCSharp.Utilities;
+namespace Flipt.Utilities;
 
 /// <summary>
 /// This class is a wrapper around the Evaluation class. It provides a builder pattern to create an instance of the Evaluation class.
@@ -19,7 +19,7 @@ public class FliptClient
         {
             Timeout = builder.Timeout
         };
-            
+
         Evaluation = Evaluation.Builder()
             .WithHttpClient(httpClient)
             .WithBaseUrl(builder.BaseUrl)

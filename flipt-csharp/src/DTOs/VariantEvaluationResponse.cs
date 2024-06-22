@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using FliptCSharp.Models;
+using Flipt.Models;
 
-namespace FliptCSharp.DTOs;
+namespace Flipt.DTOs;
 
 /// <summary>
 /// Represents a variant evaluation response.
@@ -23,7 +23,7 @@ public class VariantEvaluationResponse
     [Required]
     public DateTime Timestamp { get; set; }
     [Required]
-    public int RequestDurationMillis { get; set; }
+    public float RequestDurationMillis { get; set; }
     [Required]
     public Reason Reason { get; set; }
 }

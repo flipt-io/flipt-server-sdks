@@ -16,11 +16,12 @@ import (
 var (
 	sdks    string
 	sdkToFn = map[string]integrationTestFn{
-		"python": pythonTests,
-		"node":   nodeTests,
-		"rust":   rustTests,
-		"java":   javaTests,
-		"php":    phpTests,
+		"python": pythonTest,
+		"node":   nodeTest,
+		"rust":   rustTest,
+		"java":   javaTest,
+		"php":    phpTest,
+		"csharp": csharpTest,
 	}
 )
 
@@ -99,8 +100,8 @@ func getTestDependencies(_ context.Context, client *dagger.Client, dir *dagger.D
 	return flipt, dir
 }
 
-// pythonTests runs the python integration test suite against a container running Flipt.
-func pythonTests(ctx context.Context, client *dagger.Client, flipt *dagger.Container, hostDirectory *dagger.Directory) error {
+// pythonTest runs the python integration test suite against a container running Flipt.
+func pythonTest(ctx context.Context, client *dagger.Client, flipt *dagger.Container, hostDirectory *dagger.Directory) error {
 	_, err := client.Container().From("python:3.11-bookworm").
 		WithExec([]string{"pip", "install", "poetry==1.7.1"}).
 		WithWorkdir("/src").
@@ -115,8 +116,8 @@ func pythonTests(ctx context.Context, client *dagger.Client, flipt *dagger.Conta
 	return err
 }
 
-// nodeTests runs the node integration test suite against a container running Flipt.
-func nodeTests(ctx context.Context, client *dagger.Client, flipt *dagger.Container, hostDirectory *dagger.Directory) error {
+// nodeTest runs the node integration test suite against a container running Flipt.
+func nodeTest(ctx context.Context, client *dagger.Client, flipt *dagger.Container, hostDirectory *dagger.Directory) error {
 	_, err := client.Container().From("node:21.2-bookworm").
 		WithWorkdir("/src").
 		// The node_modules should never be version controlled, but we will exclude it here
@@ -134,8 +135,21 @@ func nodeTests(ctx context.Context, client *dagger.Client, flipt *dagger.Contain
 	return err
 }
 
-// rustTests runs the rust integration test suite against a container running Flipt.
-func rustTests(ctx context.Context, client *dagger.Client, flipt *dagger.Container, hostDirectory *dagger.Directory) error {
+func csharpTest(ctx context.Context, client *dagger.Client, flipt *dagger.Container, hostDirectory *dagger.Directory) error {
+	_, err := client.Container().From("mcr.microsoft.com/dotnet/sdk:8.0").
+		WithDirectory("/src", hostDirectory.Directory("flipt-csharp")).
+		WithWorkdir("/src").
+		WithServiceBinding("flipt", flipt.WithExec(nil).AsService()).
+		WithEnvVariable("FLIPT_URL", "http://flipt:8080").
+		WithEnvVariable("FLIPT_AUTH_TOKEN", "secret").
+		WithExec([]string{"dotnet", "test"}).
+		Sync(ctx)
+
+	return err
+}
+
+// rustTest runs the rust integration test suite against a container running Flipt.
+func rustTest(ctx context.Context, client *dagger.Client, flipt *dagger.Container, hostDirectory *dagger.Directory) error {
 	_, err := client.Container().From("rust:1.73.0-bookworm").
 		WithWorkdir("/src").
 		// Exclude target directory which contain the build artifacts for Rust.
@@ -151,8 +165,8 @@ func rustTests(ctx context.Context, client *dagger.Client, flipt *dagger.Contain
 	return err
 }
 
-// javaTests runs the java integration test suite against a container running Flipt.
-func javaTests(ctx context.Context, client *dagger.Client, flipt *dagger.Container, hostDirectory *dagger.Directory) error {
+// javaTest runs the java integration test suite against a container running Flipt.
+func javaTest(ctx context.Context, client *dagger.Client, flipt *dagger.Container, hostDirectory *dagger.Directory) error {
 	_, err := client.Container().From("gradle:8.5.0-jdk11").
 		WithWorkdir("/src").
 		WithDirectory("/src", hostDirectory.Directory("flipt-java"), dagger.ContainerWithDirectoryOpts{
@@ -167,8 +181,8 @@ func javaTests(ctx context.Context, client *dagger.Client, flipt *dagger.Contain
 	return err
 }
 
-// phpTests runs the php integration test suite against a container running Flipt.
-func phpTests(ctx context.Context, client *dagger.Client, flipt *dagger.Container, hostDirectory *dagger.Directory) error {
+// phpTest runs the php integration test suite against a container running Flipt.
+func phpTest(ctx context.Context, client *dagger.Client, flipt *dagger.Container, hostDirectory *dagger.Directory) error {
 	_, err := client.Container().From("php:8-cli").
 		WithEnvVariable("COMPOSER_ALLOW_SUPERUSER", "1").
 		WithExec([]string{"apt-get", "update"}).

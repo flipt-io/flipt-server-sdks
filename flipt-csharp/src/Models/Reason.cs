@@ -1,10 +1,12 @@
 ﻿using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
-namespace FliptCSharp.Models;
+namespace Flipt.Models;
 
 /// <summary>
 /// Represents the reason for the evaluation.
 /// </summary>
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum Reason
 {
     [EnumMember(Value = "UNKNOWN_EVALUATION_REASON")]

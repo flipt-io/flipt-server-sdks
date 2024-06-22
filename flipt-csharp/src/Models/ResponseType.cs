@@ -1,10 +1,12 @@
 ﻿using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
-namespace FliptCSharp.Models;
+namespace Flipt.Models;
 
 /// <summary>
 /// Represents the response type.
 /// </summary>
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum ResponseType
 {
     [EnumMember(Value = "VARIANT_EVALUATION_RESPONSE_TYPE")]

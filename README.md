@@ -18,6 +18,7 @@ We are constantly growing our list of clients. Currently, we support the followi
 4. [Rust](./flipt-rust)
 5. [PHP](./flipt-php)
 6. [Go](https://github.com/flipt-io/flipt/tree/main/sdk/go)
+7. [C#](./flipt-csharp)
 
 > [!NOTE]
 > The Go client is maintained in the main Flipt repository.

@@ -1,4 +1,4 @@
-﻿namespace FliptCSharp.Authentication;
+﻿namespace Flipt.Authentication;
 
 /// <summary>
 /// This class is responsible for providing the JWT authentication strategy.
@@ -12,8 +12,8 @@ public class JWTAuthenticationStrategy : IAuthenticationStrategy
         _jwtToken = jwtToken;
     }
 
-    public string GetAuthorizationHeader()
+    public KeyValuePair<string, string> GetAuthorizationHeader()
     {
-        return $"JWT {_jwtToken}";
+        return new KeyValuePair<string, string>("JWT", _jwtToken);
     }
 }
