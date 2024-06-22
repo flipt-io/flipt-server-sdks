@@ -1,0 +1,17 @@
+name: Package C# SDK
+on:
+  push:
+    tags: ["flipt-csharp-**"]
+
+permissions:
+  contents: write
+
+env:
+  NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+
+jobs:
+  build:
+    uses: ./.github/workflows/package-sdks.yml
+    with:
+      sdk: csharp
+    secrets: inherit

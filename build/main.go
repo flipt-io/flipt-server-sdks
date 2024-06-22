@@ -121,7 +121,8 @@ func csharpBuild(ctx context.Context, client *dagger.Client, hostDirectory *dagg
 	container := client.Container().From("mcr.microsoft.com/dotnet/sdk:8.0").
 		WithDirectory("/src", hostDirectory.Directory("flipt-csharp")).
 		WithWorkdir("/src").
-		WithExec([]string{"dotnet", "build", "-c", "Release"})
+		WithExec([]string{"dotnet", "build", "-c", "Release"}).
+		WithExec([]string{"dotnet", "pack", "-c", "Release", "-o", "bin/Release"})
 
 	var err error
 
@@ -137,7 +138,7 @@ func csharpBuild(ctx context.Context, client *dagger.Client, hostDirectory *dagg
 	nugetAPIKeySecret := client.SetSecret("nuget-api-key", os.Getenv("NUGET_API_KEY"))
 
 	_, err = container.WithSecretVariable("NUGET_API_KEY", nugetAPIKeySecret).
-		WithExec([]string{"dotnet", "nuget", "push", "bin/Release/*.nupkg", "--api-key", "$NUGET_API_KEY", "--source", "https://api.nuget.org/v3/index.json"}).
+		WithExec([]string{"sh", "-c", "dotnet nuget push bin/Release/*.nupkg --api-key $NUGET_API_KEY --source https://api.nuget.org/v3/index.json --skip-duplicate"}).
 		Sync(ctx)
 
 	return err
