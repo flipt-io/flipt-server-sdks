@@ -2,6 +2,9 @@
 
 ## [0.0.2](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-csharp-v0.0.1...flipt-csharp-v0.0.2) (2024-08-14)
 
+### Fixes
+
+* Support base path with additional paths (#275)
 
 ### Features
 
