@@ -136,8 +136,12 @@ public class Evaluation
     /// <returns></returns>
     private async Task<T?> EvaluateAsync<T>(string path, object request)
     {
-        var url = new Uri(new Uri(_baseUrl ?? throw new InvalidOperationException("Flipt Url is not set")), path);
-
+        if (_baseUrl == null)
+        {
+            throw new InvalidOperationException("Flipt Url is not set");
+        }
+        var url = new Uri(_baseUrl.TrimEnd('/') + path);
+        
         var jsonContent = JsonSerializer.Serialize(request, jsonSerializeSettings);
         var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
