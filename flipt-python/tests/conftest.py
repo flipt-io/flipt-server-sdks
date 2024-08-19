@@ -28,6 +28,6 @@ def sync_flipt_client(flipt_url, flipt_auth_token):
     return FliptClient(url=flipt_url, authentication=ClientTokenAuthentication(flipt_auth_token))
 
 
-@pytest.fixture()
+@pytest.fixture
 def async_flipt_client(flipt_url, flipt_auth_token):
     return AsyncFliptClient(url=flipt_url, authentication=ClientTokenAuthentication(flipt_auth_token))
