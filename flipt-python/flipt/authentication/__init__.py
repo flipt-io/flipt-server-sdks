@@ -60,4 +60,4 @@ class KubernetesAuthentication(AuthenticationStrategy):
         except KeyError or ValueError as e:
             raise RuntimeError(f"Failed parsing authentication response: {e}")
 
-        headers["Authorization"] = self.token
+        headers["Authorization"] = f"Bearer {self.token}"
