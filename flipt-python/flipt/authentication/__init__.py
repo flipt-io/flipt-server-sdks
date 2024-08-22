@@ -31,11 +31,11 @@ class KubernetesAuthentication(AuthenticationStrategy):
         self.service_account_token_path = service_account_token_path
         self.token_expiry = None
 
-
     def authenticate(self, headers: dict[str, str]) -> None:
         # Check if token is available and not expired.
         if self.token and self.token_expiry and self.token_expiry > datetime.now().timestamp():
             headers["Authorization"] = f"Bearer {self.token}"
+            return
 
         # Read service account info from the local file system.
         try:
@@ -57,7 +57,7 @@ class KubernetesAuthentication(AuthenticationStrategy):
             self.token = response_data.get("clientToken")
             token_expiry_iso8601 = response_data.get("expiresAt")
             self.token_expiry = datetime.fromisoformat(token_expiry_iso8601).timestamp()
-        except KeyError or ValueError as e:
+        except (KeyError, ValueError) as e:
             raise RuntimeError(f"Failed parsing authentication response: {e}")
 
         headers["Authorization"] = f"Bearer {self.token}"
