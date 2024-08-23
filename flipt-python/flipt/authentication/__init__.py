@@ -1,6 +1,7 @@
 import requests
 
 from datetime import datetime
+
 from pathlib import Path
 
 
@@ -26,7 +27,7 @@ class JWTAuthentication(AuthenticationStrategy):
 
 
 class KubernetesAuthentication(AuthenticationStrategy):
-    default_service_token_path = "/var/run/secrets/kubernetes.io/serviceaccount/token" # pylint: disable=S107
+    default_service_token_path = "/var/run/secrets/kubernetes.io/serviceaccount/token" # pylint: disable=S105
     def __init__(self,
                  token: str,
                  service_account_token_path:str = default_service_token_path) -> None:
