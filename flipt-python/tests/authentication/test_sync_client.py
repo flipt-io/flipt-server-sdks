@@ -1,5 +1,3 @@
-import pytest
-
 from flipt.evaluation import EvaluationRequest
 
 
