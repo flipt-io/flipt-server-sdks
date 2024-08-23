@@ -1,6 +1,6 @@
-import datetime
 import requests
 
+from datetime import datetime
 from pathlib import Path
 
 
@@ -14,7 +14,7 @@ class ClientTokenAuthentication(AuthenticationStrategy):
         self.token = token
 
     def authenticate(self, headers: dict[str, str]) -> None:
-        headers['Authorization'] = f"Bearer {self.token}"
+        headers["Authorization"] = f"Bearer {self.token}"
 
 
 class JWTAuthentication(AuthenticationStrategy):
@@ -22,11 +22,11 @@ class JWTAuthentication(AuthenticationStrategy):
         self.token = token
 
     def authenticate(self, headers: dict[str, str]) -> None:
-        headers['Authorization'] = f"JWT {self.token}"
+        headers["Authorization"] = f"JWT {self.token}"
 
 
 class KubernetesAuthentication(AuthenticationStrategy):
-    default_service_token_path = '/var/run/secrets/kubernetes.io/serviceaccount/token' # pylint: disable=S107
+    default_service_token_path = "/var/run/secrets/kubernetes.io/serviceaccount/token" # pylint: disable=S107
     def __init__(self,
                  token: str,
                  service_account_token_path:str = default_service_token_path) -> None:
@@ -37,31 +37,31 @@ class KubernetesAuthentication(AuthenticationStrategy):
     def authenticate(self, headers: dict[str, str]) -> None:
         # Check if token is available and not expired.
         if self.token and self.token_expiry and self.token_expiry > datetime.now(tz=datetime.timezone.utc).timestamp():
-            headers['Authorization'] = f"Bearer {self.token}"
+            headers["Authorization"] = f"Bearer {self.token}"
             return
 
         # Read service account info from the local file system.
         try:
-            with Path.open(Path(self.service_account_token_path), 'r') as token_file:
+            with Path.open(Path(self.service_account_token_path), "r") as token_file:
                 service_account_token = token_file.read().strip()
         except IOError as e:
-            raise RuntimeError(f'Failed to read service account token.') from e
+            raise RuntimeError("Failed to read service account token.") from e
 
-        # Send the token to flipt's auth endpoint and collect the response.
-        payload = {'service_account_token': service_account_token}
+        # Send the token to flipt"s auth endpoint and collect the response.
+        payload = {"service_account_token": service_account_token}
         try:
-            response = requests.post('http://flipt:8080/auth/v1/method/kubernetes/serviceaccount',
+            response = requests.post("http://flipt:8080/auth/v1/method/kubernetes/serviceaccount",
                                      json=payload,
                                      timeout=5)
         except requests.exceptions.RequestException as e:
-            raise RuntimeError('Failed to authenticate with Flipt.') from e
+            raise RuntimeError("Failed to authenticate with Flipt.") from e
 
         # Parse the response, storing the token and expiration as a unix timestamp.
         try:
             response_data = response.json()
-            self.token = response_data.get('clientToken')
-            self.token_expiry = response_data.get('expiresAt')
+            self.token = response_data.get("clientToken")
+            self.token_expiry = response_data.get("expiresAt")
         except (KeyError, ValueError) as e:
-            raise RuntimeError('Failed parsing authentication response.') from e
+            raise RuntimeError("Failed parsing authentication response.") from e
 
-        headers['Authorization'] = f"Bearer {self.token}"
+        headers["Authorization"] = f"Bearer {self.token}"
