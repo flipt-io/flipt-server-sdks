@@ -3,7 +3,7 @@ import os
 import pytest
 
 from flipt import AsyncFliptClient, FliptClient
-from flipt.authentication import ClientTokenAuthentication
+from flipt.authentication import ClientTokenAuthentication, KubernetesAuthentication
 
 
 @pytest.fixture(scope="session")
@@ -31,3 +31,12 @@ def sync_flipt_client(flipt_url, flipt_auth_token):
 @pytest.fixture
 def async_flipt_client(flipt_url, flipt_auth_token):
     return AsyncFliptClient(url=flipt_url, authentication=ClientTokenAuthentication(flipt_auth_token))
+
+@pytest.fixture(scope="session")
+def sync_k8s_flipt_client(flipt_url, flipt_auth_token):
+    return FliptClient(url=flipt_url, authentication=KubernetesAuthentication(flipt_auth_token))
+
+
+@pytest.fixture
+def async_k8s_flipt_client(flipt_url, flipt_auth_token):
+    return AsyncFliptClient(url=flipt_url, authentication=KubernetesAuthentication(flipt_auth_token))
