@@ -1,5 +1,6 @@
 from flipt.evaluation import EvaluationRequest
 
+
 async def test_variant(async_k8s_flipt_client):
     variant = await async_k8s_flipt_client.evaluation.variant(
         EvaluationRequest(
