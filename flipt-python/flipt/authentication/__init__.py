@@ -1,9 +1,7 @@
-import requests
 from pathlib import Path
-
 from datetime import datetime
 
-
+import requests
 
 class AuthenticationStrategy:
     def authenticate(self, headers: dict[str, str]) -> None:
