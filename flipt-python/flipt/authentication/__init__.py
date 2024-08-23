@@ -3,6 +3,7 @@ from pathlib import Path
 
 import requests
 
+
 class AuthenticationStrategy:
     def authenticate(self, headers: dict[str, str]) -> None:
         raise NotImplementedError
@@ -26,9 +27,8 @@ class JWTAuthentication(AuthenticationStrategy):
 
 class KubernetesAuthentication(AuthenticationStrategy):
     default_service_token_path = "/var/run/secrets/kubernetes.io/serviceaccount/token"  # noqa: S105
-    def __init__(self,
-                 token: str,
-                 service_account_token_path:str = default_service_token_path) -> None:
+
+    def __init__(self, token: str, service_account_token_path:str = default_service_token_path) -> None:
         self.token = token
         self.service_account_token_path = service_account_token_path
         self.token_expiry = None
@@ -49,9 +49,9 @@ class KubernetesAuthentication(AuthenticationStrategy):
         # Send the token to flipt"s auth endpoint and collect the response.
         payload = {"service_account_token": service_account_token}
         try:
-            response = requests.post("http://flipt:8080/auth/v1/method/kubernetes/serviceaccount",
-                                     json=payload,
-                                     timeout=5)
+            response = requests.post(
+                "http://flipt:8080/auth/v1/method/kubernetes/serviceaccount", json=payload, timeout=5,
+            )
         except requests.exceptions.RequestException as e:
             raise RuntimeError("Failed to authenticate with Flipt.") from e
 
