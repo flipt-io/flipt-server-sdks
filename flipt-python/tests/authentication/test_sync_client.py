@@ -1,10 +1,10 @@
 import pytest
 
-from flipt.evaluation import BatchEvaluationRequest, EvaluationRequest
+from flipt.evaluation import EvaluationRequest
 
 
 def test_variant(sync_k8s_flipt_client):
-    variant = sync_flipt_client.evaluation.variant(
+    variant = sync_k8s_flipt_client.evaluation.variant(
         EvaluationRequest(
             namespace_key="default",
             flag_key="flag1",

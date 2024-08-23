@@ -55,8 +55,7 @@ class KubernetesAuthentication(AuthenticationStrategy):
         try:
             response_data = response.json()
             self.token = response_data.get("clientToken")
-            token_expiry_iso8601 = response_data.get("expiresAt")
-            self.token_expiry = datetime.fromisoformat(token_expiry_iso8601).timestamp()
+            self.token_expiry = response_data.get("expiresAt")
         except (KeyError, ValueError) as e:
             raise RuntimeError(f"Failed parsing authentication response: {e}")
 

@@ -1,9 +1,9 @@
 import pytest
 
-from flipt.async_client import AsyncFliptClient
+from flipt.evaluation import EvaluationRequest
 
 async def test_variant(async_k8s_flipt_client):
-    variant = await async_flipt_client.evaluation.variant(
+    variant = await async_k8s_flipt_client.evaluation.variant(
         EvaluationRequest(
             namespace_key="default",
             flag_key="flag1",
