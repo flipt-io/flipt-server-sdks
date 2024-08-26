@@ -1,15 +1,27 @@
 package main
 
 import (
+	"bytes"
 	"context"
+	"crypto"
+	"crypto/rand"
+	"crypto/rsa"
+	"crypto/x509"
+	"crypto/x509/pkix"
+	"encoding/pem"
 	"flag"
 	"fmt"
 	"log"
 	"maps"
+	"math/big"
 	"os"
 	"strings"
+	"time"
 
 	"dagger.io/dagger"
+	"github.com/go-jose/go-jose/v3"
+	jjwt "github.com/go-jose/go-jose/v3/jwt"
+	"github.com/hashicorp/cap/jwt"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -25,7 +37,16 @@ var (
 	}
 )
 
-type integrationTestFn func(context.Context, *dagger.Client, *dagger.Container, *dagger.Directory) error
+type containerOpt func(*dagger.Container) *dagger.Container
+
+type integrationTestFn func(context.Context, *dagger.Client, *dagger.Container, *dagger.Directory, ...containerOpt) error
+
+func applyOpts(c *dagger.Container, opts ...containerOpt) *dagger.Container {
+	for _, opt := range opts {
+		c = opt(c)
+	}
+	return c
+}
 
 func init() {
 	flag.StringVar(&sdks, "sdks", "", "comma separated list of which sdk(s) to run integration tests for")
@@ -68,21 +89,24 @@ func run() error {
 
 	dir := client.Host().Directory(".")
 
-	flipt, hostDirectory := getTestDependencies(ctx, client, dir)
+	flipt, hostDirectory, opts, err := getTestDependencies(ctx, client, dir)
+	if err != nil {
+		return err
+	}
 
 	var g errgroup.Group
 
 	for _, fn := range tests {
 		fn := fn
 		g.Go(func() error {
-			return fn(ctx, client, flipt, hostDirectory)
+			return fn(ctx, client, flipt, hostDirectory, opts...)
 		})
 	}
 
 	return g.Wait()
 }
 
-func getTestDependencies(_ context.Context, client *dagger.Client, dir *dagger.Directory) (*dagger.Container, *dagger.Directory) {
+func getTestDependencies(ctx context.Context, client *dagger.Client, dir *dagger.Directory) (_ *dagger.Container, _ *dagger.Directory, opts []containerOpt, err error) {
 	// Flipt
 	flipt := client.Container().From("flipt/flipt:latest").
 		WithUser("root").
@@ -92,32 +116,56 @@ func getTestDependencies(_ context.Context, client *dagger.Client, dir *dagger.D
 		WithUser("flipt").
 		WithEnvVariable("FLIPT_STORAGE_TYPE", "local").
 		WithEnvVariable("FLIPT_STORAGE_LOCAL_PATH", "/var/data/flipt").
-		WithEnvVariable("FLIPT_AUTHENTICATION_METHODS_TOKEN_ENABLED", "1").
+		WithEnvVariable("FLIPT_AUTHENTICATION_METHODS_TOKEN_ENABLED", "true").
 		WithEnvVariable("FLIPT_AUTHENTICATION_METHODS_TOKEN_BOOTSTRAP_TOKEN", "secret").
-		WithEnvVariable("FLIPT_AUTHENTICATION_REQUIRED", "1").
+		WithEnvVariable("FLIPT_AUTHENTICATION_REQUIRED", "true").
 		WithExposedPort(8080)
 
-	return flipt, dir
+	{
+		// K8s auth configuration
+		flipt = flipt.
+			WithEnvVariable("FLIPT_AUTHENTICATION_METHODS_KUBERNETES_ENABLED", "true")
+
+		var saToken string
+		// run an OIDC server which exposes a JWKS url and returns
+		// the associated private key bytes
+		flipt, saToken, err = serveOIDC(ctx, client, client.Container().
+			From("golang:1.23").
+			WithMountedDirectory("/src", dir.Directory("test")).
+			WithWorkdir("/src").
+			WithExec([]string{"go", "mod", "download"}), flipt)
+		if err != nil {
+			return nil, nil, nil, err
+		}
+
+		opts = append(opts, func(c *dagger.Container) *dagger.Container {
+			return c.WithNewFile("/var/run/secrets/kubernetes.io/serviceaccount/token", dagger.ContainerWithNewFileOpts{
+				Contents: saToken,
+			})
+		})
+	}
+
+	return flipt, dir, opts, nil
 }
 
 // pythonTest runs the python integration test suite against a container running Flipt.
-func pythonTest(ctx context.Context, client *dagger.Client, flipt *dagger.Container, hostDirectory *dagger.Directory) error {
-	_, err := client.Container().From("python:3.11-bookworm").
+func pythonTest(ctx context.Context, client *dagger.Client, flipt *dagger.Container, hostDirectory *dagger.Directory, opts ...containerOpt) (err error) {
+	container := applyOpts(client.Container().From("python:3.11-bookworm").
 		WithExec([]string{"pip", "install", "poetry==1.7.1"}).
 		WithWorkdir("/src").
 		WithDirectory("/src", hostDirectory.Directory("flipt-python")).
 		WithServiceBinding("flipt", flipt.WithExec(nil).AsService()).
 		WithEnvVariable("FLIPT_URL", "http://flipt:8080").
 		WithEnvVariable("FLIPT_AUTH_TOKEN", "secret").
-		WithExec([]string{"poetry", "install"}).
-		WithExec([]string{"make", "test"}).
-		Sync(ctx)
+		WithEnvVariable("UNIQUE", time.Now().String()).
+		WithExec([]string{"poetry", "install"}), opts...)
 
+	_, err = container.WithExec([]string{"make", "test"}).Sync(ctx)
 	return err
 }
 
 // nodeTest runs the node integration test suite against a container running Flipt.
-func nodeTest(ctx context.Context, client *dagger.Client, flipt *dagger.Container, hostDirectory *dagger.Directory) error {
+func nodeTest(ctx context.Context, client *dagger.Client, flipt *dagger.Container, hostDirectory *dagger.Directory, opts ...containerOpt) error {
 	_, err := client.Container().From("node:21.2-bookworm").
 		WithWorkdir("/src").
 		// The node_modules should never be version controlled, but we will exclude it here
@@ -135,7 +183,7 @@ func nodeTest(ctx context.Context, client *dagger.Client, flipt *dagger.Containe
 	return err
 }
 
-func csharpTest(ctx context.Context, client *dagger.Client, flipt *dagger.Container, hostDirectory *dagger.Directory) error {
+func csharpTest(ctx context.Context, client *dagger.Client, flipt *dagger.Container, hostDirectory *dagger.Directory, opts ...containerOpt) error {
 	_, err := client.Container().From("mcr.microsoft.com/dotnet/sdk:8.0").
 		WithDirectory("/src", hostDirectory.Directory("flipt-csharp")).
 		WithWorkdir("/src").
@@ -149,7 +197,7 @@ func csharpTest(ctx context.Context, client *dagger.Client, flipt *dagger.Contai
 }
 
 // rustTest runs the rust integration test suite against a container running Flipt.
-func rustTest(ctx context.Context, client *dagger.Client, flipt *dagger.Container, hostDirectory *dagger.Directory) error {
+func rustTest(ctx context.Context, client *dagger.Client, flipt *dagger.Container, hostDirectory *dagger.Directory, opts ...containerOpt) error {
 	_, err := client.Container().From("rust:1.73.0-bookworm").
 		WithWorkdir("/src").
 		// Exclude target directory which contain the build artifacts for Rust.
@@ -166,7 +214,7 @@ func rustTest(ctx context.Context, client *dagger.Client, flipt *dagger.Containe
 }
 
 // javaTest runs the java integration test suite against a container running Flipt.
-func javaTest(ctx context.Context, client *dagger.Client, flipt *dagger.Container, hostDirectory *dagger.Directory) error {
+func javaTest(ctx context.Context, client *dagger.Client, flipt *dagger.Container, hostDirectory *dagger.Directory, opts ...containerOpt) error {
 	_, err := client.Container().From("gradle:8.5.0-jdk11").
 		WithWorkdir("/src").
 		WithDirectory("/src", hostDirectory.Directory("flipt-java"), dagger.ContainerWithDirectoryOpts{
@@ -182,7 +230,7 @@ func javaTest(ctx context.Context, client *dagger.Client, flipt *dagger.Containe
 }
 
 // phpTest runs the php integration test suite against a container running Flipt.
-func phpTest(ctx context.Context, client *dagger.Client, flipt *dagger.Container, hostDirectory *dagger.Directory) error {
+func phpTest(ctx context.Context, client *dagger.Client, flipt *dagger.Container, hostDirectory *dagger.Directory, opts ...containerOpt) error {
 	_, err := client.Container().From("php:8-cli").
 		WithEnvVariable("COMPOSER_ALLOW_SUPERUSER", "1").
 		WithExec([]string{"apt-get", "update"}).
@@ -200,4 +248,140 @@ func phpTest(ctx context.Context, client *dagger.Client, flipt *dagger.Container
 		Sync(ctx)
 
 	return err
+}
+
+func signJWT(key crypto.PrivateKey, claims interface{}) string {
+	sig, err := jose.NewSigner(
+		jose.SigningKey{Algorithm: jose.SignatureAlgorithm(string(jwt.RS256)), Key: key},
+		(&jose.SignerOptions{}).WithType("JWT"),
+	)
+	if err != nil {
+		panic(err)
+	}
+
+	raw, err := jjwt.Signed(sig).
+		Claims(claims).
+		CompactSerialize()
+	if err != nil {
+		panic(err)
+	}
+
+	return raw
+}
+
+// serveOIDC runs a mini OIDC-style key provider and mounts it as a service onto Flipt.
+// This provider is designed to mimic how kubernetes exposes JWKS endpoints for its service account tokens.
+// The function creates signing keys and TLS CA certificates which is shares with the provider and
+// with Flipt itself. This is to facilitate Flipt using the custom CA to authenticate the provider.
+// The function generates two JWTs, one for Flipt to identify itself and one which is returned to the caller.
+// The caller can use this as the service account token identity to be mounted into the container with the
+// client used for running the test and authenticating with Flipt.
+func serveOIDC(_ context.Context, _ *dagger.Client, base, flipt *dagger.Container) (*dagger.Container, string, error) {
+	priv, err := rsa.GenerateKey(rand.Reader, 4096)
+	if err != nil {
+		return nil, "", err
+	}
+
+	rsaSigningKey := &bytes.Buffer{}
+	if err := pem.Encode(rsaSigningKey, &pem.Block{
+		Type:  "RSA PRIVATE KEY",
+		Bytes: x509.MarshalPKCS1PrivateKey(priv),
+	}); err != nil {
+		return nil, "", err
+	}
+
+	// generate a SA style JWT for identifying the Flipt service
+	fliptSAToken := signJWT(priv, map[string]any{
+		"exp": time.Now().Add(24 * time.Hour).Unix(),
+		"iss": "https://discover.srv",
+		"kubernetes.io": map[string]any{
+			"namespace": "flipt",
+			"pod": map[string]any{
+				"name": "flipt-7d26f049-kdurb",
+				"uid":  "bd8299f9-c50f-4b76-af33-9d8e3ef2b850",
+			},
+			"serviceaccount": map[string]any{
+				"name": "flipt",
+				"uid":  "4f18914e-f276-44b2-aebd-27db1d8f8def",
+			},
+		},
+	})
+
+	// generate a CA certificate to share between Flipt and the mini OIDC server
+	ca := &x509.Certificate{
+		SerialNumber: big.NewInt(2019),
+		Subject: pkix.Name{
+			Organization:  []string{"Flipt, INC."},
+			Country:       []string{"US"},
+			Province:      []string{""},
+			Locality:      []string{"North Carolina"},
+			StreetAddress: []string{""},
+			PostalCode:    []string{""},
+		},
+		NotBefore:             time.Now(),
+		NotAfter:              time.Now().AddDate(10, 0, 0),
+		IsCA:                  true,
+		ExtKeyUsage:           []x509.ExtKeyUsage{x509.ExtKeyUsageClientAuth, x509.ExtKeyUsageServerAuth},
+		KeyUsage:              x509.KeyUsageDigitalSignature | x509.KeyUsageCertSign,
+		BasicConstraintsValid: true,
+		DNSNames:              []string{"discover.svc"},
+	}
+
+	caPrivKey, err := rsa.GenerateKey(rand.Reader, 4096)
+	if err != nil {
+		return nil, "", err
+	}
+
+	caBytes, err := x509.CreateCertificate(rand.Reader, ca, ca, &caPrivKey.PublicKey, caPrivKey)
+	if err != nil {
+		return nil, "", err
+	}
+
+	var caCert bytes.Buffer
+	if err := pem.Encode(&caCert, &pem.Block{
+		Type:  "CERTIFICATE",
+		Bytes: caBytes,
+	}); err != nil {
+		return nil, "", err
+	}
+
+	var caPrivKeyPEM bytes.Buffer
+	pem.Encode(&caPrivKeyPEM, &pem.Block{
+		Type:  "RSA PRIVATE KEY",
+		Bytes: x509.MarshalPKCS1PrivateKey(caPrivKey),
+	})
+
+	serviceAccountToken := signJWT(priv, map[string]any{
+		"exp": time.Now().Add(24 * time.Hour).Unix(),
+		"iss": "https://discover.svc",
+		"kubernetes.io": map[string]any{
+			"namespace": "integration",
+			"pod": map[string]any{
+				"name": "integration-test-7d26f049-kdurb",
+				"uid":  "bd8299f9-c50f-4b76-af33-9d8e3ef2b850",
+			},
+			"serviceaccount": map[string]any{
+				"name": "myservice",
+				"uid":  "4f18914e-f276-44b2-aebd-27db1d8f8def",
+			},
+		},
+	})
+
+	return flipt.
+			WithEnvVariable("FLIPT_LOG_LEVEL", "WARN").
+			WithEnvVariable("FLIPT_AUTHENTICATION_METHODS_KUBERNETES_DISCOVERY_URL", "https://discover.svc").
+			WithServiceBinding("discover.svc", base.
+				WithNewFile("/server.crt", dagger.ContainerWithNewFileOpts{Contents: caCert.String()}).
+				WithNewFile("/server.key", dagger.ContainerWithNewFileOpts{Contents: caPrivKeyPEM.String()}).
+				WithNewFile("/priv.pem", dagger.ContainerWithNewFileOpts{Contents: rsaSigningKey.String()}).
+				WithExposedPort(443).
+				WithExec([]string{
+					"sh",
+					"-c",
+					"go run ./internal/cmd/discover/... --private-key /priv.pem",
+				}).
+				AsService()).
+			WithNewFile("/var/run/secrets/kubernetes.io/serviceaccount/token", dagger.ContainerWithNewFileOpts{Contents: fliptSAToken}).
+			WithNewFile("/var/run/secrets/kubernetes.io/serviceaccount/ca.crt", dagger.ContainerWithNewFileOpts{Contents: caCert.String()}),
+		serviceAccountToken, nil
 }
