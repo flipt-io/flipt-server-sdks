@@ -7,6 +7,8 @@ use Flipt\Models\BooleanEvaluationResult;
 use Flipt\Models\VariantEvaluationResult;
 use Flipt\Models\DefaultBooleanEvaluationResult;
 use Flipt\Models\DefaultVariantEvaluationResult;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 
 final class FliptClient
@@ -16,8 +18,11 @@ final class FliptClient
     protected string $namespace;
     protected string $entityId;
     protected array $context;
+    protected LoggerInterface $logger;
 
-
+    /**
+     * @param array<string, string> $context
+     */
     public function __construct(string|Client $host, string $namespace = "default", array $context = [], string $entityId = '', AuthenticationStrategy $authentication = null)
     {
         $this->authentication = $authentication;
@@ -25,13 +30,25 @@ final class FliptClient
         $this->context = $context;
         $this->entityId = $entityId;
         $this->client = (is_string($host)) ? new Client(['base_uri' => $host]) : $host;
+        $this->logger = new NullLogger();
     }
 
+    /**
+     * Set logger to use
+     */
+    public function setLogger(LoggerInterface $logger) {
+        $this->logger = $logger;
+    }
 
     /**
      * Returns the boolean evaluation result
+     *
+     * @param array<string, string> $context
+     *
+     * @throws \JsonException if request or response includes invalid json data
+     * @throws \Psr\Http\Client\ClientExceptionInterface if network or request error occurs
      */
-    public function boolean(string $name, $context = [], $entityId = NULL, $reference = ""): BooleanEvaluationResult
+    public function boolean(string $name, ?array $context = [], ?string $entityId = null, ?string $reference = ""): BooleanEvaluationResult
     {
         $response = $this->apiRequest('/evaluate/v1/boolean', $this->mergeRequestParams($name, $context, $entityId, $reference));
         return new DefaultBooleanEvaluationResult($response['flagKey'], $response['enabled'], $response['reason'], $response['requestDurationMillis'], $response['requestId'], $response['timestamp']);
@@ -39,9 +56,33 @@ final class FliptClient
 
 
     /**
-     * Returns the variant evaluation result
+     * Returns the bool result or default
+     *
+     * @param string $name - the flag key
+     * @param bool $fallback - default value in case of error
+     * @param array<string, string> $context
+     *
+     * @return bool
      */
-    public function variant(string $name, $context = [], $entityId = NULL, $reference = ""): VariantEvaluationResult
+    public function booleanValue(string $name, bool $fallback, ?array $context = [], ?string $entityId = null, ?string $reference = ""): bool
+    {
+        try {
+            return $this->boolean($name, $context, $entityId, $reference)->getEnabled();
+        } catch (\JsonException | \Psr\Http\Client\ClientExceptionInterface $e) {
+            $this->logger->error($e->getMessage());
+        }
+        return $fallback;
+    }
+
+    /**
+     * Returns the variant evaluation result
+     *
+     * @param array<string,string> $context
+     *
+     * @throws \JsonException if request or response includes invalid json data
+     * @throws \Psr\Http\Client\ClientExceptionInterface if network or request error occurs
+     */
+    public function variant(string $name, ?array $context = [], ?string $entityId = null, ?string $reference = ""): VariantEvaluationResult
     {
         $response = $this->apiRequest('/evaluate/v1/variant', $this->mergeRequestParams($name, $context, $entityId, $reference));
         return new DefaultVariantEvaluationResult($response['flagKey'], $response['match'], $response['reason'], $response['requestDurationMillis'], $response['requestId'], $response['timestamp'], $response['segmentKeys'], $response['variantKey'], $response['variantAttachment']);
@@ -49,9 +90,36 @@ final class FliptClient
 
 
     /**
-     * Batch return evaluation requests
+     * Returns the variant evaluation variantKey or default
+     *
+     * @param string $name - the flag key
+     * @param string $fallback - default value in case of error
+     * @param array<string,string> $context
+     *
+     * @return string
      */
-    public function batch(array $names, $context = [], $entityId = NULL, $reference = ""): array
+    public function variantValue(string $name, string $fallback, ?array $context = [], ?string $entityId = null, ?string $reference = ""): string
+    {
+        try {
+            return $this->variant($name, $context, $entityId, $reference)->getVariantKey();
+        } catch (\JsonException | \Psr\Http\Client\ClientExceptionInterface $e) {
+            $this->logger->error($e->getMessage());
+        }
+        return $fallback;
+    }
+
+    /**
+     * Batch return evaluation requests
+     *
+     * @param array<string> $names
+     * @param array<string,string> $context
+     *
+     * @return array<mixed>
+     *
+     * @throws \JsonException if request or response includes invalid json data
+     * @throws \Psr\Http\Client\ClientExceptionInterface if network or request error occurs
+     */
+    public function batch(array $names, $context = [], ?string $entityId = null, ?string $reference = ""): array
     {
 
         $response = $this->apiRequest('/evaluate/v1/batch', [
@@ -81,8 +149,12 @@ final class FliptClient
         }, $response['responses']);
     }
 
-
-    protected function mergeRequestParams(string $name, $context = [], $entityId = NULL, $reference = "")
+    /**
+     * @param array<string,string> $context
+     *
+     * @return array<string,mixed>
+     */
+    protected function mergeRequestParams(string $name, $context = [], ?string $entityId = null, ?string $reference = "")
     {
         return [
             'context' => array_merge($this->context, $context),
@@ -97,6 +169,13 @@ final class FliptClient
 
     /**
      * Helper function to perform a guzzle request with the correct headers and body
+     *
+     * @param array<string,mixed> $body
+     *
+     * @return array<string,mixed>
+     *
+     * @throws \JsonException if request or response includes invalid json data
+     * @throws \Psr\Http\Client\ClientExceptionInterface if network or request error occurs
      */
     protected function apiRequest(string $path, array $body = [], string $method = 'POST')
     {
@@ -112,15 +191,17 @@ final class FliptClient
         // execute request
         $response = $this->client->request($method, $path, [
             'headers' => $headers,
-            'body' => json_encode($body, JSON_FORCE_OBJECT),
+            'body' => json_encode($body, JSON_FORCE_OBJECT | JSON_THROW_ON_ERROR),
         ]);
 
-        return json_decode($response->getBody(), true);
+        return json_decode($response->getBody(), true, 512, JSON_THROW_ON_ERROR);
     }
 
 
     /**
      * Create a new client with a different namespace
+     *
+     * @return FliptClient
      */
     public function withNamespace(string $namespace)
     {
@@ -129,6 +210,10 @@ final class FliptClient
 
     /**
      * Create a new client with a different context
+     *
+     * @param array<string,string> $context
+     *
+     * @return FliptClient
      */
     public function withContext(array $context)
     {
@@ -137,6 +222,8 @@ final class FliptClient
 
     /**
      * Create a new client with a different authentication strategy
+     *
+     * @return FliptClient
      */
     public function withAuthentication(AuthenticationStrategy $authentication)
     {
@@ -146,11 +233,17 @@ final class FliptClient
 
 interface AuthenticationStrategy
 {
+    /**
+     * @param array<string, mixed> $headers
+     *
+     * @return array<string, mixed>
+     */
     public function authenticate(array $headers);
 }
 
 /**
  * Authenticate with a client token
+ *
  * @see https://www.flipt.io/docs/authentication/methods#static-token
  */
 class ClientTokenAuthentication implements AuthenticationStrategy
@@ -162,6 +255,9 @@ class ClientTokenAuthentication implements AuthenticationStrategy
         $this->token = $token;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function authenticate(array $headers)
     {
         $headers['Authorization'] = 'Bearer ' . $this->token;
@@ -171,6 +267,7 @@ class ClientTokenAuthentication implements AuthenticationStrategy
 
 /**
  * Authenticate with a JWT token
+ *
  * @see https://www.flipt.io/docs/authentication/methods#json-web-tokens
  */
 class JWTAuthentication implements AuthenticationStrategy
@@ -182,6 +279,9 @@ class JWTAuthentication implements AuthenticationStrategy
         $this->token = $token;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function authenticate(array $headers)
     {
         $headers['Authorization'] = 'JWT ' . $this->token;

@@ -18,6 +18,9 @@ final class DefaultVariantEvaluationResult implements VariantEvaluationResult
     public ?string $variantKey;
     public ?string $variantAttachment;
 
+    /**
+     * @param array<string> $segmentKeys
+     */
     public function __construct(
         string $flagKey,
         bool $match,
@@ -70,6 +73,9 @@ final class DefaultVariantEvaluationResult implements VariantEvaluationResult
         return $this->timestamp;
     }
 
+    /**
+     * @return array<string>
+     */
     public function getSegmentKeys(): ?array
     {
         return $this->segmentKeys;
