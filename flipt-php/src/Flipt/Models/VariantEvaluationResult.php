@@ -12,6 +12,9 @@ interface VariantEvaluationResult
     public function getRequestDurationMillis(): float;
     public function getRequestId(): string;
     public function getTimestamp(): string;
+    /**
+     * @return array<string>
+     */
     public function getSegmentKeys(): ?array;
     public function getVariantKey(): ?string;
     public function getVariantAttachment(): ?string;
