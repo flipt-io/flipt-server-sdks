@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-php-v1.0.2...flipt-php-v1.1.0) (2024-10-08)
+
+
+### Features
+
+* **php:** resilient to network/http errors ([#308](https://github.com/flipt-io/flipt-server-sdks/issues/308)) ([ed79011](https://github.com/flipt-io/flipt-server-sdks/commit/ed79011ea6135465e1ee4231c631f56abf65785c))
+
 ## [1.0.2](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-php-v1.0.1...flipt-php-v1.0.2) (2024-04-05)
 
 
