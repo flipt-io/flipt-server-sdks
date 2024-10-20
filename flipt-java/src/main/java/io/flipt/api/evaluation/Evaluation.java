@@ -9,6 +9,8 @@ import io.flipt.api.error.Error;
 import io.flipt.api.evaluation.models.*;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Map;
 import okhttp3.*;
@@ -69,146 +71,60 @@ public class Evaluation {
     }
   }
 
-  @SuppressWarnings("resource")
-  public VariantEvaluationResponse evaluateVariant(EvaluationRequest request) {
-    URL url;
-
-    final String path = "/evaluate/v1/variant";
-
-    try {
-      url = new URL(String.format("%s%s", this.baseURL, path));
-    } catch (MalformedURLException e) {
-      throw new RuntimeException(e);
-    }
-
-    Request.Builder requestBuilder = makeRequest(request, url);
-
-    Response response = null;
-
-    try {
-      response = httpClient.newCall(requestBuilder.build()).execute();
-      assert response.body() != null;
-
-      if (!response.isSuccessful()) {
-        Error error = this.objectMapper.readValue(response.body().string(), Error.class);
-        throw new RuntimeException(error);
-      }
-      return this.objectMapper.readValue(response.body().string(), VariantEvaluationResponse.class);
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    } finally {
-      if (response != null) {
-        response.close();
-      }
-    }
+  public VariantEvaluationResponse evaluateVariant(EvaluationRequest request)
+      throws EvaluationException {
+    return this.makeRequest(request, "/evaluate/v1/variant", VariantEvaluationResponse.class);
   }
 
-  @SuppressWarnings("resource")
-  public BooleanEvaluationResponse evaluateBoolean(EvaluationRequest request) {
+  public BooleanEvaluationResponse evaluateBoolean(EvaluationRequest request)
+      throws EvaluationException {
+    return this.makeRequest(request, "/evaluate/v1/boolean", BooleanEvaluationResponse.class);
+  }
+
+  public BatchEvaluationResponse evaluateBatch(BatchEvaluationRequest request)
+      throws EvaluationException {
+    return this.makeRequest(request, "/evaluate/v1/batch", BatchEvaluationResponse.class);
+  }
+
+  private <T> T makeRequest(Object request, String path, Class<T> clazz)
+      throws EvaluationException {
     URL url;
-
-    final String path = "/evaluate/v1/boolean";
-
     try {
-      url = new URL(String.format("%s%s", this.baseURL, path));
-    } catch (MalformedURLException e) {
-      throw new RuntimeException(e);
+      url = new URI(String.format("%s%s", this.baseURL, path)).toURL();
+    } catch (URISyntaxException | MalformedURLException e) {
+      throw new EvaluationException(e);
     }
-
-    Request.Builder requestBuilder = makeRequest(request, url);
 
     Response response = null;
     try {
-      response = httpClient.newCall(requestBuilder.build()).execute();
-      assert response.body() != null;
-      if (!response.isSuccessful()) {
-        Error error = this.objectMapper.readValue(response.body().string(), Error.class);
-        throw new RuntimeException(error);
-      }
-
-      return this.objectMapper.readValue(response.body().string(), BooleanEvaluationResponse.class);
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    } finally {
-      if (response != null) {
-        response.close();
-      }
-    }
-  }
-
-  @SuppressWarnings("resource")
-  public BatchEvaluationResponse evaluateBatch(BatchEvaluationRequest request) {
-    RequestBody body;
-
-    try {
-      body =
+      RequestBody body =
           RequestBody.create(
               this.objectMapper.writeValueAsString(request), MediaType.parse("application/json"));
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
 
-    URL url;
+      Request.Builder httpRequest = new Request.Builder().url(url).method("POST", body);
 
-    final String path = "/evaluate/v1/batch";
+      if (this.headers != null) {
+        this.headers.forEach(httpRequest::addHeader);
+      }
 
-    try {
-      url = new URL(String.format("%s%s", this.baseURL, path));
-    } catch (MalformedURLException e) {
-      throw new RuntimeException(e);
-    }
+      if (this.authenticationStrategy != null) {
+        httpRequest.addHeader(
+            "Authorization", this.authenticationStrategy.getAuthorizationHeader());
+      }
 
-    Request.Builder httpRequest = new Request.Builder().url(url).method("POST", body);
-
-    if (this.headers != null) {
-      this.headers.forEach(httpRequest::addHeader);
-    }
-
-    if (this.authenticationStrategy != null) {
-      httpRequest.addHeader("Authorization", this.authenticationStrategy.getAuthorizationHeader());
-    }
-
-    Response response = null;
-
-    try {
       response = httpClient.newCall(httpRequest.build()).execute();
-      assert response.body() != null;
+
       if (!response.isSuccessful()) {
         Error error = this.objectMapper.readValue(response.body().string(), Error.class);
-        throw new RuntimeException(error);
+        throw new EvaluationException(error);
       }
-
-      return this.objectMapper.readValue(response.body().string(), BatchEvaluationResponse.class);
+      return this.objectMapper.readValue(response.body().string(), clazz);
     } catch (IOException e) {
-      throw new RuntimeException(e);
+      throw new EvaluationException(e);
     } finally {
       if (response != null) {
         response.close();
       }
     }
-  }
-
-  private Request.Builder makeRequest(EvaluationRequest request, URL url) {
-    RequestBody body;
-
-    try {
-      body =
-          RequestBody.create(
-              this.objectMapper.writeValueAsString(request), MediaType.parse("application/json"));
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
-
-    Request.Builder httpRequest = new Request.Builder().url(url).method("POST", body);
-
-    if (this.headers != null) {
-      this.headers.forEach(httpRequest::addHeader);
-    }
-
-    if (this.authenticationStrategy != null) {
-      httpRequest.addHeader("Authorization", this.authenticationStrategy.getAuthorizationHeader());
-    }
-
-    return httpRequest;
   }
 }
