@@ -30,18 +30,25 @@ public class TestFliptClient {
     Map<String, String> context = new HashMap<>();
     context.put("fizz", "buzz");
 
+    EvaluationRequest req =
+        new EvaluationRequest("default", "flag1", "entity", context, Optional.empty());
+
     VariantEvaluationResponse variant =
-        Assertions.assertDoesNotThrow(
-            () ->
-                fc.evaluation()
-                    .evaluateVariant(
-                        new EvaluationRequest(
-                            "default", "flag1", "entity", context, Optional.empty())));
+        Assertions.assertDoesNotThrow(() -> fc.evaluation().evaluateVariant(req));
     Assertions.assertTrue(variant.isMatch());
     Assertions.assertEquals("flag1", variant.getFlagKey());
     Assertions.assertEquals("MATCH_EVALUATION_REASON", variant.getReason().toString());
     Assertions.assertEquals("variant1", variant.getVariantKey());
     Assertions.assertEquals("segment1", variant.getSegmentKeys().get(0));
+
+    Assertions.assertEquals("variant1", fc.evaluation().variantValue(req, "fallback"));
+
+    Assertions.assertEquals(
+        "fallback",
+        fc.evaluation()
+            .variantValue(
+                new EvaluationRequest("default", "flag-none", "entity", context, Optional.empty()),
+                "fallback"));
   }
 
   @Test
@@ -67,17 +74,21 @@ public class TestFliptClient {
     Map<String, String> context = new HashMap<>();
     context.put("fizz", "buzz");
 
+    EvaluationRequest req =
+        new EvaluationRequest("default", "flag_boolean", "entity", context, Optional.empty());
     BooleanEvaluationResponse booleanEvaluation =
-        Assertions.assertDoesNotThrow(
-            () ->
-                fc.evaluation()
-                    .evaluateBoolean(
-                        new EvaluationRequest(
-                            "default", "flag_boolean", "entity", context, Optional.empty())));
+        Assertions.assertDoesNotThrow(() -> fc.evaluation().evaluateBoolean(req));
 
     Assertions.assertTrue(booleanEvaluation.isEnabled());
     Assertions.assertEquals("flag_boolean", booleanEvaluation.getFlagKey());
     Assertions.assertEquals("MATCH_EVALUATION_REASON", booleanEvaluation.getReason().toString());
+
+    Assertions.assertTrue(fc.evaluation().booleanValue(req, false));
+    Assertions.assertTrue(
+        fc.evaluation()
+            .booleanValue(
+                new EvaluationRequest("default", "flag-none", "entity", context, Optional.empty()),
+                true));
   }
 
   @Test

@@ -13,6 +13,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Map;
+import java.util.function.Consumer;
 import okhttp3.*;
 
 public class Evaluation {
@@ -21,6 +22,7 @@ public class Evaluation {
   private final AuthenticationStrategy authenticationStrategy;
   private final Map<String, String> headers;
   private final ObjectMapper objectMapper;
+  private final Consumer<EvaluationException> unhandledExceptionProcessor;
 
   private Evaluation(EvaluationBuilder builder) {
     this.httpClient = builder.httpClient;
@@ -32,6 +34,7 @@ public class Evaluation {
             .addModule(new Jdk8Module())
             .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
             .build();
+    this.unhandledExceptionProcessor = builder.unhandledExceptionProcessor;
   }
 
   public static EvaluationBuilder builder() {
@@ -43,6 +46,7 @@ public class Evaluation {
     private String baseURL;
     private AuthenticationStrategy authenticationStrategy;
     private Map<String, String> headers;
+    private Consumer<EvaluationException> unhandledExceptionProcessor;
 
     private EvaluationBuilder() {}
 
@@ -66,21 +70,90 @@ public class Evaluation {
       return this;
     }
 
+    public EvaluationBuilder setUnhandledExceptionProcessor(
+        Consumer<EvaluationException> processor) {
+      this.unhandledExceptionProcessor = processor;
+      return this;
+    }
+
     public Evaluation build() {
       return new Evaluation(this);
     }
   }
 
+  /**
+   * Evaluates a variant flag based on the {@link EvaluationRequest}.
+   *
+   * @param request the {@link EvaluationRequest}
+   * @return a {@link VariantEvaluationResponse} containing the evaluation result
+   * @throws EvaluationException if an error occurs during the process, such as a network issue or
+   *     invalid request
+   */
   public VariantEvaluationResponse evaluateVariant(EvaluationRequest request)
       throws EvaluationException {
     return this.makeRequest(request, "/evaluate/v1/variant", VariantEvaluationResponse.class);
   }
 
+  /**
+   * Evaluates a variant flag based on the {@link EvaluationRequest}. If the evaluation fails due to
+   * an {@link EvaluationException}, the specified fallback string will be returned. In the event of
+   * an exception, the exception is passed to an unhandled exception processor for further handling
+   * or logging.
+   *
+   * @param request the {@link EvaluationRequest}
+   * @param fallback the string value to return in case of an evaluation error
+   * @return the variant key if the evaluation is successful; otherwise, returns the fallback value
+   */
+  public String variantValue(EvaluationRequest request, String fallback) {
+    try {
+      return this.evaluateVariant(request).getVariantKey();
+    } catch (EvaluationException e) {
+      this.unhandledExceptionProcessor.accept(e);
+    }
+
+    return fallback;
+  }
+
+  /**
+   * Evaluates a boolean flag based on the {@link EvaluationRequest}.
+   *
+   * @param request the {@link EvaluationRequest}
+   * @return a {@link BooleanEvaluationResponse} containing the evaluation result
+   * @throws EvaluationException if an error occurs during the process, such as a network issue or
+   *     invalid request
+   */
   public BooleanEvaluationResponse evaluateBoolean(EvaluationRequest request)
       throws EvaluationException {
     return this.makeRequest(request, "/evaluate/v1/boolean", BooleanEvaluationResponse.class);
   }
 
+  /**
+   * Evaluates a boolean value based on the {@link EvaluationRequest}. If the evaluation fails due
+   * to an {@link EvaluationException}, the specified fallback boolean value will be returned. In
+   * the event of an exception, the exception is passed to an unhandled exception processor for
+   * further handling or logging.
+   *
+   * @param request the {@link EvaluationRequest}
+   * @param fallback the boolean value to return in case of an evaluation error
+   * @return the value if the evaluation is successful; otherwise, returns the fallback value
+   */
+  public boolean booleanValue(EvaluationRequest request, boolean fallback) {
+    try {
+      return this.evaluateBoolean(request).isEnabled();
+    } catch (EvaluationException e) {
+      this.unhandledExceptionProcessor.accept(e);
+    }
+    return fallback;
+  }
+
+  /**
+   * Evaluates a batch of flags based on the {@link BatchEvaluationRequest}.
+   *
+   * @param request the {@link BatchEvaluationRequest}
+   * @return a {@link BatchEvaluationResponse} containing the evaluation results
+   * @throws EvaluationException if an error occurs during the evaluation process, such as a network
+   *     issue or invalid request
+   */
   public BatchEvaluationResponse evaluateBatch(BatchEvaluationRequest request)
       throws EvaluationException {
     return this.makeRequest(request, "/evaluate/v1/batch", BatchEvaluationResponse.class);
