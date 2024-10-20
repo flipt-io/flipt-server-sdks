@@ -29,11 +29,14 @@ public class TestFliptClient {
 
     Map<String, String> context = new HashMap<>();
     context.put("fizz", "buzz");
-    VariantEvaluationResponse variant =
-        fc.evaluation()
-            .evaluateVariant(
-                new EvaluationRequest("default", "flag1", "entity", context, Optional.empty()));
 
+    VariantEvaluationResponse variant =
+        Assertions.assertDoesNotThrow(
+            () ->
+                fc.evaluation()
+                    .evaluateVariant(
+                        new EvaluationRequest(
+                            "default", "flag1", "entity", context, Optional.empty())));
     Assertions.assertTrue(variant.isMatch());
     Assertions.assertEquals("flag1", variant.getFlagKey());
     Assertions.assertEquals("MATCH_EVALUATION_REASON", variant.getReason().toString());
@@ -65,10 +68,12 @@ public class TestFliptClient {
     context.put("fizz", "buzz");
 
     BooleanEvaluationResponse booleanEvaluation =
-        fc.evaluation()
-            .evaluateBoolean(
-                new EvaluationRequest(
-                    "default", "flag_boolean", "entity", context, Optional.empty()));
+        Assertions.assertDoesNotThrow(
+            () ->
+                fc.evaluation()
+                    .evaluateBoolean(
+                        new EvaluationRequest(
+                            "default", "flag_boolean", "entity", context, Optional.empty())));
 
     Assertions.assertTrue(booleanEvaluation.isEnabled());
     Assertions.assertEquals("flag_boolean", booleanEvaluation.getFlagKey());
@@ -111,9 +116,12 @@ public class TestFliptClient {
     evaluationRequests.add(errorEvaluationRequest);
 
     BatchEvaluationResponse batch =
-        fc.evaluation()
-            .evaluateBatch(
-                new BatchEvaluationRequest(Optional.of(""), evaluationRequests, Optional.empty()));
+        Assertions.assertDoesNotThrow(
+            () ->
+                fc.evaluation()
+                    .evaluateBatch(
+                        new BatchEvaluationRequest(
+                            Optional.of(""), evaluationRequests, Optional.empty())));
 
     // Variant
     EvaluationResponse first = batch.getResponses().get(0);

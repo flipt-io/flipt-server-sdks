@@ -1,11 +1,12 @@
 package examples;
 
 import io.flipt.api.FliptClient;
+import io.flipt.api.evaluation.EvaluationException;
 import io.flipt.api.evaluation.models.*;
 import java.util.*;
 
 public class Main {
-  public static void main(String[] args) {
+  public static void main(String[] args) throws EvaluationException {
     FliptClient fliptClient = FliptClient.builder().build();
     Map<String, String> context = new HashMap<>();
 
