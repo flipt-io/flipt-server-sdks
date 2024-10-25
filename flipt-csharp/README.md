@@ -1,7 +1,6 @@
 # Flipt C\#
 
 [![Nuget](https://img.shields.io/nuget/v/flipt)](https://www.nuget.org/packages/Flipt/)
-![beta](https://img.shields.io/badge/status-beta-yellow)
 
 This directory contains the C# source code for the Flipt [server-side](https://www.flipt.io/docs/integration/server/rest) client.
 
