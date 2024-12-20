@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import io.flipt.api.authentication.AuthenticationStrategy;
 import io.flipt.api.error.Error;
+import io.flipt.api.error.FliptException;
 import io.flipt.api.evaluation.models.*;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -22,7 +23,7 @@ public class Evaluation {
   private final AuthenticationStrategy authenticationStrategy;
   private final Map<String, String> headers;
   private final ObjectMapper objectMapper;
-  private final Consumer<EvaluationException> unhandledExceptionProcessor;
+  private final Consumer<FliptException> unhandledExceptionProcessor;
 
   private Evaluation(EvaluationBuilder builder) {
     this.httpClient = builder.httpClient;
@@ -46,7 +47,7 @@ public class Evaluation {
     private String baseURL;
     private AuthenticationStrategy authenticationStrategy;
     private Map<String, String> headers;
-    private Consumer<EvaluationException> unhandledExceptionProcessor;
+    private Consumer<FliptException> unhandledExceptionProcessor;
 
     private EvaluationBuilder() {}
 
@@ -71,7 +72,7 @@ public class Evaluation {
     }
 
     public EvaluationBuilder setUnhandledExceptionProcessor(
-        Consumer<EvaluationException> processor) {
+        Consumer<FliptException> processor) {
       this.unhandledExceptionProcessor = processor;
       return this;
     }

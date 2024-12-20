@@ -1,6 +1,8 @@
 package io.flipt.api.flags;
 
-public class FlagException extends Exception {
+import io.flipt.api.error.FliptException;
+
+public class FlagException extends FliptException {
 
   public FlagException() {
     super();

@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.flipt.api.authentication.AuthenticationStrategy;
+import io.flipt.api.error.FliptException;
 import io.flipt.api.flags.models.ListFlagsResponse;
 import io.flipt.api.models.CommonParameters;
 import io.flipt.api.models.ListParameters;
@@ -27,7 +29,7 @@ public class Flag {
   private final AuthenticationStrategy authenticationStrategy;
   private final Map<String, String> headers;
   private final ObjectMapper objectMapper;
-  private final Consumer<FlagException> unhandledExceptionProcessor;
+  private final Consumer<FliptException> unhandledExceptionProcessor;
 
   private Flag(FlagBuilder builder) {
     this.httpClient = builder.httpClient;
@@ -38,8 +40,13 @@ public class Flag {
         JsonMapper.builder()
             .addModule(new Jdk8Module())
             .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            .addModule(new JavaTimeModule())
             .build();
     this.unhandledExceptionProcessor = builder.unhandledExceptionProcessor;
+  }
+
+  public static FlagBuilder builder() {
+    return new FlagBuilder();
   }
 
   public static class FlagBuilder {
@@ -47,7 +54,7 @@ public class Flag {
     private String baseURL;
     private AuthenticationStrategy authenticationStrategy;
     private Map<String, String> headers;
-    private Consumer<FlagException> unhandledExceptionProcessor;
+    private Consumer<FliptException> unhandledExceptionProcessor;
 
     public FlagBuilder httpClient(OkHttpClient httpClient) {
       this.httpClient = httpClient;
@@ -69,7 +76,7 @@ public class Flag {
       return this;
     }
 
-    public FlagBuilder setUnhandledExceptionProcessor(Consumer<FlagException> processor) {
+    public FlagBuilder setUnhandledExceptionProcessor(Consumer<FliptException> processor) {
       this.unhandledExceptionProcessor = processor;
       return this;
     }

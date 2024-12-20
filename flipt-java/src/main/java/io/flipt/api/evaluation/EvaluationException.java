@@ -1,6 +1,8 @@
 package io.flipt.api.evaluation;
 
-public class EvaluationException extends Exception {
+import io.flipt.api.error.FliptException;
+
+public class EvaluationException extends FliptException {
 
   public EvaluationException() {
     super();
