@@ -85,11 +85,30 @@ public class Flag {
     }
   }
 
+  /**
+   * Get a flag by namespace key and flag key
+   *
+   * @param namespaceKey the {@link String}
+   * @param flagKey the {@link String}
+   * @return a {@link io.flipt.api.flags.models.Flag} containing the flag information
+   * @throws FlagException if error occurs during the process, such as a network issue or invalid
+   *     request
+   */
   public io.flipt.api.flags.models.Flag getFlag(String namespaceKey, String flagKey)
       throws FlagException {
     return getFlag(namespaceKey, flagKey, CommonParameters.builder().build());
   }
 
+  /**
+   * Get a flag by namespace key and flag key
+   *
+   * @param namespaceKey the {@link String}
+   * @param flagKey the {@link String}
+   * @param params the {@link CommonParameters}
+   * @return a {@link io.flipt.api.flags.models.Flag} containing the flag information
+   * @throws FlagException if error occurs during the process, such as a network issue or invalid
+   *     request
+   */
   public io.flipt.api.flags.models.Flag getFlag(
       String namespaceKey, String flagKey, CommonParameters params) throws FlagException {
     return this.makeGetRequest(
@@ -98,10 +117,27 @@ public class Flag {
         io.flipt.api.flags.models.Flag.class);
   }
 
+  /**
+   * List flags by namespace key
+   *
+   * @param namespaceKey the {@link String}
+   * @return a {@link ListFlagsResponse} containing the list of flags
+   * @throws FlagException if error occurs during the process, such as a network issue or invalid
+   *     request
+   */
   public ListFlagsResponse listFlags(String namespaceKey) throws FlagException {
     return listFlags(namespaceKey, ListParameters.builder().build());
   }
 
+  /**
+   * List flags by namespace key applying the given parameters
+   *
+   * @param namespaceKey the {@link String}
+   * @param params the {@link ListParameters}
+   * @return a {@link ListFlagsResponse} containing the list of flags
+   * @throws FlagException if error occurs during the process, such as a network issue or invalid
+   *     request
+   */
   public ListFlagsResponse listFlags(String namespaceKey, ListParameters params)
       throws FlagException {
     return this.makeGetRequest(
@@ -111,10 +147,9 @@ public class Flag {
   }
 
   private Map<String, String> toQueryParamMap(Object object) {
-    ObjectNode jsonNode = objectMapper.valueToTree(object); // Convert object to JSON node
+    ObjectNode jsonNode = objectMapper.valueToTree(object);
     Map<String, String> queryParams = new HashMap<>();
 
-    // Iterate over the fields of the JSON node and add them to the query map
     jsonNode
         .fields()
         .forEachRemaining(
