@@ -4,12 +4,11 @@ import io.flipt.api.authentication.AuthenticationStrategy;
 import io.flipt.api.error.FliptException;
 import io.flipt.api.evaluation.Evaluation;
 import io.flipt.api.flags.Flag;
-import okhttp3.OkHttpClient;
-
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
+import okhttp3.OkHttpClient;
 
 public class FliptClient {
   private final Evaluation evaluation;
@@ -86,8 +85,7 @@ public class FliptClient {
       return this;
     }
 
-    public FliptClientBuilder setUnhandledExceptionProcessor(
-        Consumer<FliptException> processor) {
+    public FliptClientBuilder setUnhandledExceptionProcessor(Consumer<FliptException> processor) {
       this.unhandledExceptionProcessor = processor;
       return this;
     }

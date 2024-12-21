@@ -71,8 +71,7 @@ public class Evaluation {
       return this;
     }
 
-    public EvaluationBuilder setUnhandledExceptionProcessor(
-        Consumer<FliptException> processor) {
+    public EvaluationBuilder setUnhandledExceptionProcessor(Consumer<FliptException> processor) {
       this.unhandledExceptionProcessor = processor;
       return this;
     }

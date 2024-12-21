@@ -104,4 +104,3 @@ public class Variant {
     this.updatedAt = updatedAt;
   }
 }
-

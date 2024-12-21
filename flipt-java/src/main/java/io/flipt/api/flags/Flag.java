@@ -11,17 +11,16 @@ import io.flipt.api.error.FliptException;
 import io.flipt.api.flags.models.ListFlagsResponse;
 import io.flipt.api.models.CommonParameters;
 import io.flipt.api.models.ListParameters;
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class Flag {
   private final OkHttpClient httpClient;
@@ -86,43 +85,47 @@ public class Flag {
     }
   }
 
-  public io.flipt.api.flags.models.Flag getFlag(String namespaceKey, String flagKey) throws FlagException {
+  public io.flipt.api.flags.models.Flag getFlag(String namespaceKey, String flagKey)
+      throws FlagException {
     return getFlag(namespaceKey, flagKey, CommonParameters.builder().build());
   }
 
-  public io.flipt.api.flags.models.Flag getFlag(String namespaceKey, String flagKey, CommonParameters params)
-      throws FlagException {
+  public io.flipt.api.flags.models.Flag getFlag(
+      String namespaceKey, String flagKey, CommonParameters params) throws FlagException {
     return this.makeGetRequest(
         String.format("/api/v1/namespaces/%s/flags/%s", namespaceKey, flagKey),
         params,
-        io.flipt.api.flags.models.Flag.class
-    );
+        io.flipt.api.flags.models.Flag.class);
   }
 
   public ListFlagsResponse listFlags(String namespaceKey) throws FlagException {
     return listFlags(namespaceKey, ListParameters.builder().build());
   }
 
-  public ListFlagsResponse listFlags(String namespaceKey, ListParameters params) throws FlagException {
+  public ListFlagsResponse listFlags(String namespaceKey, ListParameters params)
+      throws FlagException {
     return this.makeGetRequest(
-        String.format("/api/v1/namespaces/%s/flags", namespaceKey), params, ListFlagsResponse.class
-    );
+        String.format("/api/v1/namespaces/%s/flags", namespaceKey),
+        params,
+        ListFlagsResponse.class);
   }
 
   private Map<String, String> toQueryParamMap(Object object) {
-    ObjectNode jsonNode = objectMapper.valueToTree(object);  // Convert object to JSON node
+    ObjectNode jsonNode = objectMapper.valueToTree(object); // Convert object to JSON node
     Map<String, String> queryParams = new HashMap<>();
 
     // Iterate over the fields of the JSON node and add them to the query map
-    jsonNode.fields().forEachRemaining(entry -> {
-      queryParams.put(entry.getKey(), entry.getValue().asText());
-    });
+    jsonNode
+        .fields()
+        .forEachRemaining(
+            entry -> {
+              queryParams.put(entry.getKey(), entry.getValue().asText());
+            });
 
     return queryParams;
   }
 
-  private <T> T makeGetRequest(String path, Object params, Class<T> clazz)
-      throws FlagException {
+  private <T> T makeGetRequest(String path, Object params, Class<T> clazz) throws FlagException {
     URL url = null;
     try {
       HttpUrl httpUrl = HttpUrl.parse(String.format("%s%s", this.baseURL, path));

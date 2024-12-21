@@ -2,7 +2,6 @@ package io.flipt.api.flags.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.flipt.api.models.PaginatedResponse;
-
 import java.util.List;
 
 public class ListFlagsResponse extends PaginatedResponse {
