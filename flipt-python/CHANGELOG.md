@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.1](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-python-v1.4.0...flipt-python-v1.4.1) (2024-12-22)
+
+
+### Bug Fixes
+
+* **python:** set default namespace for list/get flags ([#357](https://github.com/flipt-io/flipt-server-sdks/issues/357)) ([2cc3589](https://github.com/flipt-io/flipt-server-sdks/commit/2cc358991aa1816f2be1bd39b560e3df426a2f78))
+
 ## [1.4.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-python-v1.3.0...flipt-python-v1.4.0) (2024-04-12)
 
 
