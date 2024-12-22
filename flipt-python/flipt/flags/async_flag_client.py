@@ -38,6 +38,9 @@ class AsyncFlag:
             raise FliptApiError(message, response.status_code)
 
     async def list_flags(self, namespace_key: str, params: ListParameters | None = None) -> ListFlagsResponse:
+        if namespace_key is None:
+            namespace_key = "default"
+
         response = await self._client.get(
             f"{self.url}/api/v1/namespaces/{namespace_key}/flags",
             params=params.model_dump_json(exclude_none=True, by_alias=True) if params else {},
@@ -47,6 +50,9 @@ class AsyncFlag:
         return ListFlagsResponse.model_validate_json(response.text)
 
     async def get_flag(self, namespace_key: str, flag_key: str, params: CommonParameters | None = None) -> Flag:
+        if namespace_key is None:
+            namespace_key = "default"
+
         response = await self._client.get(
             f"{self.url}/api/v1/namespaces/{namespace_key}/flags/{flag_key}",
             params=params.model_dump_json(exclude_none=True, by_alias=True) if params else {},
