@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-java-v1.1.2...flipt-java-v1.2.0) (2024-12-23)
+
+
+### Miscellaneous Chores
+
+* release 1.2.0 ([dc99595](https://github.com/flipt-io/flipt-server-sdks/commit/dc99595e8c5de48d2a757e69cf4c9fa9b4d74977))
+
 ## [1.1.2](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-java-v1.1.1...flipt-java-v1.1.2) (2024-10-20)
 
 ### Bug Fixes
