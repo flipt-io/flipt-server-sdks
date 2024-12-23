@@ -8,8 +8,8 @@ from .sync_flag_client import SyncFlag
 
 __all__ = [
     "AsyncFlag",
-    "SyncFlag",
-    "ListFlagsResponse",
     "Flag",
     "FlagType",
+    "ListFlagsResponse",
+    "SyncFlag",
 ]
