@@ -188,7 +188,7 @@ public class TestFliptClient {
             .headers(headers)
             .build();
 
-    ListFlagsResponse flags = Assertions.assertDoesNotThrow(() -> fc.flag().listFlags("default"));
+    ListFlagsResponse flags = Assertions.assertDoesNotThrow(() -> fc.flags().listFlags("default"));
 
     Assertions.assertEquals(2, flags.getFlags().size());
 
@@ -234,7 +234,7 @@ public class TestFliptClient {
             .headers(headers)
             .build();
 
-    Flag flag1 = Assertions.assertDoesNotThrow(() -> fc.flag().getFlag("default", "flag1"));
+    Flag flag1 = Assertions.assertDoesNotThrow(() -> fc.flags().getFlag("default", "flag1"));
 
     Assertions.assertEquals("flag1", flag1.getKey());
     Assertions.assertEquals("flag1", flag1.getName());

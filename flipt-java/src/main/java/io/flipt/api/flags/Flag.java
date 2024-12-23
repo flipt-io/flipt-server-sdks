@@ -23,6 +23,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class Flag {
+  private static final String DEFAULT_NAMESPACE_KEY = "default";
   private final OkHttpClient httpClient;
   private final String baseURL;
   private final AuthenticationStrategy authenticationStrategy;
@@ -111,6 +112,9 @@ public class Flag {
    */
   public io.flipt.api.flags.models.Flag getFlag(
       String namespaceKey, String flagKey, CommonParameters params) throws FlagException {
+    if (Objects.isNull(namespaceKey) || namespaceKey.isEmpty()) {
+      namespaceKey = DEFAULT_NAMESPACE_KEY;
+    }
     return this.makeGetRequest(
         String.format("/api/v1/namespaces/%s/flags/%s", namespaceKey, flagKey),
         params,
@@ -140,6 +144,9 @@ public class Flag {
    */
   public ListFlagsResponse listFlags(String namespaceKey, ListParameters params)
       throws FlagException {
+    if (Objects.isNull(namespaceKey) || namespaceKey.isEmpty()) {
+      namespaceKey = DEFAULT_NAMESPACE_KEY;
+    }
     return this.makeGetRequest(
         String.format("/api/v1/namespaces/%s/flags", namespaceKey),
         params,

@@ -8,7 +8,7 @@ import io.flipt.api.flags.models.ListFlagsResponse;
 public class FlagMain {
   public static void main(String[] args) throws FlagException {
     FliptClient fliptClient = FliptClient.builder().build();
-    Flag flag = fliptClient.flag();
+    Flag flag = fliptClient.flags();
 
     ListFlagsResponse listFlagsResponse = flag.listFlags("default");
     System.out.println("Count: " + listFlagsResponse.getTotalCount());

@@ -38,7 +38,7 @@ public class FliptClient {
     return evaluation;
   }
 
-  public Flag flag() {
+  public Flag flags() {
     return flag;
   }
 
