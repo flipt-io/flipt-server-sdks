@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.2.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-java-v1.2.0...flipt-java-v1.2.0) (2024-12-23)
+
+
+### Bug Fixes
+
+* **java:** expose EvaluationException instead of the RuntimeException ([#315](https://github.com/flipt-io/flipt-server-sdks/issues/315)) ([e672cff](https://github.com/flipt-io/flipt-server-sdks/commit/e672cffe84b0d7c6ef8d9df5edc894b14696165d))
+
+
+### Miscellaneous Chores
+
+* release 1.1.1 ([feb4c8c](https://github.com/flipt-io/flipt-server-sdks/commit/feb4c8c4147c8e4b6adf07a02220e71193631d78))
+* release 1.2.0 ([dc99595](https://github.com/flipt-io/flipt-server-sdks/commit/dc99595e8c5de48d2a757e69cf4c9fa9b4d74977))
+
 ## [1.2.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-java-v1.1.2...flipt-java-v1.2.0) (2024-12-23)
 
 
