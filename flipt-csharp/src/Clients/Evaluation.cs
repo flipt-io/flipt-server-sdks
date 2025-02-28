@@ -81,7 +81,7 @@ public class Evaluation
             return this;
         }
 
-        public Evaluation? Build()
+        public Evaluation Build()
         {
             if (HttpClient == null)
             {

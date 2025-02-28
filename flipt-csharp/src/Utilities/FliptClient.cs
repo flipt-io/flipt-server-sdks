@@ -28,7 +28,7 @@ public class FliptClient
             .Build();
     }
 
-    public Evaluation? Evaluation { get; }
+    public Evaluation Evaluation { get; }
 
     /// <summary>
     /// This method returns a new instance of the FliptClientBuilder class.
