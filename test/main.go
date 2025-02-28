@@ -150,7 +150,7 @@ func csharpTest(ctx context.Context, client *dagger.Client, flipt *dagger.Contai
 
 // rustTest runs the rust integration test suite against a container running Flipt.
 func rustTest(ctx context.Context, client *dagger.Client, flipt *dagger.Container, hostDirectory *dagger.Directory) error {
-	_, err := client.Container().From("rust:1.73.0-bookworm").
+	_, err := client.Container().From("rust:1.85.0-bookworm").
 		WithWorkdir("/src").
 		// Exclude target directory which contain the build artifacts for Rust.
 		WithDirectory("/src", hostDirectory.Directory("flipt-rust"), dagger.ContainerWithDirectoryOpts{
