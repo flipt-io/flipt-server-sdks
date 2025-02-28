@@ -51,29 +51,20 @@ jobs:
   lint-rust:
     name: Lint Rust
     runs-on: ubuntu-latest
+    env:
+      CARGO_TERM_COLOR: always
     steps:
       - name: Checkout Sources
         uses: actions/checkout@v4
 
-      - name: Install Stable Toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: 1.75.0
-          override: true
-          components: rustfmt, clippy
+      - name: Install Rust
+        run: rustup update stable
 
       - name: Check Formatting
-        uses: actions-rs/cargo@v1
-        with:
-          command: fmt
-          args: --all -- --check
+        run: cargo fmt --all -- --check
 
       - name: Clippy
-        uses: actions-rs/cargo@v1
-        with:
-          command: clippy
-          args: -- -D warnings
+        run: cargo clippy --all -- -D warnings
 
   lint-java:
     name: Lint Java
