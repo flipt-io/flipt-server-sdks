@@ -57,6 +57,11 @@ impl<T: AuthenticationStrategy> ConfigBuilder<T> {
         self
     }
 
+    pub fn with_headers(mut self, headers: HeaderMap) -> Self {
+        self.headers = Some(headers);
+        self
+    }
+
     pub fn build(self) -> Config<T> {
         Config {
             endpoint: self.endpoint.unwrap(),

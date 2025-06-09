@@ -55,3 +55,26 @@ public class Program
     }
 }
 ```
+
+### Setting HTTP Headers
+
+You can set custom HTTP headers for the client by using the `WithHeaders` method.
+
+````csharp
+var fliptClient = FliptClient.Builder()
+    .WithUrl("http://localhost:8080")
+    .WithAuthentication(new ClientTokenAuthenticationStrategy("Client-Token"))
+    .WithHeaders(new Dictionary<string, string> { { "X-Custom-Header", "Custom-Value" } })
+    .Build();
+
+### Flipt V2 Environment Support
+
+Flipt V2 introduces the concept of [environments](https://docs.flipt.io/v2/concepts#environments). This client supports evaluation of flags in a specific environment by using the `X-Flipt-Environment` header.
+
+```csharp
+var fliptClient = FliptClient.Builder()
+    .WithUrl("http://localhost:8080")
+    .WithAuthentication(new ClientTokenAuthenticationStrategy("Client-Token"))
+    .WithHeaders(new Dictionary<string, string> { { "X-Flipt-Environment", "production" } })
+    .Build();
+````

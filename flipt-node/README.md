@@ -37,6 +37,26 @@ async function evaluate() {
 
 There is a more detailed example in the [examples](./examples) directory.
 
+### Setting HTTP Headers
+
+You can set custom HTTP headers for the client by using the `headers` parameter in the constructor.
+
+```typescript
+const fliptClient = new FliptClient({
+  headers: { "X-Custom-Header": "Custom-Value" }
+});
+```
+
+### Flipt V2 Environment Support
+
+Flipt V2 introduces the concept of [environments](https://docs.flipt.io/v2/concepts#environments). This client supports evaluation of flags in a specific environment by using the `X-Flipt-Environment` header.
+
+```typescript
+const fliptClient = new FliptClient({
+  headers: { "X-Flipt-Environment": "production" }
+});
+```
+
 ### Metrics
 
 There is support for [Datadog RUM](https://docs.datadoghq.com/real_user_monitoring/) through this client. This allows you to track the values of feature flag evaluation and how it relates to active browser sessions.
