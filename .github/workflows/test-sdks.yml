@@ -25,7 +25,7 @@ jobs:
         run: |
           cd /usr/local
           curl -L https://dl.dagger.io/dagger/install.sh | DAGGER_VERSION=0.9.5 sh
-      
+
       - name: Run Integration Tests
         run: |
           dagger run go run ./test

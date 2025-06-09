@@ -54,8 +54,24 @@ public class Main {
             .entityId("entity")
             .context(context)
             .build();
-    
+
     EvaluationResponse variantEvaluationResponse = fliptClient.evaluate(variantEvaluationRequest);
 ```
 
 There is a more detailed example in the [examples](./src/main/java/examples) directory.
+
+### Setting HTTP Headers
+
+You can set custom HTTP headers for the client by using the `headers` method in the builder.
+
+```java
+FliptClient fliptClient = FliptClient.builder().headers(Map.of("X-Custom-Header", "Custom-Value")).build();
+```
+
+### Flipt V2 Environment Support
+
+Flipt V2 introduces the concept of [environments](https://docs.flipt.io/v2/concepts#environments). This client supports evaluation of flags in a specific environment by using the `X-Flipt-Environment` header.
+
+```java
+FliptClient fliptClient = FliptClient.builder().headers(Map.of("X-Flipt-Environment", "production")).build();
+```
