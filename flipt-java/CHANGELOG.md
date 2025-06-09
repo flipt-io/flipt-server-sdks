@@ -1,12 +1,5 @@
 # Changelog
 
-## [1.3.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-java-v1.2.0...flipt-java-v1.3.0) (2025-06-09)
-
-
-### Features
-
-* **php:** add ablity to set arbitrary headers ([#457](https://github.com/flipt-io/flipt-server-sdks/issues/457)) ([d252e8f](https://github.com/flipt-io/flipt-server-sdks/commit/d252e8f67895bf4ba1778d46f855c0a915fa024a))
-
 ## [1.2.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-java-v1.1.2...flipt-java-v1.2.0) (2024-12-23)
 
 ### Miscellaneous Chores

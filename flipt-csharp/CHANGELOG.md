@@ -1,12 +1,5 @@
 # Changelog
 
-## [0.1.1](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-csharp-v0.1.0...flipt-csharp-v0.1.1) (2025-06-09)
-
-
-### Features
-
-* **php:** add ablity to set arbitrary headers ([#457](https://github.com/flipt-io/flipt-server-sdks/issues/457)) ([d252e8f](https://github.com/flipt-io/flipt-server-sdks/commit/d252e8f67895bf4ba1778d46f855c0a915fa024a))
-
 ## [0.1.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-csharp-v0.0.2...flipt-csharp-v0.1.0) (2025-03-01)
 
 ### Miscellaneous Chores
