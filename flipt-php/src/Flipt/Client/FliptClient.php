@@ -22,7 +22,12 @@ final class FliptClient
     protected array $headers = [];
 
     /**
-     * @param array<string, string> $context
+     * @param string|Client $host - the base URL of the Flipt server
+     * @param string $namespace - the namespace to use for evaluation
+     * @param string $entityId - the entity ID to use for evaluation
+     * @param AuthenticationStrategy|null $authentication - the authentication strategy to use for requests
+     * @param array<string, string> $context - context to use for evaluation
+     * @param array<string, string> $headers - custom HTTP headers to use for requests
      */
     public function __construct(string|Client $host, string $namespace = "default", array $context = [], string $entityId = '', AuthenticationStrategy $authentication = null, array $headers = [])
     {
@@ -212,14 +217,16 @@ final class FliptClient
     }
 
     /**
-     * Create a new client with a different headers
+     * Create a new client with additional headers
      *
      * @param array<string, string> $headers
+     * Note: This method merges the existing headers with the new ones.
      *
      * @return FliptClient
      */
     public function withHeaders(array $headers)
     {
+        $headers = array_merge($this->headers, $headers);
         return new FliptClient($this->client, $this->namespace, $this->context, $this->entityId, $this->authentication, $headers);
     }
 
