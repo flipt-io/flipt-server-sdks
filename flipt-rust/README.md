@@ -48,3 +48,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ```
 
 There is a more detailed example in the [examples](./examples) directory.
+
+## Setting HTTP Headers
+
+You can set custom HTTP headers for the client by using the `with_headers` method in the `ConfigBuilder`.
+
+```rust
+let client = FliptClient::new(ConfigBuilder::default().with_headers(HeaderMap::new()).build());
+```
+
+### Flipt V2 Environment Support
+
+Flipt V2 introduces the concept of [environments](https://docs.flipt.io/v2/concepts#environments). This client supports evaluation of flags in a specific environment by using the `X-Flipt-Environment` header.
+
+```rust
+let client = FliptClient::new(ConfigBuilder::default().with_headers(HeaderMap::from_iter([("X-Flipt-Environment".into(), "production".into())])).build());
+```

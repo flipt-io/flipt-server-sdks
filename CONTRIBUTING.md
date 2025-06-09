@@ -4,11 +4,11 @@
 
 Let us know how we can help!
 
-* Use a **clear and descriptive title** for the issue to identify the problem.
-* Describe the **exact steps** which reproduce the problem in as many details as possible.
-* Include the language client you are using and the version.
-* Include any **stack traces** with your error
-* List versions you are using: Flipt, OS, etc.
+- Use a **clear and descriptive title** for the issue to identify the problem.
+- Describe the **exact steps** which reproduce the problem in as many details as possible.
+- Include the language client you are using and the version.
+- Include any **stack traces** with your error
+- List versions you are using: Flipt, OS, etc.
 
 ## Code
 

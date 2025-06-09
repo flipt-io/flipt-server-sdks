@@ -19,11 +19,17 @@ final class FliptClient
     protected string $entityId;
     protected array $context;
     protected LoggerInterface $logger;
+    protected array $headers = [];
 
     /**
-     * @param array<string, string> $context
+     * @param string|Client $host - the base URL of the Flipt server
+     * @param string $namespace - the namespace to use for evaluation
+     * @param string $entityId - the entity ID to use for evaluation
+     * @param AuthenticationStrategy|null $authentication - the authentication strategy to use for requests
+     * @param array<string, string> $context - context to use for evaluation
+     * @param array<string, string> $headers - custom HTTP headers to use for requests
      */
-    public function __construct(string|Client $host, string $namespace = "default", array $context = [], string $entityId = '', AuthenticationStrategy $authentication = null)
+    public function __construct(string|Client $host, string $namespace = "default", array $context = [], string $entityId = '', AuthenticationStrategy $authentication = null, array $headers = [])
     {
         $this->authentication = $authentication;
         $this->namespace = $namespace;
@@ -31,6 +37,7 @@ final class FliptClient
         $this->entityId = $entityId;
         $this->client = (is_string($host)) ? new Client(['base_uri' => $host]) : $host;
         $this->logger = new NullLogger();
+        $this->headers = $headers;
     }
 
     /**
@@ -180,9 +187,10 @@ final class FliptClient
     protected function apiRequest(string $path, array $body = [], string $method = 'POST')
     {
         // merge authentication headers
-        $headers = [
-            'Accept' => 'application/json',
-        ];
+        $headers = array_merge(
+            ['Accept' => 'application/json'],
+            $this->headers
+        );
 
         if ($this->authentication) {
             $headers = $this->authentication->authenticate($headers);
@@ -205,7 +213,21 @@ final class FliptClient
      */
     public function withNamespace(string $namespace)
     {
-        return new FliptClient($this->client, $namespace, $this->context, $this->entityId, $this->authentication);
+        return new FliptClient($this->client, $namespace, $this->context, $this->entityId, $this->authentication, $this->headers);
+    }
+
+    /**
+     * Create a new client with additional headers
+     *
+     * @param array<string, string> $headers
+     * Note: This method merges the existing headers with the new ones.
+     *
+     * @return FliptClient
+     */
+    public function withHeaders(array $headers)
+    {
+        $headers = array_merge($this->headers, $headers);
+        return new FliptClient($this->client, $this->namespace, $this->context, $this->entityId, $this->authentication, $headers);
     }
 
     /**
@@ -217,7 +239,7 @@ final class FliptClient
      */
     public function withContext(array $context)
     {
-        return new FliptClient($this->client, $this->namespace, $context, $this->entityId, $this->authentication);
+        return new FliptClient($this->client, $this->namespace, $context, $this->entityId, $this->authentication, $this->headers);
     }
 
     /**
@@ -227,7 +249,7 @@ final class FliptClient
      */
     public function withAuthentication(AuthenticationStrategy $authentication)
     {
-        return new FliptClient($this->client, $this->namespace, $this->context, $this->entityId, $authentication);
+        return new FliptClient($this->client, $this->namespace, $this->context, $this->entityId, $authentication, $this->headers);
     }
 }
 

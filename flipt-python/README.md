@@ -2,7 +2,6 @@
 
 [![pypi](https://img.shields.io/pypi/v/flipt.svg)](https://pypi.org/project/flipt)
 
-
 This directory contains the Python source code for the Flipt [server-side](https://www.flipt.io/docs/integration/server/rest) client.
 
 ## Documentation
@@ -38,6 +37,22 @@ print(variant_flag)
 ```
 
 There is a more detailed example in the [examples](./examples) directory.
+
+### Setting HTTP Headers
+
+You can set custom HTTP headers for the client by using the `headers` parameter in the constructor.
+
+```python
+flipt_client = FliptClient(headers={"X-Custom-Header": "Custom-Value"})
+```
+
+### Flipt V2 Environment Support
+
+Flipt V2 introduces the concept of [environments](https://docs.flipt.io/v2/concepts#environments). This client supports evaluation of flags in a specific environment by using the `X-Flipt-Environment` header.
+
+```python
+flipt_client = FliptClient(headers={"X-Flipt-Environment": "production"})
+```
 
 ## For developers
 
