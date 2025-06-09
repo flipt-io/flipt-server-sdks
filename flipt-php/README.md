@@ -37,6 +37,24 @@ $result = $fliptClient->variant('flag1', ['fizz' => 'buzz'], 'entity');
 
 There is a more detailed example in the [tests](./tests) directory.
 
+### Setting HTTP Headers
+
+You can set custom HTTP headers for the client by using the `withHeaders` method.
+
+```php
+$fliptClient = new FliptClient();
+$fliptClient->withHeaders(['X-Custom-Header' => 'Custom-Value']);
+```
+
+### Flipt V2 Environment Support
+
+Flipt V2 introduces the concept of [environments](https://docs.flipt.io/v2/concepts#environments). This client supports evaluation of flags in a specific environment by using the `X-Flipt-Environment` header.
+
+```php
+$fliptClient = new FliptClient();
+$fliptClient->withHeaders(['X-Flipt-Environment' => 'production']);
+```
+
 ## Thanks :tada:
 
 Thanks to [legoheld](https://github.com/legoheld) for the initial implementation of this client.
