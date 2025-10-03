@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-python-v1.4.1...flipt-python-v1.5.0) (2025-10-03)
+
+
+### Miscellaneous Chores
+
+* Releasing version 1.5.0
+
 ## [1.4.1](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-python-v1.4.0...flipt-python-v1.4.1) (2024-12-22)
 
 ### Bug Fixes

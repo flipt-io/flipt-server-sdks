@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-csharp-v0.1.0...flipt-csharp-v0.1.1) (2025-10-03)
+
+
+### Miscellaneous Chores
+
+* Releasing version 0.1.1
+
 ## [0.1.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-csharp-v0.0.2...flipt-csharp-v0.1.0) (2025-03-01)
 
 ### Miscellaneous Chores

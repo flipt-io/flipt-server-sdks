@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-java-v1.2.0...flipt-java-v1.3.0) (2025-10-03)
+
+
+### Miscellaneous Chores
+
+* Releasing version 1.3.0
+
 ## [1.2.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-java-v1.1.2...flipt-java-v1.2.0) (2024-12-23)
 
 ### Miscellaneous Chores

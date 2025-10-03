@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-rust-v1.1.1...flipt-rust-v1.2.0) (2025-10-03)
+
+
+### Miscellaneous Chores
+
+* Releasing version 1.2.0
+
 ## [1.1.1](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-rust-v1.1.0...flipt-rust-v1.1.1) (2024-04-24)
 
 ### Miscellaneous Chores
