@@ -2,6 +2,12 @@ name: Package Node SDK
 on:
   push:
     tags: ["flipt-node-**"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Git tag to package (e.g., flipt-node-v1.3.0). Leave empty to use latest tag."
+        required: false
+        type: string
 
 permissions:
   contents: write
@@ -14,4 +20,5 @@ jobs:
     uses: ./.github/workflows/package-sdks.yml
     with:
       sdk: node
+      tag: ${{ inputs.tag || github.ref }}
     secrets: inherit

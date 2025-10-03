@@ -2,6 +2,12 @@ name: Package Python SDK
 on:
   push:
     tags: ["flipt-python-**"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Git tag to package (e.g., flipt-python-v1.5.0). Leave empty to use latest tag."
+        required: false
+        type: string
 
 permissions:
   contents: write
@@ -14,4 +20,5 @@ jobs:
     uses: ./.github/workflows/package-sdks.yml
     with:
       sdk: python
+      tag: ${{ inputs.tag || github.ref }}
     secrets: inherit

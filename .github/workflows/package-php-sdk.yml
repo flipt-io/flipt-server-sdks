@@ -2,6 +2,12 @@ name: Package PHP SDK
 on:
   push:
     tags: ["flipt-php-**"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Git tag to package (e.g., flipt-php-v1.2.0). Leave empty to use latest tag."
+        required: false
+        type: string
 
 permissions:
   contents: write
@@ -11,5 +17,5 @@ jobs:
     uses: ./.github/workflows/package-sdks.yml
     with:
       sdk: php
-      tag: ${{ github.ref }}
+      tag: ${{ inputs.tag || github.ref }}
     secrets: inherit

@@ -11,6 +11,20 @@ permissions:
 jobs:
   release-please:
     runs-on: ubuntu-latest
+    outputs:
+      releases_created: ${{ steps.release.outputs.releases_created }}
+      python_released: ${{ steps.release.outputs['flipt-python--release_created'] }}
+      node_released: ${{ steps.release.outputs['flipt-node--release_created'] }}
+      java_released: ${{ steps.release.outputs['flipt-java--release_created'] }}
+      rust_released: ${{ steps.release.outputs['flipt-rust--release_created'] }}
+      php_released: ${{ steps.release.outputs['flipt-php--release_created'] }}
+      csharp_released: ${{ steps.release.outputs['flipt-csharp--release_created'] }}
+      python_tag: ${{ steps.release.outputs['flipt-python--tag_name'] }}
+      node_tag: ${{ steps.release.outputs['flipt-node--tag_name'] }}
+      java_tag: ${{ steps.release.outputs['flipt-java--tag_name'] }}
+      rust_tag: ${{ steps.release.outputs['flipt-rust--tag_name'] }}
+      php_tag: ${{ steps.release.outputs['flipt-php--tag_name'] }}
+      csharp_tag: ${{ steps.release.outputs['flipt-csharp--tag_name'] }}
     steps:
       - name: Generate token
         id: generate_token
@@ -21,5 +35,60 @@ jobs:
           installation_id: ${{ secrets.FLIPT_RELEASE_BOT_INSTALLATION_ID }}
 
       - uses: googleapis/release-please-action@v4
+        id: release
         with:
           token: ${{ steps.generate_token.outputs.token}}
+
+  trigger-python-package:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.python_released == 'true' }}
+    uses: ./.github/workflows/package-sdks.yml
+    with:
+      sdk: python
+      tag: ${{ needs.release-please.outputs.python_tag }}
+    secrets: inherit
+
+  trigger-node-package:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.node_released == 'true' }}
+    uses: ./.github/workflows/package-sdks.yml
+    with:
+      sdk: node
+      tag: ${{ needs.release-please.outputs.node_tag }}
+    secrets: inherit
+
+  trigger-java-package:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.java_released == 'true' }}
+    uses: ./.github/workflows/package-sdks.yml
+    with:
+      sdk: java
+      tag: ${{ needs.release-please.outputs.java_tag }}
+    secrets: inherit
+
+  trigger-rust-package:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.rust_released == 'true' }}
+    uses: ./.github/workflows/package-sdks.yml
+    with:
+      sdk: rust
+      tag: ${{ needs.release-please.outputs.rust_tag }}
+    secrets: inherit
+
+  trigger-php-package:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.php_released == 'true' }}
+    uses: ./.github/workflows/package-sdks.yml
+    with:
+      sdk: php
+      tag: ${{ needs.release-please.outputs.php_tag }}
+    secrets: inherit
+
+  trigger-csharp-package:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.csharp_released == 'true' }}
+    uses: ./.github/workflows/package-sdks.yml
+    with:
+      sdk: csharp
+      tag: ${{ needs.release-please.outputs.csharp_tag }}
+    secrets: inherit
