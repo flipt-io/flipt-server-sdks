@@ -145,7 +145,7 @@ func csharpBuild(ctx context.Context, client *dagger.Client, hostDirectory *dagg
 }
 
 func rustBuild(ctx context.Context, client *dagger.Client, hostDirectory *dagger.Directory) error {
-	container := client.Container().From("rust:1.73.0-bookworm").
+	container := client.Container().From("rust:1.90.0-bookworm").
 		WithDirectory("/src", hostDirectory.Directory("flipt-rust"), dagger.ContainerWithDirectoryOpts{
 			Exclude: []string{"./target/"},
 		}).
