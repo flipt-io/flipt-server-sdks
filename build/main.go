@@ -216,14 +216,11 @@ func javaBuild(ctx context.Context, client *dagger.Client, hostDirectory *dagger
 		return err
 	}
 
-	if os.Getenv("MAVEN_USERNAME") == "" {
-		return fmt.Errorf("MAVEN_USERNAME is not set")
+	if os.Getenv("SONATYPE_PORTAL_USERNAME") == "" {
+		return fmt.Errorf("SONATYPE_PORTAL_USERNAME is not set")
 	}
-	if os.Getenv("MAVEN_PASSWORD") == "" {
-		return fmt.Errorf("MAVEN_PASSWORD is not set")
-	}
-	if os.Getenv("MAVEN_PUBLISH_REGISTRY_URL") == "" {
-		return fmt.Errorf("MAVEN_PUBLISH_REGISTRY_URL is not set")
+	if os.Getenv("SONATYPE_PORTAL_PASSWORD") == "" {
+		return fmt.Errorf("SONATYPE_PORTAL_PASSWORD is not set")
 	}
 	if os.Getenv("PGP_PRIVATE_KEY") == "" {
 		return fmt.Errorf("PGP_PRIVATE_KEY is not set")
@@ -233,16 +230,14 @@ func javaBuild(ctx context.Context, client *dagger.Client, hostDirectory *dagger
 	}
 
 	var (
-		mavenUsername    = client.SetSecret("maven-username", os.Getenv("MAVEN_USERNAME"))
-		mavenPassword    = client.SetSecret("maven-password", os.Getenv("MAVEN_PASSWORD"))
-		mavenRegistryUrl = client.SetSecret("maven-registry-url", os.Getenv("MAVEN_PUBLISH_REGISTRY_URL"))
+		sonatypeUsername = client.SetSecret("sonatype-username", os.Getenv("SONATYPE_PORTAL_USERNAME"))
+		sonatypePassword = client.SetSecret("sonatype-password", os.Getenv("SONATYPE_PORTAL_PASSWORD"))
 		pgpPrivateKey    = client.SetSecret("pgp-private-key", os.Getenv("PGP_PRIVATE_KEY"))
 		pgpPassphrase    = client.SetSecret("pgp-passphrase", os.Getenv("PGP_PASSPHRASE"))
 	)
 
-	_, err = container.WithSecretVariable("MAVEN_USERNAME", mavenUsername).
-		WithSecretVariable("MAVEN_PASSWORD", mavenPassword).
-		WithSecretVariable("MAVEN_PUBLISH_REGISTRY_URL", mavenRegistryUrl).
+	_, err = container.WithSecretVariable("SONATYPE_PORTAL_USERNAME", sonatypeUsername).
+		WithSecretVariable("SONATYPE_PORTAL_PASSWORD", sonatypePassword).
 		WithSecretVariable("PGP_PRIVATE_KEY", pgpPrivateKey).
 		WithSecretVariable("PGP_PASSPHRASE", pgpPassphrase).
 		WithExec([]string{"./gradlew", "publish"}).
