@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-java-v1.3.0...flipt-java-v1.3.1) (2025-10-03)
+
+
+### Bug Fixes
+
+* migrate Java SDK publishing to Sonatype Portal ([#541](https://github.com/flipt-io/flipt-server-sdks/issues/541)) ([4ff2251](https://github.com/flipt-io/flipt-server-sdks/commit/4ff225136bfad16416b25ca9ca3d83335ef16406))
+
 ## [1.3.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-java-v1.2.0...flipt-java-v1.3.0) (2025-10-03)
 
 
