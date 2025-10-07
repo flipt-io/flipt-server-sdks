@@ -240,7 +240,7 @@ func javaBuild(ctx context.Context, client *dagger.Client, hostDirectory *dagger
 		WithSecretVariable("SONATYPE_PORTAL_PASSWORD", sonatypePassword).
 		WithSecretVariable("PGP_PRIVATE_KEY", pgpPrivateKey).
 		WithSecretVariable("PGP_PASSPHRASE", pgpPassphrase).
-		WithExec([]string{"./gradlew", "publish"}).
+		WithExec([]string{"./gradlew", "publishToSonatype", "closeAndReleaseSonatypeStagingRepository"}).
 		Sync(ctx)
 
 	return err
