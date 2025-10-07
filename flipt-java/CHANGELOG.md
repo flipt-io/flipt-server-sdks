@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-java-v1.3.0...flipt-java-v1.3.1) (2025-10-07)
+
+
+### Bug Fixes
+
+* Java SDK Maven Central publishing ([#551](https://github.com/flipt-io/flipt-server-sdks/issues/551)) ([6cba140](https://github.com/flipt-io/flipt-server-sdks/commit/6cba140e06c62cd2d3420caf5bd8cfe24991754f))
+
 ## [1.3.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-java-v1.2.0...flipt-java-v1.3.0) (2025-10-03)
 
 
