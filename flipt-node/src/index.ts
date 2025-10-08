@@ -4,6 +4,7 @@ import {
   EvaluationRequest,
   VariantEvaluationResponse
 } from "./evaluation/models";
+import { Flags } from "./flags";
 
 interface FliptClientOptions {
   url?: string;
@@ -48,6 +49,7 @@ const defaultFliptClientOptions: FliptClientOptions = {
 
 export class FliptClient {
   public evaluation: Evaluation;
+  public flags: Flags;
 
   public constructor(options?: FliptClientOptions) {
     const clientOptions = {
@@ -71,6 +73,13 @@ export class FliptClient {
     }
 
     this.evaluation = new Evaluation(
+      clientOptions.url || defaultURL,
+      clientOptions.timeout,
+      clientOptions.authenticationStrategy,
+      clientOptions.headers
+    );
+
+    this.flags = new Flags(
       clientOptions.url || defaultURL,
       clientOptions.timeout,
       clientOptions.authenticationStrategy,

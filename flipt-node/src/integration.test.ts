@@ -117,3 +117,23 @@ test("batch", async () => {
   expect(error.namespaceKey).toEqual("default");
   expect(error.reason).toEqual("NOT_FOUND_ERROR_EVALUATION_REASON");
 });
+
+test("getFlag", async () => {
+  const flag = await client.flags.getFlag("default", "flag1");
+
+  expect(flag.key).toEqual("flag1");
+  expect(flag.enabled).toEqual(true);
+  expect(flag.type).toEqual("VARIANT_FLAG_TYPE");
+});
+
+test("listFlags", async () => {
+  const response = await client.flags.listFlags("default");
+
+  expect(response.flags).toBeDefined();
+  expect(response.flags.length).toBeGreaterThan(0);
+
+  const flag1 = response.flags.find((f) => f.key === "flag1");
+  expect(flag1).toBeDefined();
+  expect(flag1?.enabled).toEqual(true);
+  expect(flag1?.type).toEqual("VARIANT_FLAG_TYPE");
+});
