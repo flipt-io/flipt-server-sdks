@@ -12,13 +12,15 @@ These server-side SDKs are responsible for evaluating context and returning the 
 
 We are constantly growing our list of clients. Currently, we support the following languages:
 
-1. [Python](./flipt-python)
-2. [NodeJS](./flipt-node)
-3. [Java](./flipt-java)
-4. [Rust](./flipt-rust)
-5. [PHP](./flipt-php)
-6. [Go](https://github.com/flipt-io/flipt/tree/main/sdk/go)
-7. [C#](./flipt-csharp)
+| Language | Version | Package Registry |
+|----------|---------|------------------|
+| [Python](./flipt-python) | [![PyPI](https://img.shields.io/pypi/v/flipt?label=flipt)](https://pypi.org/project/flipt/) | PyPI |
+| [Node.js](./flipt-node) | [![npm](https://img.shields.io/npm/v/@flipt-io/flipt?label=@flipt-io/flipt)](https://www.npmjs.com/package/@flipt-io/flipt) | npm |
+| [Java](./flipt-java) | [![Maven Central](https://img.shields.io/maven-central/v/io.flipt/flipt-java?label=flipt-java)](https://central.sonatype.com/artifact/io.flipt/flipt-java) | Maven Central |
+| [Rust](./flipt-rust) | [![Crates.io](https://img.shields.io/crates/v/flipt?label=flipt)](https://crates.io/crates/flipt) | crates.io |
+| [PHP](./flipt-php) | [![Packagist](https://img.shields.io/packagist/v/flipt-io/flipt?label=flipt-io/flipt)](https://packagist.org/packages/flipt-io/flipt) | Packagist |
+| [C#](./flipt-csharp) | [![NuGet](https://img.shields.io/nuget/v/Flipt?label=Flipt)](https://www.nuget.org/packages/Flipt/) | NuGet |
+| [Go](https://github.com/flipt-io/flipt/tree/main/sdk/go) | [![GitHub](https://img.shields.io/github/v/tag/flipt-io/flipt?filter=sdk/go/*&label=flipt-sdk-go)](https://github.com/flipt-io/flipt/tree/main/sdk/go) | GitHub |
 
 > [!NOTE]
 > The Go client is maintained in the main Flipt repository.

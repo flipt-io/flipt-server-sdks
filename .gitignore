@@ -51,3 +51,6 @@ artifacts/
 # VS Code
 .vscode/
 .idea/
+
+.claude/
+.cursor/
