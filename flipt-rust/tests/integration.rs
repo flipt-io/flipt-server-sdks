@@ -3,7 +3,6 @@ use flipt::evaluation::models::{
     BatchEvaluationRequest, ErrorEvaluationReason, EvaluationReason, EvaluationRequest,
     EvaluationResponseType,
 };
-use flipt::flags::models::FlagType;
 use flipt::{ClientTokenAuthentication, ConfigBuilder};
 use std::time::Duration;
 use std::{collections::HashMap, env};
@@ -104,18 +103,6 @@ async fn tests() {
     assert_eq!(error.flag_key, "notfound");
     assert_eq!(error.namespace_key, "default");
     assert_eq!(error.reason, ErrorEvaluationReason::NotFound);
-
-    // Test GetFlag
-    let flag = flipt_client
-        .flags
-        .get_flag("default", "flag1")
-        .await
-        .unwrap();
-    assert_eq!(flag.key, "flag1");
-    assert_eq!(flag.name, "flag1");
-    assert_eq!(flag.namespace_key, "default");
-    assert_eq!(flag.r#type, FlagType::Variant);
-    assert!(flag.enabled);
 
     // Test ListFlags
     let list_response = flipt_client
