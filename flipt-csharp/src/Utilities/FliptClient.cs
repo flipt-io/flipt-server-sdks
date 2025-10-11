@@ -26,9 +26,18 @@ public class FliptClient
             .WithAuthenticationStrategy(builder.AuthenticationStrategy)
             .WithHeaders(builder.Headers)
             .Build();
+
+        Flag = Flag.Builder()
+            .WithHttpClient(httpClient)
+            .WithBaseUrl(builder.BaseUrl)
+            .WithAuthenticationStrategy(builder.AuthenticationStrategy)
+            .WithHeaders(builder.Headers)
+            .Build();
     }
 
     public Evaluation Evaluation { get; }
+
+    public Flag Flag { get; }
 
     /// <summary>
     /// This method returns a new instance of the FliptClientBuilder class.
