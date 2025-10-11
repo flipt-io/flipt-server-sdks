@@ -1,10 +1,5 @@
 import { AuthenticationStrategy } from "..";
-import {
-  Flag,
-  FlagRequest,
-  ListFlagsRequest,
-  ListFlagsResponse
-} from "./models";
+import { Flag, ListFlagsRequest, ListFlagsResponse } from "./models";
 
 export class Flags {
   private url: string;
@@ -26,43 +21,6 @@ export class Flags {
       };
     }
     this.timeout = timeout;
-  }
-
-  public async getFlag(
-    namespaceKey: string,
-    flagKey: string,
-    request?: FlagRequest
-  ): Promise<Flag> {
-    const namespace = namespaceKey || "default";
-    const url = new URL(
-      `${this.url}/api/v1/namespaces/${namespace}/flags/${flagKey}`
-    );
-
-    if (request?.reference) {
-      url.searchParams.append("reference", request.reference);
-    }
-
-    const args: RequestInit = {
-      method: "GET",
-      headers: {
-        ...this.headers
-      }
-    };
-
-    if (this.timeout !== undefined && this.timeout > 0) {
-      args.signal = AbortSignal.timeout(this.timeout * 1000);
-    }
-
-    const response = await fetch(url.toString(), args);
-
-    if (response.status !== 200) {
-      const body = await response.json();
-      throw new Error(body["message"] || "internal error");
-    }
-
-    const data: Flag = (await response.json()) as Flag;
-
-    return data;
   }
 
   public async listFlags(

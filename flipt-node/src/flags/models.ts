@@ -1,8 +1,5 @@
-export interface FlagRequest {
+export interface ListFlagsRequest {
   reference?: string;
-}
-
-export interface ListFlagsRequest extends FlagRequest {
   limit?: number;
   offset?: number;
   pageToken?: string;

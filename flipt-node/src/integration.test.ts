@@ -118,14 +118,6 @@ test("batch", async () => {
   expect(error.reason).toEqual("NOT_FOUND_ERROR_EVALUATION_REASON");
 });
 
-test("getFlag", async () => {
-  const flag = await client.flags.getFlag("default", "flag1");
-
-  expect(flag.key).toEqual("flag1");
-  expect(flag.enabled).toEqual(true);
-  expect(flag.type).toEqual("VARIANT_FLAG_TYPE");
-});
-
 test("listFlags", async () => {
   const response = await client.flags.listFlags("default");
 
