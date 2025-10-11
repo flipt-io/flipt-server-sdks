@@ -99,35 +99,6 @@ public class Flag
     }
 
     /// <summary>
-    /// This method gets a flag by namespace key and flag key.
-    /// </summary>
-    /// <param name="namespaceKey"></param>
-    /// <param name="flagKey"></param>
-    /// <returns></returns>
-    public async Task<Models.Flag?> GetFlagAsync(string namespaceKey, string flagKey)
-    {
-        return await GetFlagAsync(namespaceKey, flagKey, null);
-    }
-
-    /// <summary>
-    /// This method gets a flag by namespace key and flag key with parameters.
-    /// </summary>
-    /// <param name="namespaceKey"></param>
-    /// <param name="flagKey"></param>
-    /// <param name="parameters"></param>
-    /// <returns></returns>
-    public async Task<Models.Flag?> GetFlagAsync(string namespaceKey, string flagKey, CommonParameters? parameters)
-    {
-        if (string.IsNullOrEmpty(namespaceKey))
-        {
-            namespaceKey = DefaultNamespaceKey;
-        }
-
-        var path = $"/api/v1/namespaces/{namespaceKey}/flags/{flagKey}";
-        return await MakeGetRequestAsync<Models.Flag>(path, parameters);
-    }
-
-    /// <summary>
     /// This method lists flags by namespace key.
     /// </summary>
     /// <param name="namespaceKey"></param>

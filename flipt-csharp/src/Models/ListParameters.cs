@@ -5,7 +5,7 @@ namespace Flipt.Models;
 /// <summary>
 /// Parameters for list API requests with pagination.
 /// </summary>
-public class ListParameters : CommonParameters
+public class ListParameters
 {
     [JsonPropertyName("limit")]
     public int? Limit { get; set; }
@@ -15,4 +15,7 @@ public class ListParameters : CommonParameters
 
     [JsonPropertyName("pageToken")]
     public string? PageToken { get; set; }
+
+    [JsonPropertyName("reference")]
+    public string? Reference { get; set; }
 }
