@@ -1,6 +1,8 @@
 pub mod api;
 pub mod error;
 pub mod evaluation;
+pub mod flags;
+pub mod models;
 pub mod util;
 
 use reqwest::header::HeaderMap;

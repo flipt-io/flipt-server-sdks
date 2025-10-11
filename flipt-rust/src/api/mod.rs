@@ -1,9 +1,11 @@
 use crate::error::ClientError;
 use crate::evaluation::Evaluation;
+use crate::flags::Flags;
 use crate::{AuthenticationStrategy, Config, ConfigBuilder, NoneAuthentication};
 
 pub struct FliptClient {
     pub evaluation: Evaluation,
+    pub flags: Flags,
 }
 
 impl FliptClient {
@@ -30,7 +32,8 @@ impl FliptClient {
         };
 
         Ok(Self {
-            evaluation: Evaluation::new(client, config.endpoint),
+            evaluation: Evaluation::new(client.clone(), config.endpoint.clone()),
+            flags: Flags::new(client, config.endpoint),
         })
     }
 }
