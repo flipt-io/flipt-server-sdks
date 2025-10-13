@@ -103,4 +103,13 @@ async fn tests() {
     assert_eq!(error.flag_key, "notfound");
     assert_eq!(error.namespace_key, "default");
     assert_eq!(error.reason, ErrorEvaluationReason::NotFound);
+
+    // Test ListFlags
+    let list_response = flipt_client
+        .flags
+        .list_flags("default", None)
+        .await
+        .unwrap();
+    assert!(!list_response.flags.is_empty());
+    assert_eq!(list_response.flags.len(), 2);
 }
