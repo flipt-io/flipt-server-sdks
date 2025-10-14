@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.2](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-csharp-v0.1.1...flipt-csharp-v0.1.2) (2025-10-14)
+
+
+### Features
+
+* added segment_keys attribute to boolean evaluation response models ([#563](https://github.com/flipt-io/flipt-server-sdks/issues/563)) ([4d8a437](https://github.com/flipt-io/flipt-server-sdks/commit/4d8a43701f384914342cb37880ac0c0e1d8ce6a3))
+* **csharp:** add ListFlags support ([#555](https://github.com/flipt-io/flipt-server-sdks/issues/555)) ([9c237b1](https://github.com/flipt-io/flipt-server-sdks/commit/9c237b1dc9cb2147f6dcb5f681942ea594c23811))
+
 ## [0.1.1](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-csharp-v0.1.0...flipt-csharp-v0.1.1) (2025-10-03)
 
 

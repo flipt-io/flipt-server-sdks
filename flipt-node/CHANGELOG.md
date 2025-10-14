@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-node-v1.3.0...flipt-node-v1.4.0) (2025-10-14)
+
+
+### Features
+
+* added segment_keys attribute to boolean evaluation response models ([#563](https://github.com/flipt-io/flipt-server-sdks/issues/563)) ([4d8a437](https://github.com/flipt-io/flipt-server-sdks/commit/4d8a43701f384914342cb37880ac0c0e1d8ce6a3))
+* **node:** add ListFlags support ([#554](https://github.com/flipt-io/flipt-server-sdks/issues/554)) ([91b6e26](https://github.com/flipt-io/flipt-server-sdks/commit/91b6e267f01d9b8b6ba0443967d7a303e29b1f35))
+
 ## [1.3.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-node-v1.2.0...flipt-node-v1.3.0) (2025-10-03)
 
 
