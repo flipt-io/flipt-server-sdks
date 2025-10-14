@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-rust-v1.2.0...flipt-rust-v1.3.0) (2025-10-13)
+
+
+### Features
+
+* **rust:** add ListFlags support ([#553](https://github.com/flipt-io/flipt-server-sdks/issues/553)) ([ee21d32](https://github.com/flipt-io/flipt-server-sdks/commit/ee21d326714c789fec7beea17d455a21518af052))
+
 ## [1.2.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-rust-v1.1.1...flipt-rust-v1.2.0) (2025-10-03)
 
 
