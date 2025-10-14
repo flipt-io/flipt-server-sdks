@@ -27,7 +27,7 @@ export class Flags {
     namespaceKey: string,
     request?: ListFlagsRequest
   ): Promise<ListFlagsResponse> {
-    const namespace = namespaceKey || "default";
+    const namespace = namespaceKey ?? "default";
     const url = new URL(`${this.url}/api/v1/namespaces/${namespace}/flags`);
 
     if (request?.reference) {
@@ -57,13 +57,25 @@ export class Flags {
     const response = await fetch(url.toString(), args);
 
     if (response.status !== 200) {
-      const body = await response.json();
-      throw new Error(body["message"] || "internal error");
+      try {
+        const body = await response.json();
+        throw new Error(body["message"] || "internal error");
+      } catch (e) {
+        if (e instanceof Error && e.message !== "internal error") {
+          throw e;
+        }
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
     }
 
-    const data: ListFlagsResponse =
-      (await response.json()) as ListFlagsResponse;
-
-    return data;
+    try {
+      const data: ListFlagsResponse =
+        (await response.json()) as ListFlagsResponse;
+      return data;
+    } catch (e) {
+      throw new Error(
+        `Failed to parse response: ${e instanceof Error ? e.message : "unknown error"}`
+      );
+    }
   }
 }
