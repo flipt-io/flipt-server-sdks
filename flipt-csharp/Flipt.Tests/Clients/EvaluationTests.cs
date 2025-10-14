@@ -76,6 +76,7 @@ namespace Flipt.Tests.Clients
             Assert.True(response.Enabled);
             Assert.Equal("flag_boolean", response.FlagKey);
             Assert.Equal(Reason.MatchEvaluationReason, response.Reason);
+            Assert.Equal("segment1", response.SegmentKeys[0]);
         }
 
         [Fact]
@@ -151,6 +152,7 @@ namespace Flipt.Tests.Clients
             Assert.True(booleanResponse.Enabled);
             Assert.Equal("flag_boolean", booleanResponse.FlagKey);
             Assert.Equal(Reason.MatchEvaluationReason, booleanResponse.Reason);
+            Assert.Equal("segment1", booleanResponse.SegmentKeys[0]);
 
             // Error
             var thirdResponse = batchResponse.Responses[2];

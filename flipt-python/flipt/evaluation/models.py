@@ -52,6 +52,7 @@ class BooleanEvaluationResponse(CamelAliasModel):
     enabled: bool
     flag_key: str
     reason: EvaluationReason
+    segment_keys: list[str]
     request_duration_millis: float
     timestamp: str
 

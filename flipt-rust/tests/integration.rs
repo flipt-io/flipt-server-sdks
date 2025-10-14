@@ -58,6 +58,7 @@ async fn tests() {
     assert!(boolean.enabled);
     assert_eq!(boolean.flag_key, "flag_boolean");
     assert_eq!(boolean.reason, EvaluationReason::Match);
+    assert_eq!(boolean.segment_keys.get(0).unwrap(), "segment1");
 
     let mut requests: Vec<EvaluationRequest> = Vec::new();
     requests.push(variant_request);
@@ -94,6 +95,7 @@ async fn tests() {
     assert!(boolean.enabled);
     assert_eq!(boolean.flag_key, "flag_boolean");
     assert_eq!(boolean.reason, EvaluationReason::Match);
+    assert_eq!(boolean.segment_keys.get(0).unwrap(), "segment1");
 
     // Error
     let third_response = batch.responses.get(2).unwrap();

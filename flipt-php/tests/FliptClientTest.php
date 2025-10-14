@@ -39,6 +39,7 @@ final class FliptClientTest extends TestCase
         $this->assertTrue($result->getEnabled());
         $this->assertEquals($result->getReason(), ResponseReasons::MATCH_EVALUATION_REASON);
         $this->assertEquals('flag_boolean', $result->getFlagKey());
+        $this->assertEquals($result->getSegmentKeys(), ['segment1']);
 
         $value = $this->apiClient->booleanValue('flag_boolean', false, ['fizz' => 'buzz'], 'entity');
         $this->assertTrue($value);

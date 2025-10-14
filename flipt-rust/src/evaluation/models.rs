@@ -23,6 +23,7 @@ pub struct EvaluationRequest {
 pub struct BooleanEvaluationResponse {
     pub enabled: bool,
     pub reason: EvaluationReason,
+    pub segment_keys: Vec<String>,
     pub request_id: String,
     pub request_duration_millis: f64,
     pub timestamp: DateTime<Utc>,

@@ -40,7 +40,7 @@ func main() {
 }
 
 func run() error {
-	var tests = make(map[string]integrationTestFn, len(sdkToFn))
+	tests := make(map[string]integrationTestFn, len(sdkToFn))
 
 	maps.Copy(tests, sdkToFn)
 
@@ -84,7 +84,7 @@ func run() error {
 
 func getTestDependencies(_ context.Context, client *dagger.Client, dir *dagger.Directory) (*dagger.Container, *dagger.Directory) {
 	// Flipt
-	flipt := client.Container().From("flipt/flipt:latest").
+	flipt := client.Container().From("flipt/flipt:v1.61.0").
 		WithUser("root").
 		WithExec([]string{"mkdir", "-p", "/var/data/flipt"}).
 		WithDirectory("/var/data/flipt", dir.Directory("test/fixtures/testdata")).

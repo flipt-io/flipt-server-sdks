@@ -47,6 +47,7 @@ async def test_boolean(async_flipt_client):
     assert boolean.enabled
     assert boolean.flag_key == "flag_boolean"
     assert boolean.reason == "MATCH_EVALUATION_REASON"
+    assert "segment1" in boolean.segment_keys
 
 
 @pytest.mark.usefixtures("_mock_boolean_response_error")
@@ -107,6 +108,7 @@ async def test_batch(async_flipt_client):
     assert boolean.enabled
     assert boolean.flag_key == "flag_boolean"
     assert boolean.reason == "MATCH_EVALUATION_REASON"
+    assert "segment1" in boolean.segment_keys
 
     # Error
     assert batch.responses[2].type == "ERROR_EVALUATION_RESPONSE_TYPE"
