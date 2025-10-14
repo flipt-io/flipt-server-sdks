@@ -2,6 +2,7 @@ package io.flipt.api.evaluation.models;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
 
 public class BooleanEvaluationResponse {
   private final boolean enabled;
@@ -9,6 +10,8 @@ public class BooleanEvaluationResponse {
   private final String flagKey;
 
   private final EvaluationReason reason;
+
+  private final List<String> segmentKeys;
 
   private final float requestDurationMillis;
 
@@ -19,11 +22,13 @@ public class BooleanEvaluationResponse {
       @JsonProperty("enabled") boolean enabled,
       @JsonProperty("flagKey") String flagKey,
       @JsonProperty("reason") EvaluationReason reason,
+      @JsonProperty("segmentKeys") List<String> segmentKeys,
       @JsonProperty("requestDurationMillis") float requestDurationMillis,
       @JsonProperty("timesteamp") String timestamp) {
     this.enabled = enabled;
     this.flagKey = flagKey;
     this.reason = reason;
+    this.segmentKeys = segmentKeys;
     this.requestDurationMillis = requestDurationMillis;
     this.timestamp = timestamp;
   }
@@ -41,6 +46,11 @@ public class BooleanEvaluationResponse {
   @JsonProperty("reason")
   public EvaluationReason getReason() {
     return reason;
+  }
+
+  @JsonProperty("segmentKeys")
+  public List<String> getSegmentKeys() {
+    return segmentKeys;
   }
 
   @JsonProperty("requestDurationMillis")

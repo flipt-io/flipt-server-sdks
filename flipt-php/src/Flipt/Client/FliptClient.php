@@ -58,7 +58,7 @@ final class FliptClient
     public function boolean(string $name, ?array $context = [], ?string $entityId = null, ?string $reference = ""): BooleanEvaluationResult
     {
         $response = $this->apiRequest('/evaluate/v1/boolean', $this->mergeRequestParams($name, $context, $entityId, $reference));
-        return new DefaultBooleanEvaluationResult($response['flagKey'], $response['enabled'], $response['reason'], $response['requestDurationMillis'], $response['requestId'], $response['timestamp']);
+        return new DefaultBooleanEvaluationResult($response['flagKey'], $response['enabled'], $response['reason'], $response['segmentKeys'] ?? null, $response['requestDurationMillis'], $response['requestId'], $response['timestamp']);
     }
 
 
@@ -149,7 +149,7 @@ final class FliptClient
             if ($resp['type'] == 'BOOLEAN_EVALUATION_RESPONSE_TYPE') {
                 // get the boolean response
                 $vr = $resp['booleanResponse'];
-                return new DefaultBooleanEvaluationResult($vr['flagKey'], $vr['enabled'], $vr['reason'], $vr['requestDurationMillis'], $vr['requestId'], $vr['timestamp']);
+                return new DefaultBooleanEvaluationResult($vr['flagKey'], $vr['enabled'], $vr['reason'], $vr['segmentKeys'] ?? null, $vr['requestDurationMillis'], $vr['requestId'], $vr['timestamp']);
             }
 
             return null;

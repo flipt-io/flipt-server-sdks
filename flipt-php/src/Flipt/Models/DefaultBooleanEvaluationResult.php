@@ -11,14 +11,19 @@ final class DefaultBooleanEvaluationResult implements BooleanEvaluationResult
     public string $flagKey;
     public bool $enabled;
     public string $reason;
+    public ?array $segmentKeys;
     public float $requestDurationMillis;
     public string $requestId;
     public string $timestamp;
 
+    /**
+     * @param array<string> $segmentKeys
+     */
     public function __construct(
         string $flagKey,
         bool $enabled,
         string $reason,
+        ?array $segmentKeys,
         float $requestDurationMillis,
         string $requestId,
         string $timestamp
@@ -26,6 +31,7 @@ final class DefaultBooleanEvaluationResult implements BooleanEvaluationResult
         $this->flagKey = $flagKey;
         $this->enabled = $enabled;
         $this->reason = $reason;
+        $this->segmentKeys = $segmentKeys;
         $this->requestDurationMillis = $requestDurationMillis;
         $this->requestId = $requestId;
         $this->timestamp = $timestamp;
@@ -44,6 +50,14 @@ final class DefaultBooleanEvaluationResult implements BooleanEvaluationResult
     public function getReason(): string
     {
         return $this->reason;
+    }
+
+    /**
+     * @return array<string>
+     */
+    public function getSegmentKeys(): ?array
+    {
+        return $this->segmentKeys;
     }
 
     public function getRequestDurationMillis(): float

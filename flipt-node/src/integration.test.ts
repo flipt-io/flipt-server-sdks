@@ -51,6 +51,7 @@ test("boolean", async () => {
   expect(boolean.flagKey).toEqual("flag_boolean");
   expect(boolean.enabled).toEqual(true);
   expect(boolean.reason).toEqual("MATCH_EVALUATION_REASON");
+  expect(boolean.segmentKeys).toContain("segment1");
 });
 
 test("batch", async () => {
@@ -104,6 +105,7 @@ test("batch", async () => {
   expect(boolean.flagKey).toEqual("flag_boolean");
   expect(boolean.enabled).toEqual(true);
   expect(boolean.reason).toEqual("MATCH_EVALUATION_REASON");
+  expect(boolean.segmentKeys).toContain("segment1");
 
   // Error
   expect(batch.responses[2].type).toEqual("ERROR_EVALUATION_RESPONSE_TYPE");

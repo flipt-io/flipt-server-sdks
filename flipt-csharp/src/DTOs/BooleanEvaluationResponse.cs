@@ -15,6 +15,8 @@ public class BooleanEvaluationResponse
     [Required]
     public bool Enabled { get; set; }
     [Required]
+    public required List<string> SegmentKeys { get; set; }
+    [Required]
     public DateTime Timestamp { get; set; }
     [Required]
     public float RequestDurationMillis { get; set; }

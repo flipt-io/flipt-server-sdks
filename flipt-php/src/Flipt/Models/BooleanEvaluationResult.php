@@ -9,6 +9,10 @@ interface BooleanEvaluationResult
     public function getFlagKey(): string;
     public function getEnabled(): bool;
     public function getReason(): string;
+    /**
+     * @return array<string>
+     */
+    public function getSegmentKeys(): ?array;
     public function getRequestDurationMillis(): float;
     public function getRequestId(): string;
     public function getTimestamp(): string;

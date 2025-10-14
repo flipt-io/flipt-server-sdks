@@ -85,6 +85,7 @@ public class TestFliptClient {
     Assertions.assertTrue(booleanEvaluation.isEnabled());
     Assertions.assertEquals("flag_boolean", booleanEvaluation.getFlagKey());
     Assertions.assertEquals("MATCH_EVALUATION_REASON", booleanEvaluation.getReason().toString());
+    Assertions.assertEquals("segment1", booleanEvaluation.getSegmentKeys().get(0));
 
     Assertions.assertTrue(fc.evaluation().booleanValue(req, false));
     Assertions.assertTrue(
@@ -156,6 +157,7 @@ public class TestFliptClient {
     Assertions.assertTrue(booleanEvaluation.isEnabled());
     Assertions.assertEquals("flag_boolean", booleanEvaluation.getFlagKey());
     Assertions.assertEquals("MATCH_EVALUATION_REASON", booleanEvaluation.getReason().toString());
+    Assertions.assertEquals("segment1", booleanEvaluation.getSegmentKeys().get(0));
 
     // Error
     EvaluationResponse third = batch.getResponses().get(2);

@@ -21,6 +21,7 @@ export interface BooleanEvaluationResponse {
   enabled: boolean;
   flagKey: string;
   reason: EvaluationReason;
+  segmentKeys: string[];
   requestDurationMillis: number;
   timestamp: string;
 }
