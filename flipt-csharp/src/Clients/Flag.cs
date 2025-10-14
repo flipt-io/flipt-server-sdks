@@ -99,21 +99,21 @@ public class Flag
     }
 
     /// <summary>
-    /// This method lists flags by namespace key.
+    /// Lists flags for the specified namespace key.
     /// </summary>
-    /// <param name="namespaceKey"></param>
-    /// <returns></returns>
+    /// <param name="namespaceKey">The key of the namespace for which to list flags.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains a <see cref="ListFlagsResponse"/> if successful; otherwise, <c>null</c>.</returns>
     public async Task<ListFlagsResponse?> ListFlagsAsync(string namespaceKey)
     {
         return await ListFlagsAsync(namespaceKey, null);
     }
 
     /// <summary>
-    /// This method lists flags by namespace key with parameters.
+    /// Lists flags for the specified namespace, optionally filtering with parameters.
     /// </summary>
-    /// <param name="namespaceKey"></param>
-    /// <param name="parameters"></param>
-    /// <returns></returns>
+    /// <param name="namespaceKey">The key of the namespace to list flags from. If null or empty, the default namespace is used.</param>
+    /// <param name="parameters">Optional parameters to filter or paginate the flag list.</param>
+    /// <returns>A <see cref="ListFlagsResponse"/> containing the list of flags, or null if the request fails.</returns>
     public async Task<ListFlagsResponse?> ListFlagsAsync(string namespaceKey, ListParameters? parameters)
     {
         if (string.IsNullOrEmpty(namespaceKey))
@@ -126,12 +126,17 @@ public class Flag
     }
 
     /// <summary>
-    /// This method makes a GET request to the Flipt server.
+    /// Makes an asynchronous GET request to the Flipt server and deserializes the response to the specified type.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="path"></param>
-    /// <param name="parameters"></param>
-    /// <returns></returns>
+    /// <typeparam name="T">The type to which the response will be deserialized.</typeparam>
+    /// <param name="path">The relative path of the API endpoint.</param>
+    /// <param name="parameters">An object containing query parameters to be appended to the request URL. Can be null.</param>
+    /// <returns>
+    /// A task representing the asynchronous operation, with a result of type <typeparamref name="T"/> if the response is not empty; otherwise, <c>null</c>.
+    /// </returns>
+    /// <exception cref="InvalidOperationException">Thrown if the Flipt base URL is not set.</exception>
+    /// <exception cref="HttpRequestException">Thrown when the HTTP request fails.</exception>
+    /// <exception cref="JsonException">Thrown when deserialization of the response fails.</exception>
     private async Task<T?> MakeGetRequestAsync<T>(string path, object? parameters)
     {
         if (_baseUrl == null)
@@ -175,10 +180,10 @@ public class Flag
     }
 
     /// <summary>
-    /// This method builds a query string from an object.
+    /// Builds a query string from the provided object by serializing its properties as key-value pairs.
     /// </summary>
-    /// <param name="parameters"></param>
-    /// <returns></returns>
+    /// <param name="parameters">The object whose properties will be converted into query string parameters.</param>
+    /// <returns>A string representing the query string constructed from the object's properties.</returns>
     private string BuildQueryString(object parameters)
     {
         var jsonString = JsonSerializer.Serialize(parameters, jsonSerializeSettings);
