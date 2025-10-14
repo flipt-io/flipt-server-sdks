@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-php-v1.2.0...flipt-php-v1.3.0) (2025-10-14)
+
+
+### Features
+
+* added segment_keys attribute to boolean evaluation response models ([#563](https://github.com/flipt-io/flipt-server-sdks/issues/563)) ([4d8a437](https://github.com/flipt-io/flipt-server-sdks/commit/4d8a43701f384914342cb37880ac0c0e1d8ce6a3))
+
 ## [1.2.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-php-v1.1.0...flipt-php-v1.2.0) (2025-06-09)
 
 

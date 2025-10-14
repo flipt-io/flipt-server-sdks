@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <PackageId>Flipt</PackageId>
     <!-- x-release-please-start-version -->
-    <Version>0.1.1</Version>
+    <Version>0.1.2</Version>
     <!-- x-release-please-end -->
     <Authors>Joseph Washington Jr. (vgwizardx), Flipt Devs (dev@flipt.io)</Authors>
     <Company>Flipt.io</Company>
