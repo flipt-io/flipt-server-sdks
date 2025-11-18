@@ -6,6 +6,28 @@ import {
 } from "./evaluation/models";
 import { Flags } from "./flags";
 
+// Re-export all evaluation models
+export {
+  EvaluationRequest,
+  VariantEvaluationResponse,
+  BooleanEvaluationResponse,
+  BatchEvaluationRequest,
+  BatchEvaluationResponse,
+  EvaluationResponse,
+  EvaluationResponseType,
+  EvaluationReason,
+  ErrorEvaluationReason
+} from "./evaluation/models";
+
+// Re-export all flag models
+export {
+  Flag,
+  FlagType,
+  Variant,
+  ListFlagsRequest,
+  ListFlagsResponse
+} from "./flags/models";
+
 interface FliptClientOptions {
   url?: string;
   authenticationStrategy?: AuthenticationStrategy;
