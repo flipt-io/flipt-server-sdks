@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-node-v1.4.0...flipt-node-v1.5.0) (2025-11-18)
+
+
+### Features
+
+* **flipt-node:** export types idiomatically from top-level package ([#586](https://github.com/flipt-io/flipt-server-sdks/issues/586)) ([6ef1d9a](https://github.com/flipt-io/flipt-server-sdks/commit/6ef1d9a9c9925da43526c6e758b561ec7daa02c5)), closes [#585](https://github.com/flipt-io/flipt-server-sdks/issues/585)
+
 ## [1.4.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-node-v1.3.0...flipt-node-v1.4.0) (2025-10-14)
 
 
