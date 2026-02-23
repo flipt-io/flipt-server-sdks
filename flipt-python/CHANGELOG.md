@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.1](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-python-v1.6.0...flipt-python-v1.6.1) (2026-02-23)
+
+
+### Bug Fixes
+
+* **python:** relax httpx constraint to &gt;=0.27.0,&lt;1.0.0 ([#630](https://github.com/flipt-io/flipt-server-sdks/issues/630)) ([ab2fbd7](https://github.com/flipt-io/flipt-server-sdks/commit/ab2fbd78efe62237e6a560556ea4fe95a18d8f51))
+
 ## [1.6.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-python-v1.5.0...flipt-python-v1.6.0) (2025-10-14)
 
 
