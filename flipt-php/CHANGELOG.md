@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-php-v1.3.0...flipt-php-v1.3.1) (2026-03-02)
+
+
+### Miscellaneous Chores
+
+* **deps:** bump com.fasterxml.jackson.datatype:jackson-datatype-jdk8 ([#636](https://github.com/flipt-io/flipt-server-sdks/issues/636)) ([e8d02a2](https://github.com/flipt-io/flipt-server-sdks/commit/e8d02a2f76f8f7cf3f71384477fd7bc418ec4ccb))
+
 ## [1.3.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-php-v1.2.0...flipt-php-v1.3.0) (2025-10-14)
 
 
