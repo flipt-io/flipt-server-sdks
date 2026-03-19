@@ -39,7 +39,7 @@ class BatchEvaluationRequest(CamelAliasModel):
 
 class VariantEvaluationResponse(CamelAliasModel):
     match: bool
-    segment_keys: list[str]
+    segment_keys: list[str] = Field(default_factory=list)
     reason: EvaluationReason
     flag_key: str
     variant_key: str
@@ -52,7 +52,7 @@ class BooleanEvaluationResponse(CamelAliasModel):
     enabled: bool
     flag_key: str
     reason: EvaluationReason
-    segment_keys: list[str]
+    segment_keys: list[str] = Field(default_factory=list)
     request_duration_millis: float
     timestamp: str
 
