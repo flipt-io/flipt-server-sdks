@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.2](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-python-v1.6.1...flipt-python-v1.6.2) (2026-03-19)
+
+
+### Bug Fixes
+
+* **python:** use empty list for segment_keys if missing in evaluation responses ([#652](https://github.com/flipt-io/flipt-server-sdks/issues/652)) ([83f76f5](https://github.com/flipt-io/flipt-server-sdks/commit/83f76f5ce0421e4be59c9294e09401399880b7cc))
+
 ## [1.6.1](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-python-v1.6.0...flipt-python-v1.6.1) (2026-02-23)
 
 
