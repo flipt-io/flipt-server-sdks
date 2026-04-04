@@ -1,6 +1,6 @@
-# CLAUDE.md
+# AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to AI agents when working with code in this repository.
 
 ## Overview
 
@@ -30,6 +30,7 @@ Each SDK follows a consistent pattern:
 ### Common Client Methods
 
 All SDKs implement these core methods:
+
 - Variant evaluation
 - Boolean evaluation
 - Batch evaluation
@@ -43,6 +44,7 @@ Most SDKs support Flipt V2 environments via the `X-Flipt-Environment` header. Th
 ## Development Commands
 
 ### Python (flipt-python)
+
 ```bash
 cd flipt-python
 poetry install
@@ -53,6 +55,7 @@ make testcov     # Generate HTML coverage report
 ```
 
 ### Node.js (flipt-node)
+
 ```bash
 cd flipt-node
 npm install
@@ -63,6 +66,7 @@ npm test         # Run Jest tests
 ```
 
 ### Java (flipt-java)
+
 ```bash
 cd flipt-java
 ./gradlew spotlessCheck   # Check code formatting
@@ -72,6 +76,7 @@ cd flipt-java
 ```
 
 ### Rust (flipt-rust)
+
 ```bash
 cd flipt-rust
 cargo fmt --all -- --check              # Check formatting
@@ -82,6 +87,7 @@ cargo test --features flipt_integration --test integration  # Run integration te
 ```
 
 ### PHP (flipt-php)
+
 ```bash
 cd flipt-php
 composer install
@@ -89,6 +95,7 @@ composer test    # Run PHPUnit tests
 ```
 
 ### C# (flipt-csharp)
+
 ```bash
 cd flipt-csharp
 dotnet test      # Run tests
@@ -102,11 +109,13 @@ dotnet build     # Build the project
 Integration tests use Dagger to run each SDK against a containerized Flipt server. Tests are defined in `test/main.go`.
 
 Run all integration tests:
+
 ```bash
 dagger run go run ./test
 ```
 
 Run tests for specific SDK(s):
+
 ```bash
 dagger run go run ./test --sdks=python
 dagger run go run ./test --sdks=python,node,rust
@@ -117,6 +126,7 @@ Requirements: Docker, Go 1.21.4+, and Dagger 0.9.5+ must be installed.
 ### Test Configuration
 
 Integration tests use these environment variables:
+
 - `FLIPT_URL` - Set to `http://flipt:8080` (service binding in container)
 - `FLIPT_AUTH_TOKEN` - Set to `secret` (bootstrap token)
 
