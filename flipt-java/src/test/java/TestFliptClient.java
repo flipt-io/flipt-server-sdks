@@ -1,6 +1,11 @@
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import io.flipt.api.FliptClient;
 import io.flipt.api.authentication.AuthenticationStrategy;
 import io.flipt.api.authentication.ClientTokenAuthenticationStrategy;
+import io.flipt.api.error.Error;
+import io.flipt.api.evaluation.EvaluationException;
 import io.flipt.api.evaluation.models.*;
 import io.flipt.api.flags.models.Flag;
 import io.flipt.api.flags.models.FlagType;
@@ -248,5 +253,61 @@ public class TestFliptClient {
     Assertions.assertEquals("variant1", flag1.getVariants().get(0).getKey());
     Assertions.assertEquals("variant1", flag1.getVariants().get(0).getName());
     Assertions.assertEquals("variant description", flag1.getVariants().get(0).getDescription());
+  }
+
+  @Test
+  void tesFlagEvaluationWithError() {
+    String fliptURL = System.getenv().get("FLIPT_URL");
+    String authToken = System.getenv().get("FLIPT_AUTH_TOKEN");
+
+    assert fliptURL != null && !fliptURL.isEmpty();
+    assert authToken != null && !authToken.isEmpty();
+
+    AuthenticationStrategy authenticationStrategy =
+        new ClientTokenAuthenticationStrategy(authToken);
+
+    Map<String, String> headers = Map.of("Accept", "application/json");
+
+    FliptClient fc =
+        FliptClient.builder()
+            .url(fliptURL)
+            .authentication(authenticationStrategy)
+            .headers(headers)
+            .build();
+
+    Map<String, String> context = new HashMap<>();
+    context.put("fizz", "buzz");
+
+    EvaluationRequest req1 =
+        new EvaluationRequest("default", "flag1", "entity", context, Optional.empty());
+    EvaluationException ex1 =
+        Assertions.assertThrows(
+            EvaluationException.class, () -> fc.evaluation().evaluateBoolean(req1));
+    Assertions.assertEquals(
+        "io.flipt.api.error.Error: flag type VARIANT_FLAG_TYPE invalid", ex1.getMessage());
+
+    EvaluationRequest req2 =
+        new EvaluationRequest("default", "flag_uknown", "entity", context, Optional.empty());
+    EvaluationException ex2 =
+        Assertions.assertThrows(
+            EvaluationException.class, () -> fc.evaluation().evaluateBoolean(req2));
+    Assertions.assertEquals(
+        "io.flipt.api.error.Error: flag \"default/flag_uknown\" not found", ex2.getMessage());
+  }
+
+  @Test
+  public void testDeserializeError() throws Exception {
+    JsonMapper mapper =
+        JsonMapper.builder()
+            .addModule(new Jdk8Module())
+            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            .build();
+
+    String json = "{\"code\": 5, \"message\": \"flag not found\"}";
+
+    Error error = mapper.readValue(json, Error.class);
+
+    Assertions.assertEquals(5, error.getCode());
+    Assertions.assertEquals("flag not found", error.getMessage());
   }
 }
