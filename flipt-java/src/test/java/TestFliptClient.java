@@ -300,12 +300,18 @@ public class TestFliptClient {
     JsonMapper mapper =
         JsonMapper.builder()
             .addModule(new Jdk8Module())
-            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
             .build();
 
     String json = "{\"code\": 5, \"message\": \"flag not found\"}";
 
     Error error = mapper.readValue(json, Error.class);
+
+    Assertions.assertEquals(5, error.getCode());
+    Assertions.assertEquals("flag not found", error.getMessage());
+
+    json = "{\"code\": 5, \"message\":\"flag not found\", \"details\":[]}";
+
+    error = mapper.readValue(json, Error.class);
 
     Assertions.assertEquals(5, error.getCode());
     Assertions.assertEquals("flag not found", error.getMessage());
