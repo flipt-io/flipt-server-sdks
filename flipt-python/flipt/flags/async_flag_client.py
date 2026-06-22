@@ -50,6 +50,7 @@ class AsyncFlag:
         return ListFlagsResponse.model_validate_json(response.text)
 
     async def get_flag(self, namespace_key: str, flag_key: str, params: CommonParameters | None = None) -> Flag:
+        """Flipt v1 only. Not available in Flipt v2."""
         if namespace_key is None:
             namespace_key = "default"
 
