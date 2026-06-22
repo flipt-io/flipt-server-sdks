@@ -186,7 +186,7 @@ func phpTest(ctx context.Context, client *dagger.Client, flipt *dagger.Container
 	_, err := client.Container().From("php:8-cli").
 		WithEnvVariable("COMPOSER_ALLOW_SUPERUSER", "1").
 		WithExec([]string{"apt-get", "update"}).
-		WithExec([]string{"apt-get", "install", "-y", "git"}).
+		WithExec([]string{"apt-get", "install", "-y", "git", "unzip"}).
 		WithExec([]string{"sh", "-c", "curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer"}).
 		WithWorkdir("/src").
 		WithDirectory("/src", hostDirectory.Directory("flipt-php"), dagger.ContainerWithDirectoryOpts{
