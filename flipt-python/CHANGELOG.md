@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.3](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-python-v1.6.2...flipt-python-v1.6.3) (2026-06-23)
+
+
+### Bug Fixes
+
+* **python:** make created_at/updated_at optional and deprecated for Flipt v2 support ([#717](https://github.com/flipt-io/flipt-server-sdks/issues/717)) ([78e51fb](https://github.com/flipt-io/flipt-server-sdks/commit/78e51fbb7c9e87d81bb4f558dab90ac49f4cf344))
+
 ## [1.6.2](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-python-v1.6.1...flipt-python-v1.6.2) (2026-03-19)
 
 
