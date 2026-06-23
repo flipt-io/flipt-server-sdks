@@ -32,6 +32,8 @@ Cargo.lock
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
+!.agents/skills/release/
+!.agents/skills/release/SKILL.md
 x64/
 x86/
 bld/
