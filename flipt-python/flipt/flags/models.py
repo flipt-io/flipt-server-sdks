@@ -1,6 +1,8 @@
 from datetime import datetime
 from enum import StrEnum
 
+from pydantic import Field
+
 from flipt.models import CamelAliasModel, PaginatedResponse
 
 
@@ -17,8 +19,14 @@ class Variant(CamelAliasModel):
     key: str
     name: str
     namespace_key: str
-    created_at: datetime
-    updated_at: datetime
+    created_at: datetime | None = Field(
+        default=None,
+        description="Deprecated: populated in Flipt v1, will be None in Flipt v2",
+    )
+    updated_at: datetime | None = Field(
+        default=None,
+        description="Deprecated: populated in Flipt v1, will be None in Flipt v2",
+    )
 
 
 class Flag(CamelAliasModel):
@@ -28,8 +36,14 @@ class Flag(CamelAliasModel):
     enabled: bool
     namespace_key: str
     type: FlagType
-    created_at: datetime
-    updated_at: datetime
+    created_at: datetime | None = Field(
+        default=None,
+        description="Deprecated: populated in Flipt v1, will be None in Flipt v2",
+    )
+    updated_at: datetime | None = Field(
+        default=None,
+        description="Deprecated: populated in Flipt v1, will be None in Flipt v2",
+    )
     variants: list[Variant]
 
 
