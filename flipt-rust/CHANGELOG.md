@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.1](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-rust-v1.4.0...flipt-rust-v1.4.1) (2026-06-24)
+
+
+### Bug Fixes
+
+* **rust:** allow missing segement_keys for boolean evaluation for better backward compatibility ([#720](https://github.com/flipt-io/flipt-server-sdks/issues/720)) ([72f6f9b](https://github.com/flipt-io/flipt-server-sdks/commit/72f6f9bbb97b76aae2b1b8433037f8915323b902))
+
 ## [1.4.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-rust-v1.3.0...flipt-rust-v1.4.0) (2025-10-14)
 
 
