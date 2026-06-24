@@ -23,6 +23,7 @@ pub struct EvaluationRequest {
 pub struct BooleanEvaluationResponse {
     pub enabled: bool,
     pub reason: EvaluationReason,
+    #[serde(default)]
     pub segment_keys: Vec<String>,
     pub request_id: String,
     pub request_duration_millis: f64,
@@ -98,4 +99,36 @@ pub enum EvaluationResponseType {
     Boolean,
     #[serde(rename = "ERROR_EVALUATION_RESPONSE_TYPE")]
     Error,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn boolean_evaluation_response_default_reason() {
+        let json = r#"{
+            "enabled":true,
+            "reason":"DEFAULT_EVALUATION_REASON",
+            "requestId":"fb502132-66e5-45a1-a315-f1a91d4f4637",
+            "requestDurationMillis":3.070422,
+            "timestamp":"2024-05-01T10:05:06.822847492Z",
+            "flagKey":"flag_boolean"
+        }"#;
+
+        let response: BooleanEvaluationResponse = serde_json::from_str(json).unwrap();
+
+        assert!(response.enabled);
+        assert_eq!(response.reason, EvaluationReason::Default);
+        assert_eq!(response.request_id, "fb502132-66e5-45a1-a315-f1a91d4f4637");
+        assert_eq!(response.request_duration_millis, 3.070422);
+        assert_eq!(
+            response.timestamp,
+            "2024-05-01T10:05:06.822847492Z"
+                .parse::<DateTime<Utc>>()
+                .unwrap()
+        );
+        assert_eq!(response.flag_key, "flag_boolean");
+        assert!(response.segment_keys.is_empty());
+    }
 }
