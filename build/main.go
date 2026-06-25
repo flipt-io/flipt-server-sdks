@@ -91,7 +91,7 @@ func run() error {
 
 func pythonBuild(ctx context.Context, client *dagger.Client, hostDirectory *dagger.Directory) error {
 	container := client.Container().From("python:3.11-bookworm").
-		WithExec([]string{"pip", "install", "poetry==1.7.0"}).
+		WithExec([]string{"pip", "install", "poetry==2.4.1"}).
 		WithDirectory("/src", hostDirectory.Directory("flipt-python")).
 		WithWorkdir("/src").
 		WithExec([]string{"poetry", "install", "--without=dev", "-v"}).
