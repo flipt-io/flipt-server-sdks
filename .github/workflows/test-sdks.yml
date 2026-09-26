@@ -17,14 +17,14 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v7
         with:
-          go-version: "1.21.4"
+          go-version: "1.26"
           check-latest: true
           cache: true
 
       - name: Install Dagger
         run: |
           cd /usr/local
-          curl -L https://dl.dagger.io/dagger/install.sh | DAGGER_VERSION=0.9.5 sh
+          curl -L https://dl.dagger.io/dagger/install.sh | DAGGER_VERSION=0.21.9 sh
 
       - name: Run Integration Tests
         run: |
