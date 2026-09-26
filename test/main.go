@@ -95,6 +95,7 @@ func getTestDependencies(_ context.Context, client *dagger.Client, dir *dagger.D
 		WithEnvVariable("FLIPT_AUTHENTICATION_METHODS_TOKEN_ENABLED", "1").
 		WithEnvVariable("FLIPT_AUTHENTICATION_METHODS_TOKEN_BOOTSTRAP_TOKEN", "secret").
 		WithEnvVariable("FLIPT_AUTHENTICATION_REQUIRED", "1").
+		WithEnvVariable("FLIPT_META_CHECK_FOR_UPDATES", "false").
 		WithExposedPort(8080)
 
 	return flipt, dir
@@ -106,7 +107,7 @@ func pythonTest(ctx context.Context, client *dagger.Client, flipt *dagger.Contai
 		WithExec([]string{"pip", "install", "poetry==1.7.1"}).
 		WithWorkdir("/src").
 		WithDirectory("/src", hostDirectory.Directory("flipt-python")).
-		WithServiceBinding("flipt", flipt.WithExec(nil).AsService()).
+		WithServiceBinding("flipt", flipt.AsService()).
 		WithEnvVariable("FLIPT_URL", "http://flipt:8080").
 		WithEnvVariable("FLIPT_AUTH_TOKEN", "secret").
 		WithExec([]string{"poetry", "install"}).
@@ -125,7 +126,7 @@ func nodeTest(ctx context.Context, client *dagger.Client, flipt *dagger.Containe
 		WithDirectory("/src", hostDirectory.Directory("flipt-node"), dagger.ContainerWithDirectoryOpts{
 			Exclude: []string{".node_modules/"},
 		}).
-		WithServiceBinding("flipt", flipt.WithExec(nil).AsService()).
+		WithServiceBinding("flipt", flipt.AsService()).
 		WithEnvVariable("FLIPT_URL", "http://flipt:8080").
 		WithEnvVariable("FLIPT_AUTH_TOKEN", "secret").
 		WithExec([]string{"npm", "install"}).
@@ -139,7 +140,7 @@ func csharpTest(ctx context.Context, client *dagger.Client, flipt *dagger.Contai
 	_, err := client.Container().From("mcr.microsoft.com/dotnet/sdk:8.0").
 		WithDirectory("/src", hostDirectory.Directory("flipt-csharp")).
 		WithWorkdir("/src").
-		WithServiceBinding("flipt", flipt.WithExec(nil).AsService()).
+		WithServiceBinding("flipt", flipt.AsService()).
 		WithEnvVariable("FLIPT_URL", "http://flipt:8080").
 		WithEnvVariable("FLIPT_AUTH_TOKEN", "secret").
 		WithExec([]string{"dotnet", "test"}).
@@ -156,7 +157,7 @@ func rustTest(ctx context.Context, client *dagger.Client, flipt *dagger.Containe
 		WithDirectory("/src", hostDirectory.Directory("flipt-rust"), dagger.ContainerWithDirectoryOpts{
 			Exclude: []string{"./target/"},
 		}).
-		WithServiceBinding("flipt", flipt.WithExec(nil).AsService()).
+		WithServiceBinding("flipt", flipt.AsService()).
 		WithEnvVariable("FLIPT_URL", "http://flipt:8080").
 		WithEnvVariable("FLIPT_AUTH_TOKEN", "secret").
 		WithExec([]string{"cargo", "test", "--features", "flipt_integration", "--test", "integration"}).
@@ -172,7 +173,7 @@ func javaTest(ctx context.Context, client *dagger.Client, flipt *dagger.Containe
 		WithDirectory("/src", hostDirectory.Directory("flipt-java"), dagger.ContainerWithDirectoryOpts{
 			Exclude: []string{"./.gradle", "./.idea", "./build"},
 		}).
-		WithServiceBinding("flipt", flipt.WithExec(nil).AsService()).
+		WithServiceBinding("flipt", flipt.AsService()).
 		WithEnvVariable("FLIPT_URL", "http://flipt:8080").
 		WithEnvVariable("FLIPT_AUTH_TOKEN", "secret").
 		WithExec([]string{"./gradlew", "test"}).
@@ -192,7 +193,7 @@ func phpTest(ctx context.Context, client *dagger.Client, flipt *dagger.Container
 		WithDirectory("/src", hostDirectory.Directory("flipt-php"), dagger.ContainerWithDirectoryOpts{
 			Exclude: []string{"./vendor", "./composer.lock"},
 		}).
-		WithServiceBinding("flipt", flipt.WithExec(nil).AsService()).
+		WithServiceBinding("flipt", flipt.AsService()).
 		WithEnvVariable("FLIPT_URL", "http://flipt:8080").
 		WithEnvVariable("FLIPT_AUTH_TOKEN", "secret").
 		WithExec([]string{"composer", "install"}).

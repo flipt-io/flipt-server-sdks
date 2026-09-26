@@ -6,7 +6,7 @@ In the `test/` directory we will use [Dagger](https://dagger.io/) to orchestrate
 
 ## Requirements
 
-Make sure you have `dagger` installed. This module is pinned to `v0.9.5` currently.
+Make sure you have `dagger` installed. This module is pinned to `v0.21.9` currently.
 
 Here are the [Dagger Installation Instructions](https://docs.dagger.io/quickstart/729236/cli).
 

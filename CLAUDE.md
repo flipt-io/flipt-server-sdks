@@ -121,7 +121,7 @@ dagger run go run ./test --sdks=python
 dagger run go run ./test --sdks=python,node,rust
 ```
 
-Requirements: Docker, Go 1.21.4+, and Dagger 0.9.5+ must be installed.
+Requirements: Docker, Go 1.26.1+, and Dagger 0.21.9+ must be installed.
 
 ### Test Configuration
 
