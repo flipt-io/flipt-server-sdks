@@ -1,6 +1,6 @@
 from http import HTTPStatus
 
-import httpx
+import httpx2
 
 from flipt.authentication import AuthenticationStrategy
 from flipt.exceptions import FliptApiError
@@ -15,7 +15,7 @@ class AsyncFlag:
         url: str,
         headers: dict[str, str] | None = None,
         authentication: AuthenticationStrategy | None = None,
-        httpx_client: httpx.AsyncClient | None = None,
+        httpx_client: httpx2.AsyncClient | None = None,
     ):
         self.url = url
 
@@ -23,7 +23,7 @@ class AsyncFlag:
             headers = {}
         self.headers = headers
 
-        self._client = httpx_client or httpx.AsyncClient()
+        self._client = httpx_client or httpx2.AsyncClient()
 
         if authentication:
             authentication.authenticate(self.headers)
@@ -31,7 +31,7 @@ class AsyncFlag:
     async def close(self) -> None:
         await self._client.aclose()
 
-    def _raise_on_error(self, response: httpx.Response) -> None:
+    def _raise_on_error(self, response: httpx2.Response) -> None:
         if response.status_code != 200:
             body = response.json()
             message = body.get("message", HTTPStatus(response.status_code).description)

@@ -1,6 +1,6 @@
 from http import HTTPStatus
 
-import httpx
+import httpx2
 
 from flipt.authentication import AuthenticationStrategy
 from flipt.exceptions import FliptApiError
@@ -20,7 +20,7 @@ class Evaluation:
         url: str,
         headers: dict[str, str] | None = None,
         authentication: AuthenticationStrategy | None = None,
-        httpx_client: httpx.Client | None = None,
+        httpx_client: httpx2.Client | None = None,
     ):
         self.url = url
 
@@ -28,7 +28,7 @@ class Evaluation:
             headers = {}
         self.headers = headers
 
-        self._client = httpx_client or httpx.Client()
+        self._client = httpx_client or httpx2.Client()
 
         if authentication:
             authentication.authenticate(self.headers)
@@ -36,7 +36,7 @@ class Evaluation:
     def close(self) -> None:
         self._client.close()
 
-    def _raise_on_error(self, response: httpx.Response) -> None:
+    def _raise_on_error(self, response: httpx2.Response) -> None:
         if response.status_code != 200:
             body = response.json()
             message = body.get("message", HTTPStatus(response.status_code).description)

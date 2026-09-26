@@ -1,4 +1,4 @@
-import httpx
+import httpx2
 
 from .authentication import AuthenticationStrategy
 from .evaluation import AsyncEvaluation
@@ -13,7 +13,7 @@ class AsyncFliptClient:
         timeout: int = 60,
         authentication: AuthenticationStrategy | None = None,
     ):
-        self.httpx_client = httpx.AsyncClient(timeout=timeout)
+        self.httpx_client = httpx2.AsyncClient(timeout=timeout)
 
         self.evaluation = AsyncEvaluation(url, headers, authentication, self.httpx_client)
         self.flag = AsyncFlag(url, headers, authentication, self.httpx_client)

@@ -1,33 +1,18 @@
-from http import HTTPStatus
-
+import httpx2
 import pytest
 
-
-@pytest.fixture(params=[{}, {"message": "some error"}])
-def _mock_variant_response_error(httpx_mock, flipt_url, request):
-    httpx_mock.add_response(
-        method="POST",
-        url=f"{flipt_url}/evaluate/v1/variant",
-        status_code=HTTPStatus.INTERNAL_SERVER_ERROR,
-        json=request.param,
-    )
+from flipt.evaluation import AsyncEvaluation, Evaluation
 
 
-@pytest.fixture(params=[{}, {"message": "some error"}])
-def _mock_boolean_response_error(httpx_mock, flipt_url, request):
-    httpx_mock.add_response(
-        method="POST",
-        url=f"{flipt_url}/evaluate/v1/boolean",
-        status_code=HTTPStatus.INTERNAL_SERVER_ERROR,
-        json=request.param,
-    )
+@pytest.fixture
+def failing_evaluation(mock_flipt_url, error_transport):
+    client = Evaluation(mock_flipt_url, httpx_client=httpx2.Client(transport=error_transport))
+    yield client
+    client.close()
 
 
-@pytest.fixture(params=[{}, {"message": "some error"}])
-def _mock_batch_response_error(httpx_mock, flipt_url, request):
-    httpx_mock.add_response(
-        method="POST",
-        url=f"{flipt_url}/evaluate/v1/batch",
-        status_code=HTTPStatus.INTERNAL_SERVER_ERROR,
-        json=request.param,
-    )
+@pytest.fixture
+async def failing_async_evaluation(mock_flipt_url, error_transport):
+    client = AsyncEvaluation(mock_flipt_url, httpx_client=httpx2.AsyncClient(transport=error_transport))
+    yield client
+    await client.close()
