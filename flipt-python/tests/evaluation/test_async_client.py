@@ -21,10 +21,9 @@ async def test_variant(async_flipt_client):
     assert "segment1" in variant.segment_keys
 
 
-@pytest.mark.usefixtures("_mock_variant_response_error")
-async def test_evaluate_variant_error(async_flipt_client):
+async def test_evaluate_variant_error(failing_async_evaluation):
     with pytest.raises(FliptApiError):
-        await async_flipt_client.evaluation.variant(
+        await failing_async_evaluation.variant(
             EvaluationRequest(
                 namespace_key="default",
                 flag_key="flag1",
@@ -50,10 +49,9 @@ async def test_boolean(async_flipt_client):
     assert "segment1" in boolean.segment_keys
 
 
-@pytest.mark.usefixtures("_mock_boolean_response_error")
-async def test_evaluate_boolean_error(async_flipt_client):
+async def test_evaluate_boolean_error(failing_async_evaluation):
     with pytest.raises(FliptApiError):
-        await async_flipt_client.evaluation.boolean(
+        await failing_async_evaluation.boolean(
             EvaluationRequest(
                 namespace_key="default",
                 flag_key="flag_boolean",
@@ -119,10 +117,9 @@ async def test_batch(async_flipt_client):
     assert error.reason == "NOT_FOUND_ERROR_EVALUATION_REASON"
 
 
-@pytest.mark.usefixtures("_mock_batch_response_error")
-async def test_evaluate_batch_error(async_flipt_client):
+async def test_evaluate_batch_error(failing_async_evaluation):
     with pytest.raises(FliptApiError):
-        await async_flipt_client.evaluation.batch(
+        await failing_async_evaluation.batch(
             BatchEvaluationRequest(
                 requests=[
                     EvaluationRequest(

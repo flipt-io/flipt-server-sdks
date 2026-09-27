@@ -1,4 +1,4 @@
-import httpx
+import httpx2
 
 from .authentication import AuthenticationStrategy
 from .evaluation import Evaluation
@@ -13,7 +13,7 @@ class FliptClient:
         timeout: int = 60,
         authentication: AuthenticationStrategy | None = None,
     ):
-        self.httpx_client = httpx.Client(timeout=timeout)
+        self.httpx_client = httpx2.Client(timeout=timeout)
 
         self.evaluation = Evaluation(url, headers, authentication, self.httpx_client)
         self.flag = SyncFlag(url, headers, authentication, self.httpx_client)

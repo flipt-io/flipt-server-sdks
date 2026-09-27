@@ -1,13 +1,18 @@
-from http import HTTPStatus
-
+import httpx2
 import pytest
 
+from flipt.flags import AsyncFlag, SyncFlag
 
-@pytest.fixture(params=[{}, {"message": "some error"}])
-def _mock_list_flags_response_error(httpx_mock, flipt_url, request):
-    httpx_mock.add_response(
-        method="GET",
-        url=f"{flipt_url}/api/v1/namespaces/default/flags",
-        status_code=HTTPStatus.INTERNAL_SERVER_ERROR,
-        json=request.param,
-    )
+
+@pytest.fixture
+def failing_flag(mock_flipt_url, error_transport):
+    client = SyncFlag(mock_flipt_url, httpx_client=httpx2.Client(transport=error_transport))
+    yield client
+    client.close()
+
+
+@pytest.fixture
+async def failing_async_flag(mock_flipt_url, error_transport):
+    client = AsyncFlag(mock_flipt_url, httpx_client=httpx2.AsyncClient(transport=error_transport))
+    yield client
+    await client.close()

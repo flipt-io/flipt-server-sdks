@@ -8,10 +8,9 @@ class TestListFlags:
         list_response = sync_flipt_client.flag.list_flags(namespace_key="default")
         assert len(list_response.flags) == 2
 
-    @pytest.mark.usefixtures("_mock_list_flags_response_error")
-    def test_list_flags_error(self, sync_flipt_client):
+    def test_list_flags_error(self, failing_flag):
         with pytest.raises(FliptApiError):
-            sync_flipt_client.flag.list_flags(namespace_key="default")
+            failing_flag.list_flags(namespace_key="default")
 
     @pytest.mark.parametrize("flag_key", ["flag1", "flag_boolean"])
     def test_get_flag_success(self, sync_flipt_client, flag_key):
