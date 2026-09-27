@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-python-v1.6.3...flipt-python-v2.0.0) (2026-09-27)
+
+
+### ⚠ BREAKING CHANGES
+
+* **python:** the Python SDK depends on httpx2 instead of httpx. Transport errors are httpx2 exceptions. The httpx_client argument of Evaluation, AsyncEvaluation, SyncFlag, and AsyncFlag must be an httpx2.Client or httpx2.AsyncClient. httpx is no longer a transitive dependency. The client verifies Transport Layer Security certificates against the operating system's trust store instead of certifi.
+
+### Features
+
+* **python:** migrate from httpx to httpx2 ([#761](https://github.com/flipt-io/flipt-server-sdks/issues/761)) ([3d9ff67](https://github.com/flipt-io/flipt-server-sdks/commit/3d9ff6707921d2d1a589bb3db189fb161bc36137)), closes [#760](https://github.com/flipt-io/flipt-server-sdks/issues/760)
+
 ## [1.6.3](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-python-v1.6.2...flipt-python-v1.6.3) (2026-06-23)
 
 
