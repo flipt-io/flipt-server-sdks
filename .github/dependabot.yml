@@ -1,24 +1,46 @@
 version: 2
 updates:
-  - package-ecosystem: npm
+  - package-ecosystem: "npm"
     directory: "/flipt-node"
     schedule:
-      interval: weekly
+      interval: "weekly"
     open-pull-requests-limit: 5
     labels:
       - "dependencies"
       # kodiak `merge.automerge_label`
       - "automerge"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+    groups:
+      npm-security:
+        applies-to: security-updates
+        patterns: ["*"]
+      npm-minor-patch:
+        applies-to: version-updates
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
 
-  - package-ecosystem: pip
+  - package-ecosystem: "pip"
     directory: "/flipt-python"
     schedule:
-      interval: weekly
+      interval: "weekly"
     open-pull-requests-limit: 5
     labels:
       - "dependencies"
       # kodiak `merge.automerge_label`
       - "automerge"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+    groups:
+      pip-security:
+        applies-to: security-updates
+        patterns: ["*"]
+      pip-minor-patch:
+        applies-to: version-updates
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
 
   - package-ecosystem: "cargo"
     directory: "/flipt-rust"
@@ -29,25 +51,48 @@ updates:
       - "dependencies"
       # kodiak `merge.automerge_label`
       - "automerge"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+    groups:
+      cargo-security:
+        applies-to: security-updates
+        patterns: ["*"]
+      cargo-minor-patch:
+        applies-to: version-updates
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
 
-  - package-ecosystem: gradle
+  - package-ecosystem: "gradle"
     directory: "/flipt-java"
     schedule:
-      interval: weekly
+      interval: "weekly"
     open-pull-requests-limit: 5
     labels:
       - "dependencies"
       # kodiak `merge.automerge_label`
       - "automerge"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+    groups:
+      gradle-security:
+        applies-to: security-updates
+        patterns: ["*"]
+      gradle-minor-patch:
+        applies-to: version-updates
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
 
   - package-ecosystem: "github-actions"
-    # Workflow files stored in the
-    # default location of `.github/workflows`
     directory: "/"
     schedule:
-      interval: weekly
+      interval: "weekly"
     open-pull-requests-limit: 5
     labels:
       - "dependencies"
       # kodiak `merge.automerge_label`
       - "automerge"
+    groups:
+      github-actions:
+        patterns: ["*"]
