@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.1](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-node-v1.5.0...flipt-node-v1.5.1) (2026-11-07)
+
+
+### Bug Fixes
+
+* **flipt-node:** round request timeout delays ([#788](https://github.com/flipt-io/flipt-server-sdks/issues/788)) ([7fff18b](https://github.com/flipt-io/flipt-server-sdks/commit/7fff18b8b55c4a2ecb1e25fdd3a4e547da2d7a38))
+
 ## [1.5.0](https://github.com/flipt-io/flipt-server-sdks/compare/flipt-node-v1.4.0...flipt-node-v1.5.0) (2025-11-18)
 
 
