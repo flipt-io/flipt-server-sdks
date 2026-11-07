@@ -51,7 +51,7 @@ export class Flags {
     };
 
     if (this.timeout !== undefined && this.timeout > 0) {
-      args.signal = AbortSignal.timeout(this.timeout * 1000);
+      args.signal = AbortSignal.timeout(Math.round(this.timeout * 1000));
     }
 
     const response = await fetch(url.toString(), args);
